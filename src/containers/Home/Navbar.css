@@ -1,0 +1,9 @@
+.SearchBarDivInput {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+.SearchBarInput {
+  width: 50% !important;
+  margin-bottom: 10px !important;
+}

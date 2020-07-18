@@ -1,0 +1,59 @@
+.HomeSearchImageWrapper {
+  background-size: 100% 100%;
+  margin-bottom: 30px;
+  height: calc(100vh / 2.5);
+  max-height: 360px;
+  background-position: top center;
+  width: 100%;
+  display: flex;
+  color: #fff;
+  background-image: linear-gradient(
+      to right,
+      rgba(58, 83, 155, 0.151),
+      rgba(92, 151, 191, 0.73)
+    ),
+    url("https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg");
+}
+.HomeSearchContentWrapper {
+  width: 100%;
+  margin-top: 30px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+}
+.HomeHeaderWelcome {
+  font-size: 3em;
+  font-weight: 700;
+  line-height: 1;
+}
+.HomeSecondHeader {
+  font-size: 2em;
+  font-weight: 600;
+  margin: 0;
+}
+.HomeInputStyle {
+  width: 100%;
+  height: 46px;
+  font-size: 1.1em !important;
+  border-radius: 30px !important;
+  padding: 10px 20px !important;
+}
+.HomeInputButton {
+  height: 46px;
+  padding: 10px 26px !important;
+  background: linear-gradient(
+    to right,
+    rgba(58, 83, 155, 0.151),
+    rgba(92, 151, 191, 0.73)
+  ) !important;
+  border-radius: 30px !important;
+  position: absolute;
+  margin: 0 !important;
+  top: 0;
+  right: -1px;
+  color: rgba(255, 255, 255, 1) !important;
+}
