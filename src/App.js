@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./App.css";
 import Signin from "./containers/Signin/Signin";
 import Signup from "./containers/Signup/Signup";
 import Home from "./containers/Home/Home";
@@ -20,11 +21,12 @@ import OnTvTvShows from "./containers/TvShows/OnTvTvShows/OnTvTvShows";
 import TopRatedTvShows from "./containers/TvShows/TopRatedTvShows/TopRatedTvShows";
 import MovieDetails from "./containers/Movies/MovieDetails/MovieDetails";
 import DiscoverMovies from "./containers/Movies/DiscoverMovies/DiscoverMovies";
+import TvShowDetails from "./containers/TvShows/TvShowDetails/TvShowDetails";
 /*
 
 TASK: /{somewhere wrong} redirects to /home
-TASK: logging out redirects to signin
 TASK: add redux authentication here
+TASK: remove all console errors
 
 */
 const isAuth = () => localStorage.getItem("token");
@@ -63,7 +65,7 @@ class App extends Component {
         component: Home,
       },
       {
-        path: "/searh/:id",
+        path: "/search/:id",
         exact: true,
         name: "Search Results",
         component: SearchResults,
@@ -152,6 +154,12 @@ class App extends Component {
         exact: true,
         name: "Top Rated Tv Shows",
         component: TopRatedTvShows,
+      },
+      {
+        path: "/tvshowdetails/:id",
+        exact: true,
+        name: "Tv Show Details",
+        component: TvShowDetails,
       },
     ];
 

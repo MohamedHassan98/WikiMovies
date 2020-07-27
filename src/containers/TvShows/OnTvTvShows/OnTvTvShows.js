@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 
 class OnTvTvShows extends Component {
   state = {
@@ -21,8 +22,9 @@ class OnTvTvShows extends Component {
             return {
               key: onTvTvShow.id,
               tvShowName: onTvTvShow.name,
-              tvShowImage:
-                `https://image.tmdb.org/t/p/w500` + onTvTvShow.poster_path,
+              tvShowImage: onTvTvShow.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + onTvTvShow.poster_path
+                : NoImage,
               tvShowReleaseDate: onTvTvShow.first_air_date,
             };
           }),
@@ -42,8 +44,9 @@ class OnTvTvShows extends Component {
               return {
                 key: onTvTvShow.id,
                 tvShowName: onTvTvShow.name,
-                tvShowImage:
-                  `https://image.tmdb.org/t/p/w500` + onTvTvShow.poster_path,
+                tvShowImage: onTvTvShow.poster_path
+                  ? `https://image.tmdb.org/t/p/w500` + onTvTvShow.poster_path
+                  : NoImage,
                 tvShowReleaseDate: onTvTvShow.first_air_date,
               };
             }),
@@ -63,9 +66,18 @@ class OnTvTvShows extends Component {
               this.state.onTvTvShows.map((onTvTvShow) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <Image src={onTvTvShow.tvShowImage} />
+                    <a href={"/tvshowdetails/" + onTvTvShow.key}>
+                      <Image src={onTvTvShow.tvShowImage} />
+                    </a>
                     <Card.Content>
-                      <Card.Header>{onTvTvShow.tvShowName}</Card.Header>
+                      <Card.Header>
+                        <a
+                          style={{ color: "black" }}
+                          href={"/tvshowdetails/" + onTvTvShow.key}
+                        >
+                          {onTvTvShow.tvShowName}
+                        </a>
+                      </Card.Header>
                       <Card.Meta>{onTvTvShow.tvShowReleaseDate}</Card.Meta>
                     </Card.Content>
                   </Card>

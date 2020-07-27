@@ -11,6 +11,7 @@ import {
   Pagination,
 } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 /*
 
 TASK: FIX CARD HEIGHT FOR ALL MOVIES
@@ -40,8 +41,9 @@ class DiscoverMovies extends Component {
             return {
               key: discoverMovie.id,
               movieName: discoverMovie.title,
-              movieImage:
-                `https://image.tmdb.org/t/p/w500` + discoverMovie.poster_path,
+              movieImage: discoverMovie.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + discoverMovie.poster_path
+                : NoImage,
               movieReleaseDate: discoverMovie.release_date,
             };
           }),
@@ -65,8 +67,10 @@ class DiscoverMovies extends Component {
               return {
                 key: discoverMovie.id,
                 movieName: discoverMovie.title,
-                movieImage:
-                  `https://image.tmdb.org/t/p/w500` + discoverMovie.poster_path,
+                movieImage: discoverMovie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500` +
+                    discoverMovie.poster_path
+                  : NoImage,
                 movieReleaseDate: discoverMovie.release_date,
               };
             }),
@@ -88,8 +92,9 @@ class DiscoverMovies extends Component {
             return {
               key: discoverMovie.id,
               movieName: discoverMovie.title,
-              movieImage:
-                `https://image.tmdb.org/t/p/w500` + discoverMovie.poster_path,
+              movieImage: discoverMovie.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + discoverMovie.poster_path
+                : NoImage,
               movieReleaseDate: discoverMovie.release_date,
             };
           }),
@@ -181,9 +186,18 @@ class DiscoverMovies extends Component {
                   this.state.discoverMovies.map((discoverMovie) => (
                     <Grid.Column width={4}>
                       <Card>
-                        <Image src={discoverMovie.movieImage} />
+                        <a href={"/moviedetails/" + discoverMovie.key}>
+                          <Image src={discoverMovie.movieImage} />
+                        </a>
                         <Card.Content>
-                          <Card.Header>{discoverMovie.movieName}</Card.Header>
+                          <Card.Header>
+                            <a
+                              style={{ color: "black" }}
+                              href={"/moviedetails/" + discoverMovie.key}
+                            >
+                              {discoverMovie.movieName}
+                            </a>
+                          </Card.Header>
                           <Card.Meta>
                             {discoverMovie.movieReleaseDate}
                           </Card.Meta>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 
 class PopularTvShows extends Component {
   state = {
@@ -21,8 +22,9 @@ class PopularTvShows extends Component {
             return {
               key: popularTvShow.id,
               tvShowName: popularTvShow.name,
-              tvShowImage:
-                `https://image.tmdb.org/t/p/w500` + popularTvShow.poster_path,
+              tvShowImage: popularTvShow.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + popularTvShow.poster_path
+                : NoImage,
               tvShowReleaseDate: popularTvShow.first_air_date,
             };
           }),
@@ -42,8 +44,10 @@ class PopularTvShows extends Component {
               return {
                 key: popularTvShow.id,
                 tvShowName: popularTvShow.name,
-                tvShowImage:
-                  `https://image.tmdb.org/t/p/w500` + popularTvShow.poster_path,
+                tvShowImage: popularTvShow.poster_path
+                  ? `https://image.tmdb.org/t/p/w500` +
+                    popularTvShow.poster_path
+                  : NoImage,
                 tvShowReleaseDate: popularTvShow.first_air_date,
               };
             }),
@@ -63,9 +67,18 @@ class PopularTvShows extends Component {
               this.state.popularTvShows.map((popularTvShow) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <Image src={popularTvShow.tvShowImage} />
+                    <a href={"/tvshowdetails/" + popularTvShow.key}>
+                      <Image src={popularTvShow.tvShowImage} />
+                    </a>
                     <Card.Content>
-                      <Card.Header>{popularTvShow.tvShowName}</Card.Header>
+                      <Card.Header>
+                        <a
+                          style={{ color: "black" }}
+                          href={"/tvshowdetails/" + popularTvShow.key}
+                        >
+                          {popularTvShow.tvShowName}
+                        </a>
+                      </Card.Header>
                       <Card.Meta>{popularTvShow.tvShowReleaseDate}</Card.Meta>
                     </Card.Content>
                   </Card>

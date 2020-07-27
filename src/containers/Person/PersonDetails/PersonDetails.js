@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Container, Image, Grid } from "semantic-ui-react";
+import { Container, Image, Grid, Card } from "semantic-ui-react";
 import Slider from "react-slick";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
+import ReadMoreAndLess from "react-read-more-less";
 
 /*
 
@@ -40,8 +42,9 @@ class PersonDetails extends Component {
           gender: response.data.gender,
           biography: response.data.biography,
           placeOfBirth: response.data.place_of_birth,
-          profilePicture:
-            `https://image.tmdb.org/t/p/w500` + response.data.profile_path,
+          profilePicture: response.data.profile_path
+            ? `https://image.tmdb.org/t/p/w500` + response.data.profile_path
+            : NoImage,
         });
       });
     axios
@@ -62,9 +65,27 @@ class PersonDetails extends Component {
           allCredits: response.data.cast.map((allCredit) => {
             return {
               key: allCredit.id,
-              creditName: allCredit.original_title,
-              creditPicture:
-                `https://image.tmdb.org/t/p/w500` + allCredit.poster_path,
+              creditName: allCredit.original_title
+                ? allCredit.original_title
+                : allCredit.original_name,
+              creditPicture: allCredit.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + allCredit.poster_path
+                : NoImage,
+            };
+          }),
+        });
+      });
+    axios
+      .get(
+        `https://api.themoviedb.org/3/person/${this.props.match.params.id}/images?api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+      )
+      .then((response) => {
+        this.setState({
+          actorImages: response.data.profiles.map((actorImage) => {
+            return {
+              image: actorImage.file_path
+                ? `https://image.tmdb.org/t/p/w500` + actorImage.file_path
+                : NoImage,
             };
           }),
         });
@@ -74,14 +95,11 @@ class PersonDetails extends Component {
   render() {
     const settings = {
       initialSlide: 0,
-      dots: false,
+      dots: true,
       infinite: false,
       speed: 500,
       slidesToShow: 5,
       slidesToScroll: 5,
-      draggable: false,
-      nextArrow: null,
-      prevArrow: null,
     };
     let genderMaleFemale = null;
     if (this.state.gender === 1) {
@@ -162,7 +180,19 @@ class PersonDetails extends Component {
                   <strong>{this.state.name}</strong>
                 </h1>
                 <h3 style={{ marginTop: "30px" }}>Biography</h3>
-                <p>{this.state.biography}</p>
+                {this.state.biography ? (
+                  <ReadMoreAndLess
+                    ref={this.ReadMore}
+                    className="read-more-content"
+                    charLimit={250}
+                    readMoreText="Read more"
+                    readLessText="Read less"
+                  >
+                    {this.state.biography}
+                  </ReadMoreAndLess>
+                ) : (
+                  `We don't have a biography for ${this.state.name}.`
+                )}
                 <h3 style={{ marginTop: "30px", marginBottom: "30px" }}>
                   Known For
                 </h3>
@@ -188,6 +218,21 @@ class PersonDetails extends Component {
                       </div>
                     ))}
                 </Slider>
+                <h3 style={{ marginTop: "30px", marginBottom: "30px" }}>
+                  Images
+                </h3>
+                <Grid divided="vertically">
+                  <Grid.Row>
+                    {this.state.actorImages &&
+                      this.state.actorImages.map((actorImage) => (
+                        <Grid.Column width={4}>
+                          <Card>
+                            <Image style={{}} src={actorImage.image} />
+                          </Card>
+                        </Grid.Column>
+                      ))}
+                  </Grid.Row>
+                </Grid>
               </>
             </Grid.Column>
           </Grid.Row>

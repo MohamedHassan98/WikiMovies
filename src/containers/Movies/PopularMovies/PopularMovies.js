@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 
 class PopularMovies extends Component {
   state = {
@@ -21,8 +22,9 @@ class PopularMovies extends Component {
             return {
               key: popularMovie.id,
               movieName: popularMovie.title,
-              movieImage:
-                `https://image.tmdb.org/t/p/w500` + popularMovie.poster_path,
+              movieImage: popularMovie.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + popularMovie.poster_path
+                : NoImage,
               movieReleaseDate: popularMovie.release_date,
             };
           }),
@@ -42,8 +44,9 @@ class PopularMovies extends Component {
               return {
                 key: popularMovie.id,
                 movieName: popularMovie.title,
-                movieImage:
-                  `https://image.tmdb.org/t/p/w500` + popularMovie.poster_path,
+                movieImage: popularMovie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500` + popularMovie.poster_path
+                  : NoImage,
                 movieReleaseDate: popularMovie.release_date,
               };
             }),
@@ -64,9 +67,18 @@ class PopularMovies extends Component {
               this.state.popularMovies.map((popularMovie) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <Image src={popularMovie.movieImage} />
+                    <a href={"/moviedetails/" + popularMovie.key}>
+                      <Image src={popularMovie.movieImage} />
+                    </a>
                     <Card.Content>
-                      <Card.Header>{popularMovie.movieName}</Card.Header>
+                      <Card.Header>
+                        <a
+                          style={{ color: "black" }}
+                          href={"/moviedetails/" + popularMovie.key}
+                        >
+                          {popularMovie.movieName}
+                        </a>
+                      </Card.Header>
                       <Card.Meta>{popularMovie.movieReleaseDate}</Card.Meta>
                     </Card.Content>
                   </Card>

@@ -17,6 +17,7 @@ import MoviesLogo from "../../assets/MoviesLogo.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { withRouter } from "react-router-dom";
+import DarkMode from "../DarkMode/DarkModeToggle";
 class Navbar extends Component {
   state = {
     searchClicked: false,
@@ -53,7 +54,9 @@ class Navbar extends Component {
           <Modal.Header>Sign Out</Modal.Header>
           <Modal.Content>
             <Modal.Description>
-              <p>Are you sure you want to sign out?</p>
+              <p style={{ color: "darkgrey" }}>
+                Are you sure you want to sign out?
+              </p>
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>
@@ -214,6 +217,9 @@ class Navbar extends Component {
             <Menu.Item onClick={this.clickLogoutHandler} position="secondright">
               <Icon disabled name="sign-out" />
               Sign Out
+            </Menu.Item>
+            <Menu.Item>
+              <DarkMode />
             </Menu.Item>
           </Container>
           {searchBar}

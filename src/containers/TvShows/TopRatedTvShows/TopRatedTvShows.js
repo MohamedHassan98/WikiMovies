@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 
 class TopRatedTvShows extends Component {
   state = {
@@ -21,8 +22,9 @@ class TopRatedTvShows extends Component {
             return {
               key: topRatedTvShow.id,
               tvShowName: topRatedTvShow.name,
-              tvShowImage:
-                `https://image.tmdb.org/t/p/w500` + topRatedTvShow.poster_path,
+              tvShowImage: topRatedTvShow.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + topRatedTvShow.poster_path
+                : NoImage,
               tvShowReleaseDate: topRatedTvShow.first_air_date,
             };
           }),
@@ -42,9 +44,10 @@ class TopRatedTvShows extends Component {
               return {
                 key: topRatedTvShow.id,
                 tvShowName: topRatedTvShow.name,
-                tvShowImage:
-                  `https://image.tmdb.org/t/p/w500` +
-                  topRatedTvShow.poster_path,
+                tvShowImage: topRatedTvShow.poster_path
+                  ? `https://image.tmdb.org/t/p/w500` +
+                    topRatedTvShow.poster_path
+                  : NoImage,
                 tvShowReleaseDate: topRatedTvShow.first_air_date,
               };
             }),
@@ -64,9 +67,18 @@ class TopRatedTvShows extends Component {
               this.state.topRatedTvShows.map((topRatedTvShow) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <Image src={topRatedTvShow.tvShowImage} />
+                    <a href={"/tvshowdetails/" + topRatedTvShow.key}>
+                      <Image src={topRatedTvShow.tvShowImage} />
+                    </a>
                     <Card.Content>
-                      <Card.Header>{topRatedTvShow.tvShowName}</Card.Header>
+                      <Card.Header>
+                        <a
+                          style={{ color: "black" }}
+                          href={"/tvshowdetails/" + topRatedTvShow.key}
+                        >
+                          {topRatedTvShow.tvShowName}
+                        </a>
+                      </Card.Header>
                       <Card.Meta>{topRatedTvShow.tvShowReleaseDate}</Card.Meta>
                     </Card.Content>
                   </Card>

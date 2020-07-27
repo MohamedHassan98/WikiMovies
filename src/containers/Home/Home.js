@@ -8,11 +8,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import "./Home.css";
 import axios from "axios";
-/*
 
-TASK: SLIDERS AREN'T ON FIRST SLIDE
-
-*/
 class Home extends Component {
   state = {
     searchName: "",
@@ -130,7 +126,7 @@ class Home extends Component {
     const settings = {
       initialSlide: 0,
       dots: true,
-      infinite: true,
+      infinite: false,
       speed: 500,
       slidesToShow: 5,
       slidesToScroll: 5,

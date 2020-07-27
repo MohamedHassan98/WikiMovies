@@ -11,11 +11,10 @@ import {
   Pagination,
 } from "semantic-ui-react";
 import axios from "axios";
-
+import NoImage from "../../../assets/NoImage.png";
 /*
 
 TASK: FIX CARD HEIGHT FOR ALL TV SHOWS
-TASK: ADD TV SHOW DETAILS PAGE
 
 */
 class DiscoverTvShows extends Component {
@@ -46,9 +45,10 @@ class DiscoverTvShows extends Component {
               return {
                 key: discoverTvShow.id,
                 tvShowName: discoverTvShow.name,
-                tvShowImage:
-                  `https://image.tmdb.org/t/p/w500` +
-                  discoverTvShow.poster_path,
+                tvShowImage: discoverTvShow.poster_path
+                  ? `https://image.tmdb.org/t/p/w500` +
+                    discoverTvShow.poster_path
+                  : NoImage,
                 tvShowReleaseDate: discoverTvShow.first_air_date,
               };
             }),
@@ -70,8 +70,9 @@ class DiscoverTvShows extends Component {
             return {
               key: discoverTvShow.id,
               tvShowName: discoverTvShow.name,
-              tvShowImage:
-                `https://image.tmdb.org/t/p/w500` + discoverTvShow.poster_path,
+              tvShowImage: discoverTvShow.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + discoverTvShow.poster_path
+                : NoImage,
               tvShowReleaseDate: discoverTvShow.first_air_date,
             };
           }),
@@ -91,8 +92,9 @@ class DiscoverTvShows extends Component {
             return {
               key: discoverTvShow.id,
               tvShowName: discoverTvShow.name,
-              tvShowImage:
-                `https://image.tmdb.org/t/p/w500` + discoverTvShow.poster_path,
+              tvShowImage: discoverTvShow.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + discoverTvShow.poster_path
+                : NoImage,
               tvShowReleaseDate: discoverTvShow.first_air_date,
             };
           }),
@@ -188,10 +190,17 @@ class DiscoverTvShows extends Component {
                     this.state.discoverTvShows.map((discoverTvShow) => (
                       <Grid.Column width={4}>
                         <Card>
-                          <Image src={discoverTvShow.tvShowImage} />
+                          <a href={"/tvshowdetails/" + discoverTvShow.key}>
+                            <Image src={discoverTvShow.tvShowImage} />
+                          </a>
                           <Card.Content>
                             <Card.Header>
-                              {discoverTvShow.tvShowName}
+                              <a
+                                style={{ color: "black" }}
+                                href={"/tvshowdetails/" + discoverTvShow.key}
+                              >
+                                {discoverTvShow.tvShowName}
+                              </a>
                             </Card.Header>
                             <Card.Meta>
                               {discoverTvShow.tvShowReleaseDate}

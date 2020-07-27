@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 
 class TopRatedMovies extends Component {
   state = {
@@ -21,8 +22,9 @@ class TopRatedMovies extends Component {
             return {
               key: topRatedMovie.id,
               movieName: topRatedMovie.title,
-              movieImage:
-                `https://image.tmdb.org/t/p/w500` + topRatedMovie.poster_path,
+              movieImage: topRatedMovie.poster_path
+                ? `https://image.tmdb.org/t/p/w500` + topRatedMovie.poster_path
+                : NoImage,
               movieReleaseDate: topRatedMovie.release_date,
             };
           }),
@@ -42,8 +44,10 @@ class TopRatedMovies extends Component {
               return {
                 key: topRatedMovie.id,
                 movieName: topRatedMovie.title,
-                movieImage:
-                  `https://image.tmdb.org/t/p/w500` + topRatedMovie.poster_path,
+                movieImage: topRatedMovie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500` +
+                    topRatedMovie.poster_path
+                  : NoImage,
                 movieReleaseDate: topRatedMovie.release_date,
               };
             }),
@@ -63,9 +67,18 @@ class TopRatedMovies extends Component {
               this.state.topRatedMovies.map((topRatedMovie) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <Image src={topRatedMovie.movieImage} />
+                    <a href={"/moviedetails/" + topRatedMovie.key}>
+                      <Image src={topRatedMovie.movieImage} />
+                    </a>
                     <Card.Content>
-                      <Card.Header>{topRatedMovie.movieName}</Card.Header>
+                      <Card.Header>
+                        <a
+                          style={{ color: "black" }}
+                          href={"/moviedetails/" + topRatedMovie.key}
+                        >
+                          {topRatedMovie.movieName}
+                        </a>
+                      </Card.Header>
                       <Card.Meta>{topRatedMovie.movieReleaseDate}</Card.Meta>
                     </Card.Content>
                   </Card>

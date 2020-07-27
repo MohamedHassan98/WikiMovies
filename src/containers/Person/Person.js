@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Card, Image, Grid, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../assets/NoImage.png";
 /* 
 
 TASK: FIX CARD HEIGHT
@@ -26,7 +27,9 @@ class Person extends Component {
               key: person.id,
               name: person.name,
               description: person.known_for_department,
-              image: `https://image.tmdb.org/t/p/w500` + person.profile_path,
+              image: person.profile_path
+                ? `https://image.tmdb.org/t/p/w500` + person.profile_path
+                : NoImage,
               knownFors: person.known_for.map((knownFor) => {
                 return {
                   key: knownFor.id,
@@ -53,7 +56,9 @@ class Person extends Component {
                 key: person.id,
                 name: person.name,
                 description: person.known_for_department,
-                image: `https://image.tmdb.org/t/p/w500` + person.profile_path,
+                image: person.profile_path
+                  ? `https://image.tmdb.org/t/p/w500` + person.profile_path
+                  : NoImage,
                 knownFors: person.known_for.map((knownFor) => {
                   return {
                     key: knownFor.id,

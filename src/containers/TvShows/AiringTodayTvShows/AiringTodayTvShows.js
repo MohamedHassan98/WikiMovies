@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 
 class AiringTodayTvShows extends Component {
   state = {
@@ -21,9 +22,10 @@ class AiringTodayTvShows extends Component {
             return {
               key: airingTodayTvShow.id,
               tvShowName: airingTodayTvShow.name,
-              tvShowImage:
-                `https://image.tmdb.org/t/p/w500` +
-                airingTodayTvShow.poster_path,
+              tvShowImage: airingTodayTvShow.poster_path
+                ? `https://image.tmdb.org/t/p/w500` +
+                  airingTodayTvShow.poster_path
+                : NoImage,
               tvShowReleaseDate: airingTodayTvShow.first_air_date,
             };
           }),
@@ -44,9 +46,10 @@ class AiringTodayTvShows extends Component {
                 return {
                   key: airingTodayTvShow.id,
                   tvShowName: airingTodayTvShow.name,
-                  tvShowImage:
-                    `https://image.tmdb.org/t/p/w500` +
-                    airingTodayTvShow.poster_path,
+                  tvShowImage: airingTodayTvShow.poster_path
+                    ? `https://image.tmdb.org/t/p/w500` +
+                      airingTodayTvShow.poster_path
+                    : NoImage,
                   tvShowReleaseDate: airingTodayTvShow.first_air_date,
                 };
               }
@@ -67,9 +70,18 @@ class AiringTodayTvShows extends Component {
               this.state.airingTodayTvShows.map((airingTodayTvShow) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <Image src={airingTodayTvShow.tvShowImage} />
+                    <a href={"/tvshowdetails/" + airingTodayTvShow.key}>
+                      <Image src={airingTodayTvShow.tvShowImage} />
+                    </a>
                     <Card.Content>
-                      <Card.Header>{airingTodayTvShow.tvShowName}</Card.Header>
+                      <Card.Header>
+                        <a
+                          style={{ color: "black" }}
+                          href={"/tvshowdetails/" + airingTodayTvShow.key}
+                        >
+                          {airingTodayTvShow.tvShowName}
+                        </a>
+                      </Card.Header>
                       <Card.Meta>
                         {airingTodayTvShow.tvShowReleaseDate}
                       </Card.Meta>

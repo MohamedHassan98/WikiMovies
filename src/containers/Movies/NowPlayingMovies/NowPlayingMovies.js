@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import NoImage from "../../../assets/NoImage.png";
 
 class NowPlaying extends Component {
   state = {
@@ -21,8 +22,10 @@ class NowPlaying extends Component {
             return {
               key: nowPlayingMovie.id,
               movieName: nowPlayingMovie.title,
-              movieImage:
-                `https://image.tmdb.org/t/p/w500` + nowPlayingMovie.poster_path,
+              movieImage: nowPlayingMovie.poster_path
+                ? `https://image.tmdb.org/t/p/w500` +
+                  nowPlayingMovie.poster_path
+                : NoImage,
               movieReleaseDate: nowPlayingMovie.release_date,
             };
           }),
@@ -42,9 +45,10 @@ class NowPlaying extends Component {
               return {
                 key: nowPlayingMovie.id,
                 movieName: nowPlayingMovie.title,
-                movieImage:
-                  `https://image.tmdb.org/t/p/w500` +
-                  nowPlayingMovie.poster_path,
+                movieImage: nowPlayingMovie
+                  ? `https://image.tmdb.org/t/p/w500` +
+                    nowPlayingMovie.poster_path
+                  : NoImage,
                 movieReleaseDate: nowPlayingMovie.release_date,
               };
             }),
@@ -64,9 +68,18 @@ class NowPlaying extends Component {
               this.state.nowPlayingMovies.map((nowPlayingMovie) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <Image src={nowPlayingMovie.movieImage} />
+                    <a href={"/moviedetails/" + nowPlayingMovie.key}>
+                      <Image src={nowPlayingMovie.movieImage} />
+                    </a>
                     <Card.Content>
-                      <Card.Header>{nowPlayingMovie.movieName}</Card.Header>
+                      <Card.Header>
+                        <a
+                          style={{ color: "black" }}
+                          href={"/moviedetails/" + nowPlayingMovie.key}
+                        >
+                          {nowPlayingMovie.movieName}
+                        </a>
+                      </Card.Header>
                       <Card.Meta>{nowPlayingMovie.movieReleaseDate}</Card.Meta>
                     </Card.Content>
                   </Card>

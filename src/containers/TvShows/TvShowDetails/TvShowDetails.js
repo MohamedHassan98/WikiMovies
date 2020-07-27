@@ -3,82 +3,79 @@ import { Container, Grid, Image, Icon, Modal } from "semantic-ui-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import CurrencyFormat from "react-currency-format";
 import axios from "axios";
 import NoImage from "../../../assets/NoImage.png";
 import ISO6391 from "iso-639-1";
 /*
 
 TASK: CAST REDIRECT TO THEIR PROFILE
+TASK: FIX RUNTIME
 
 */
-class MovieDetails extends Component {
+class TvShowDetails extends Component {
   state = {
     coverPhoto: null,
-    movieGenres: [],
-    movieHomepage: null,
-    movieName: null,
-    movieOverview: null,
+    tvShowGenres: [],
+    tvshowHomepage: null,
+    tvshowName: null,
+    tvshowOverview: null,
     mainPhoto: null,
-    movieReleaseDate: null,
-    movieRuntime: null,
-    movieBudget: null,
-    movieRevenue: null,
-    movieOriginalLanguage: null,
-    movieStatus: null,
-    movieTagline: null,
-    movieCasts: [],
-    movieFacebook: null,
-    movieInstagram: null,
-    movieTwitter: null,
-    movieTrailer: null,
-    movieMedias: [],
+    tvshowReleaseDate: null,
+    tvshowRuntime: null,
+    tvshowNetwork: null,
+    tvshowOriginalLanguage: null,
+    tvshowStatus: null,
+    tvshowCasts: [],
+    tvshowFacebook: null,
+    tvshowInstagram: null,
+    tvshowTwitter: null,
+    tvshowTrailer: null,
+    tvshowMedias: [],
+    tvshowRecommends: [],
     clickPlayTrailer: false,
-    movieRecommends: [],
   };
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `https://api.themoviedb.org/3/tv/${this.props.match.params.id}?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US`
       )
       .then((response) => {
         this.setState({
           coverPhoto:
             `https://image.tmdb.org/t/p/original` + response.data.backdrop_path,
-          movieGenres: response.data.genres.map((movieGenre) => {
+          tvshowGenres: response.data.genres.map((tvshowGenre) => {
             return {
-              key: movieGenre.id,
-              genre: movieGenre.name,
+              key: tvshowGenre.id,
+              genre: tvshowGenre.name,
             };
           }),
-          movieHomepage: response.data.homepage,
-          movieName: response.data.original_title,
-          movieOverview: response.data.overview,
+          tvshowHomepage: response.data.homepage,
+          tvshowName: response.data.original_name,
+          tvshoweOverview: response.data.overview,
           mainPhoto: response.data.poster_path
             ? `https://image.tmdb.org/t/p/original` + response.data.poster_path
             : NoImage,
-          movieReleaseDate: response.data.release_date,
-          movieRuntime: response.data.runtime,
-          movieBudget: response.data.budget,
-          movieRevenue: response.data.revenue,
-          movieOriginalLanguage: response.data.original_language,
-          movieStatus: response.data.status,
-          movieTagline: response.data.tagline,
+          tvshowReleaseDate: response.data.first_air_date,
+          tvshowRuntime: response.data.episode_run_time,
+          tvshowNetwork: response.data.networks[0].logo_path,
+          tvshowOverview: response.data.overview,
+          tvshowOriginalLanguage: response.data.original_language,
+          tvshowStatus: response.data.status,
         });
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/credits?api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `https://api.themoviedb.org/3/tv/${this.props.match.params.id}/credits?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
       )
       .then((response) => {
         this.setState({
-          movieCasts: response.data.cast.map((movieCast) => {
+          tvshowCasts: response.data.cast.map((tvshowCast) => {
             return {
-              key: movieCast.id,
-              actorName: movieCast.name,
-              characterName: movieCast.character,
-              actorImage: movieCast.profile_path
-                ? `https://image.tmdb.org/t/p/w500` + movieCast.profile_path
+              key: tvshowCast.id,
+              actorName: tvshowCast.name,
+              characterName: tvshowCast.character,
+              actorImage: tvshowCast.profile_path
+                ? `https://image.tmdb.org/t/p/w500` + tvshowCast.profile_path
                 : NoImage,
             };
           }),
@@ -86,59 +83,56 @@ class MovieDetails extends Component {
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/external_ids?api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `https://api.themoviedb.org/3/tv/${this.props.match.params.id}/external_ids?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
       )
       .then((response) => {
         this.setState({
-          movieFacebook: response.data.facebook_id,
-          movieInstagram: response.data.instagram_id,
-          movieTwitter: response.data.twitter_id,
+          tvshowFacebook: response.data.facebook_id,
+          tvshowInstagram: response.data.instagram_id,
+          tvshowTwitter: response.data.twitter_id,
         });
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/videos?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US`
+        `https://api.themoviedb.org/3/tv/${this.props.match.params.id}/videos?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
       )
       .then((response) => {
         this.setState({
-          movieTrailer: response.data.results[0]
+          tvshowTrailer: response.data.results[0]
             ? response.data.results[0].key
             : null,
-          movieTrailerId: response.data.results[0]
+          tvshowTrailerId: response.data.results[0]
             ? response.data.results[0].id
             : null,
-          movieMedias: response.data.results.map((movieMedia) => {
+          tvshowMedias: response.data.results.map((tvshowMedia) => {
             return {
-              key: movieMedia.key,
-              id: movieMedia.id,
+              key: tvshowMedia.key,
+              id: tvshowMedia.id,
             };
           }),
         });
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/recommendations?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94&page=1`
+        `https://api.themoviedb.org/3/tv/${this.props.match.params.id}/recommendations?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94&page=1`
       )
       .then((response) => {
         this.setState({
-          movieRecommends: response.data.results.map((movieRecommend) => {
+          tvshowRecommends: response.data.results.map((tvshowRecommend) => {
             return {
-              key: movieRecommend.id,
-              recommendedMovieName: movieRecommend.original_title,
-              recommendedMovieImage: movieRecommend.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + movieRecommend.poster_path
+              key: tvshowRecommend.id,
+              recommendedTvShowName: tvshowRecommend.original_name,
+              recommendedTvShowDate: tvshowRecommend.first_air_date,
+              recommendedTvShowImage: tvshowRecommend.poster_path
+                ? `https://image.tmdb.org/t/p/w500` +
+                  tvshowRecommend.poster_path
                 : NoImage,
-              recommendedMovieReleaseDate: movieRecommend.release_date,
             };
           }),
         });
       });
   }
   render() {
-    const runtimeHours = Math.floor(this.state.movieRuntime / 60);
-    const runtimeMinutes = Math.round(
-      (this.state.movieRuntime / 60 - runtimeHours) * 60
-    );
     const settings = {
       initialSlide: 0,
       dots: true,
@@ -192,19 +186,19 @@ class MovieDetails extends Component {
                   marginBottom: "25px",
                 }}
               >
-                {this.state.movieName}
+                {this.state.tvshowName}
               </h2>
               <span style={{ fontSize: "15px" }}>
-                {this.state.movieReleaseDate}
+                {this.state.tvshowReleaseDate}
               </span>
-              {this.state.movieGenres &&
-                this.state.movieGenres.map((movieGenre) => (
+              {this.state.tvshowGenres &&
+                this.state.tvshowGenres.map((tvshowGenre) => (
                   <span style={{ paddingLeft: "10px", fontSize: "15px" }}>
-                    {movieGenre.genre + "."}
+                    {tvshowGenre.genre + "."}
                   </span>
                 ))}
               <span style={{ paddingLeft: "10px", fontSize: "15px" }}>
-                {runtimeHours + " hrs " + runtimeMinutes + " mins"}
+                {this.state.tvshowRuntime}
               </span>
               <div style={{ width: "100%", marginTop: "25px" }}>
                 <Modal
@@ -224,32 +218,21 @@ class MovieDetails extends Component {
                   }
                 >
                   <Modal.Content style={{ padding: "0", lineHeight: "0" }}>
-                    {this.state.movieTrailer && this.state.movieMedias ? (
+                    {this.state.tvshowTrailer && this.state.tvshowMedias ? (
                       <iframe
                         style={{ height: "600px", width: "100%" }}
                         src={
                           "https://www.youtube.com/embed/" +
-                          this.state.movieTrailer
+                          this.state.tvshowTrailer
                         }
-                        title={this.state.movieTrailerId}
+                        title={this.state.tvshowTrailerId}
                       ></iframe>
                     ) : null}
                   </Modal.Content>
                 </Modal>
               </div>
-              <h3
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "400",
-                  fontStyle: "italic",
-                  width: "100%",
-                  opacity: "0.7",
-                }}
-              >
-                {this.state.movieTagline}
-              </h3>
               <h3 style={{ fontSize: "25px", width: "100%" }}>Overview</h3>
-              <p style={{ fontSize: "15px" }}>{this.state.movieOverview}</p>
+              <p style={{ fontSize: "15px" }}>{this.state.tvshowOverview}</p>
             </Grid.Column>
           </Grid.Row>
 
@@ -257,8 +240,8 @@ class MovieDetails extends Component {
             <Grid.Column width={12}>
               <h1>Full Cast</h1>
               <Slider {...settings}>
-                {this.state.movieCasts &&
-                  this.state.movieCasts.map((movieCast) => (
+                {this.state.tvshowCasts &&
+                  this.state.tvshowCasts.map((tvshowCast) => (
                     <div>
                       <div
                         style={{
@@ -269,12 +252,12 @@ class MovieDetails extends Component {
                       >
                         <Image
                           style={{ width: "70%", borderRadius: "30px" }}
-                          src={movieCast.actorImage}
+                          src={tvshowCast.actorImage}
                         />
                         <h1 style={{ fontSize: "17px", textAlign: "center" }}>
-                          {movieCast.actorName}
+                          {tvshowCast.actorName}
                         </h1>
-                        <p>{movieCast.characterName}</p>
+                        <p>{tvshowCast.characterName}</p>
                       </div>
                     </div>
                   ))}
@@ -282,42 +265,42 @@ class MovieDetails extends Component {
             </Grid.Column>
             <Grid.Column width={4}>
               <div style={{ marginTop: "10px", marginBottom: "20px" }}>
-                {this.state.movieFacebook ? (
+                {this.state.tvshowFacebook ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
                     href={
-                      "https://www.facebook.com/" + this.state.movieFacebook
+                      "https://www.facebook.com/" + this.state.tvshowFacebook
                     }
                   >
                     <Icon size="big" name="facebook" />
                   </a>
                 ) : null}
-                {this.state.movieInstagram ? (
+                {this.state.tvshowInstagram ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
                     href={
-                      "https://www.instagram.com/" + this.state.movieInstagram
+                      "https://www.instagram.com/" + this.state.tvshowInstagram
                     }
                   >
                     <Icon size="big" name="instagram" />
                   </a>
                 ) : null}
-                {this.state.movieTwitter ? (
+                {this.state.tvshowTwitter ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={"https://www.twitter.com/" + this.state.movieTwitter}
+                    href={"https://www.twitter.com/" + this.state.tvshowTwitter}
                   >
                     <Icon size="big" name="twitter" />
                   </a>
                 ) : null}
-                {this.state.movieHomepage ? (
+                {this.state.tvshowHomepage ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={this.state.movieHomepage}
+                    href={this.state.tvshowHomepage}
                   >
                     <Icon size="big" name="linkify" />
                   </a>
@@ -334,7 +317,25 @@ class MovieDetails extends Component {
                   >
                     Status
                   </strong>
-                  {this.state.movieStatus}
+                  {this.state.tvshowStatus}
+                </p>
+                <p style={{ fontSize: "15px" }}>
+                  <strong
+                    style={{
+                      display: "block",
+                      fontSize: "18px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    Network
+                  </strong>
+                  <Image
+                    style={{ width: "25%" }}
+                    src={
+                      "https://image.tmdb.org/t/p/w500" +
+                      this.state.tvshowNetwork
+                    }
+                  />
                 </p>
                 <p style={{ fontSize: "15px" }}>
                   <strong
@@ -346,51 +347,7 @@ class MovieDetails extends Component {
                   >
                     Original Language
                   </strong>
-                  {ISO6391.getName(this.state.movieOriginalLanguage)}
-                </p>
-                <p style={{ fontSize: "15px" }}>
-                  <strong
-                    style={{
-                      display: "block",
-                      fontSize: "18px",
-                      marginBottom: "5px",
-                    }}
-                  >
-                    Budget
-                  </strong>
-                  {this.state.movieBudget ? (
-                    <CurrencyFormat
-                      value={this.state.movieBudget}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"$"}
-                      renderText={(value) => <div>{value}</div>}
-                    />
-                  ) : (
-                    "-"
-                  )}
-                </p>
-                <p style={{ fontSize: "15px" }}>
-                  <strong
-                    style={{
-                      display: "block",
-                      fontSize: "18px",
-                      marginBottom: "5px",
-                    }}
-                  >
-                    Revenue
-                  </strong>
-                  {this.state.movieRevenue ? (
-                    <CurrencyFormat
-                      value={this.state.movieRevenue}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"$"}
-                      renderText={(value) => <div>{value}</div>}
-                    />
-                  ) : (
-                    "-"
-                  )}
+                  {ISO6391.getName(this.state.tvshowOriginalLanguage)}
                 </p>
               </div>
             </Grid.Column>
@@ -399,13 +356,13 @@ class MovieDetails extends Component {
             <Grid.Column style={{ marginTop: "30px" }}>
               <h1>Media</h1>
               <Slider {...settingss}>
-                {this.state.movieMedias &&
-                  this.state.movieMedias.map((movieMedia) => (
+                {this.state.tvshowMedias &&
+                  this.state.tvshowMedias.map((tvshowMedia) => (
                     <div>
                       <iframe
                         style={{ height: "600px", width: "100%" }}
-                        src={"https://www.youtube.com/embed/" + movieMedia.key}
-                        title={movieMedia.id}
+                        src={"https://www.youtube.com/embed/" + tvshowMedia.key}
+                        title={tvshowMedia.id}
                       ></iframe>
                     </div>
                   ))}
@@ -416,8 +373,8 @@ class MovieDetails extends Component {
             <Grid.Column style={{ marginTop: "30px" }}>
               <h1>Recommendations</h1>
               <Slider {...settings}>
-                {this.state.movieRecommends &&
-                  this.state.movieRecommends.map((movieRecommend) => (
+                {this.state.tvshowRecommends &&
+                  this.state.tvshowRecommends.map((tvshowRecommend) => (
                     <div>
                       <div
                         style={{
@@ -428,12 +385,12 @@ class MovieDetails extends Component {
                       >
                         <Image
                           style={{ width: "70%", borderRadius: "30px" }}
-                          src={movieRecommend.recommendedMovieImage}
+                          src={tvshowRecommend.recommendedTvShowImage}
                         />
                         <h1 style={{ fontSize: "17px", textAlign: "center" }}>
-                          {movieRecommend.recommendedMovieName}
+                          {tvshowRecommend.recommendedTvShowName}
                         </h1>
-                        <p>{movieRecommend.recommendedMovieReleaseDate}</p>
+                        <p>{tvshowRecommend.recommendedTvShowDate}</p>
                       </div>
                     </div>
                   ))}
@@ -445,4 +402,4 @@ class MovieDetails extends Component {
     );
   }
 }
-export default MovieDetails;
+export default TvShowDetails;

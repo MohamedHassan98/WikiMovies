@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Image, Container, Item, Grid, Pagination } from "semantic-ui-react";
 import axios from "axios";
-
+import NoImage from "../../assets/NoImage.png";
 /* 
 
 TASK: ADD SEARCH CATEGORY, DEFAULT MOVIES
@@ -35,7 +35,9 @@ class SearchResults extends Component {
                 name: movie.title,
                 description: movie.overview,
                 releaseDate: movie.release_date,
-                image: `https://image.tmdb.org/t/p/w500/` + movie.poster_path,
+                image: movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500/` + movie.poster_path
+                  : NoImage,
               };
             }),
           });
@@ -62,7 +64,9 @@ class SearchResults extends Component {
                 name: movie.title,
                 description: movie.overview,
                 releaseDate: movie.release_date,
-                image: `https://image.tmdb.org/t/p/w500/` + movie.poster_path,
+                image: movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500/` + movie.poster_path
+                  : NoImage,
               };
             }),
           });
@@ -84,7 +88,9 @@ class SearchResults extends Component {
                 name: movie.title,
                 description: movie.overview,
                 releaseDate: movie.release_date,
-                image: `https://image.tmdb.org/t/p/w500/` + movie.poster_path,
+                image: movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500/` + movie.poster_path
+                  : NoImage,
               };
             }),
           });
@@ -109,6 +115,7 @@ class SearchResults extends Component {
                   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
                   marginBottom: "35px",
                   borderRadius: "30px",
+                  width: "100%",
                 }}
               >
                 <Item.Group style={{ marginBottom: "50px" }}>
@@ -116,6 +123,7 @@ class SearchResults extends Component {
                     <Image
                       style={{ width: "20%", borderRadius: "30px" }}
                       src={movie.image}
+                      href={"/moviedetails/" + movie.key}
                     />
                     <Item.Content
                       style={{
@@ -125,7 +133,12 @@ class SearchResults extends Component {
                       }}
                     >
                       <Item.Header style={{ padding: "25px" }}>
-                        {movie.name}
+                        <a
+                          style={{ color: "black" }}
+                          href={"/moviedetails/" + movie.key}
+                        >
+                          {movie.name}
+                        </a>
                       </Item.Header>
                       <Item.Meta style={{ padding: "25px" }}>
                         {movie.releaseDate}
