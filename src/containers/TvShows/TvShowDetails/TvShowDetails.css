@@ -1,0 +1,61 @@
+.TvShowDetailsContainerStyle {
+  margin-top: 150px;
+}
+.TvShowDetailsMainPhotoStyle {
+  border-radius: 30px;
+}
+.TvShowDetailsGridColumnInfo {
+  display: flex !important;
+  align-content: center;
+  flex-wrap: wrap;
+  color: white;
+}
+.TvShowDetailsTvShowName {
+  font-size: 40px;
+  width: 100%;
+  margin-bottom: 25px;
+}
+.TvShowDetailsTvShowInfoP {
+  font-size: 15px;
+}
+.TvShowDetailsTvShowInfoSpan {
+  padding-left: 10px;
+  font-size: 15px;
+}
+.TvShowDetailsModalDiv {
+  width: 100%;
+  margin-top: 25px;
+}
+.TvShowDetailsPlayTrailerButton {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 20px;
+}
+.TvShowDetailsModalContent {
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+.TvShowDetailsExternalIconsDiv {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.TvShowDetailsStrong {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.TvShowDetailsIframeStyle {
+  height: 600px;
+  width: 100%;
+}
+.TvShowDetailsOverviewHeader {
+  font-size: 25px;
+  widows: 100%;
+}
+.TvShowDetailsColumn {
+  margin-top: 30px !important;
+}
+.TvShowDetailsNetworkImage {
+  width: 25%;
+}

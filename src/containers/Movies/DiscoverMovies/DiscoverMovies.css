@@ -11,3 +11,15 @@
   ) !important;
   color: rgba(255, 255, 255, 1) !important;
 }
+.DiscoverMoviesSortByDiv {
+  border-radius: 20px;
+  border: 2px solid black;
+}
+.DiscoverMoviesSortByHeader {
+  padding: 14px 16px;
+  margin-bottom: 0px;
+}
+.DiscoverMoviesSortDropdownDiv {
+  padding: 16px;
+  border-top: 1px solid black;
+}

@@ -13,21 +13,19 @@ class PopularTvShows extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/tv/popular?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US&page=1`
+        `${process.env.REACT_APP_BASE_URL}/tv/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`
       )
       .then((response) => {
         this.setState({
           totalPages: response.data.total_pages,
-          popularTvShows: response.data.results.map((popularTvShow) => {
-            return {
-              key: popularTvShow.id,
-              tvShowName: popularTvShow.name,
-              tvShowImage: popularTvShow.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + popularTvShow.poster_path
-                : NoImage,
-              tvShowReleaseDate: popularTvShow.first_air_date,
-            };
-          }),
+          popularTvShows: response.data.results.map((popularTvShow) => ({
+            key: popularTvShow.id,
+            tvShowName: popularTvShow.name,
+            tvShowImage: popularTvShow.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${popularTvShow.poster_path}`
+              : NoImage,
+            tvShowReleaseDate: popularTvShow.first_air_date,
+          })),
         });
       });
   }
@@ -36,21 +34,18 @@ class PopularTvShows extends Component {
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/tv/popular?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US&page=${this.state.page}`
+          `${process.env.REACT_APP_BASE_URL}/tv/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${activePage}`
         )
         .then((response) => {
           this.setState({
-            popularTvShows: response.data.results.map((popularTvShow) => {
-              return {
-                key: popularTvShow.id,
-                tvShowName: popularTvShow.name,
-                tvShowImage: popularTvShow.poster_path
-                  ? `https://image.tmdb.org/t/p/w500` +
-                    popularTvShow.poster_path
-                  : NoImage,
-                tvShowReleaseDate: popularTvShow.first_air_date,
-              };
-            }),
+            popularTvShows: response.data.results.map((popularTvShow) => ({
+              key: popularTvShow.id,
+              tvShowName: popularTvShow.name,
+              tvShowImage: popularTvShow.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${popularTvShow.poster_path}`
+                : NoImage,
+              tvShowReleaseDate: popularTvShow.first_air_date,
+            })),
           });
         })
     );
@@ -58,23 +53,24 @@ class PopularTvShows extends Component {
   };
 
   render() {
+    const { popularTvShows, totalPages } = this.state;
     return (
-      <Container style={{ marginTop: "80px" }}>
+      <Container className="ContainerStyle">
         <h1>Popular Tv Shows</h1>
         <Grid container divided="vertically">
           <Grid.Row>
-            {this.state.popularTvShows &&
-              this.state.popularTvShows.map((popularTvShow) => (
+            {popularTvShows &&
+              popularTvShows.map((popularTvShow) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <a href={"/tvshowdetails/" + popularTvShow.key}>
+                    <a href={`/tvshowdetails/${popularTvShow.key}`}>
                       <Image src={popularTvShow.tvShowImage} />
                     </a>
                     <Card.Content>
                       <Card.Header>
                         <a
-                          style={{ color: "black" }}
-                          href={"/tvshowdetails/" + popularTvShow.key}
+                          className="CardHeader"
+                          href={`/tvshowdetails/${popularTvShow.key}`}
                         >
                           {popularTvShow.tvShowName}
                         </a>
@@ -86,10 +82,10 @@ class PopularTvShows extends Component {
               ))}
           </Grid.Row>
         </Grid>
-        <div style={{ textAlign: "center" }}>
+        <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}
-            totalPages={this.state.totalPages}
+            totalPages={totalPages}
             onPageChange={this.setPageNum}
           />
         </div>

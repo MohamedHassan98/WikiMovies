@@ -7,3 +7,17 @@
   width: 50% !important;
   margin-bottom: 10px !important;
 }
+.NavbarDropdownItem {
+  color: black !important;
+}
+.NavbarFormStyle {
+  position: absolute !important;
+  top: 59px;
+  width: 100%;
+}
+.NavbarModalSignout {
+  color: darkgrey;
+}
+.NavbarImageStyle {
+  margin-right: 1.5em;
+}

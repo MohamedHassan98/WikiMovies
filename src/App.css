@@ -113,3 +113,40 @@ input[type="checkbox"].dmcheck + label {
   opacity: 0.9;
   background-color: #f6f6f6;
 }
+.ui.card {
+  height: 100%;
+}
+.ui.card > .content > .header,
+.ui.cards > .card > .content > .header {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ContainerStyle {
+  margin-top: 80px;
+}
+.PaginationStyle {
+  text-align: center;
+}
+.CardHeader {
+  color: black !important;
+}
+.ui.card .meta,
+.ui.cards > .card .meta {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.SliderDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.SliderImage {
+  border-radius: 30px;
+  width: 70%;
+}
+.SliderHeader {
+  text-align: center;
+  font-size: 17px;
+}

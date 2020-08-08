@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import { Container, Card, Image, Grid, Pagination } from "semantic-ui-react";
 import axios from "axios";
 import NoImage from "../../assets/NoImage.png";
-/* 
+import "./Person.css";
 
-TASK: FIX CARD HEIGHT
-
-*/
 class Person extends Component {
   state = {
     persons: [],
@@ -17,57 +14,49 @@ class Person extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/person/popular?page=1&api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US`
+        `${process.env.REACT_APP_BASE_URL}/person/popular?page=1&api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
       )
       .then((response) => {
         this.setState({
           totalPages: response.data.total_pages,
-          persons: response.data.results.map((person) => {
-            return {
-              key: person.id,
-              name: person.name,
-              description: person.known_for_department,
-              image: person.profile_path
-                ? `https://image.tmdb.org/t/p/w500` + person.profile_path
-                : NoImage,
-              knownFors: person.known_for.map((knownFor) => {
-                return {
-                  key: knownFor.id,
-                  movieTitle: knownFor.title,
-                  tvTitles: knownFor.name,
-                };
-              }),
-            };
-          }),
+          persons: response.data.results.map((person) => ({
+            key: person.id,
+            name: person.name,
+            description: person.known_for_department,
+            image: person.profile_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${person.profile_path}`
+              : NoImage,
+            knownFors: person.known_for.map((knownFor) => ({
+              key: knownFor.id,
+              movieTitle: knownFor.title,
+              tvTitles: knownFor.name,
+            })),
+          })),
         });
       });
   }
 
-  setPageNum = (event, { activePage }) => {
+  setPageNum = (_, { activePage }) => {
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/person/popular?page=${this.state.page}&api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US`
+          `${process.env.REACT_APP_BASE_URL}/person/popular?page=${activePage}&api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
         )
         .then((response) => {
           this.setState({
-            persons: response.data.results.map((person) => {
-              return {
-                key: person.id,
-                name: person.name,
-                description: person.known_for_department,
-                image: person.profile_path
-                  ? `https://image.tmdb.org/t/p/w500` + person.profile_path
-                  : NoImage,
-                knownFors: person.known_for.map((knownFor) => {
-                  return {
-                    key: knownFor.id,
-                    movieTitle: knownFor.title,
-                    tvTitles: knownFor.name,
-                  };
-                }),
-              };
-            }),
+            persons: response.data.results.map((person) => ({
+              key: person.id,
+              name: person.name,
+              description: person.known_for_department,
+              image: person.profile_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${person.profile_path}`
+                : NoImage,
+              knownFors: person.known_for.map((knownFor) => ({
+                key: knownFor.id,
+                movieTitle: knownFor.title,
+                tvTitles: knownFor.name,
+              })),
+            })),
           });
         })
     );
@@ -75,25 +64,21 @@ class Person extends Component {
   };
 
   render() {
+    const { persons, totalPages } = this.state;
     return (
-      <Container style={{ marginTop: "80px" }}>
-        <h1 style={{ fontWeight: "700", marginBottom: "30px" }}>
-          Popular People
-        </h1>
+      <Container className="ContainerStyle">
+        <h1 className="PersonPopularHeader">Popular People</h1>
         <Grid container divided="vertically">
           <Grid.Row>
-            {this.state.persons.map((person) => (
+            {persons.map((person) => (
               <Grid.Column width={4}>
                 <Card>
-                  <a href={"/person/" + person.key}>
+                  <a href={`/person/${person.key}`}>
                     <Image src={person.image} />
                   </a>
                   <Card.Content>
                     <Card.Header>
-                      <a
-                        style={{ color: "black" }}
-                        href={"/person/" + person.key}
-                      >
+                      <a className="CardHeader" href={`/person/${person.key}`}>
                         {person.name}
                       </a>
                     </Card.Header>
@@ -115,10 +100,10 @@ class Person extends Component {
             ))}
           </Grid.Row>
         </Grid>
-        <div style={{ textAlign: "center" }}>
+        <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}
-            totalPages={this.state.totalPages}
+            totalPages={totalPages}
             onPageChange={this.setPageNum}
           />
         </div>

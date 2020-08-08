@@ -1,0 +1,29 @@
+.SearchResultsContainer {
+  margin-top: 120px;
+}
+.SearchResultsGrid {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 35px !important;
+  border-radius: 30px;
+  width: 100%;
+}
+.SearchResultsItemGroup {
+  margin-bottom: 50px !important;
+}
+.SearchResultsImage {
+  width: 20%;
+  border-radius: 30px !important;
+}
+.SearchResultsItemContent {
+  display: flex !important;
+  flex-direction: column !important;
+  align-content: center !important;
+  justify-content: center !important;
+  align-content: center !important;
+}
+.SearchResultsItemInsideContent {
+  padding: 25px !important;
+}
+.SearchResultsItemHeader {
+  color: black !important;
+}

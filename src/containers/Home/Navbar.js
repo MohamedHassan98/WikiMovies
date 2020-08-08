@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./Navbar.css";
 import { connect } from "react-redux";
 import {
   Container,
@@ -14,10 +13,15 @@ import {
   DropdownItem,
 } from "semantic-ui-react";
 import MoviesLogo from "../../assets/MoviesLogo.png";
-import { Formik } from "formik";
-import * as Yup from "yup";
 import { withRouter } from "react-router-dom";
 import DarkMode from "../DarkMode/DarkModeToggle";
+import "./Navbar.css";
+/*
+
+TASK: FIX LOGOUT MODAL
+
+*/
+
 class Navbar extends Component {
   state = {
     searchClicked: false,
@@ -31,9 +35,13 @@ class Navbar extends Component {
   searchCancelClickedHandler = () => {
     this.setState({ searchClicked: false });
   };
-  submitSearchHandler = (values) => {
-    const newSearch = { search: values.searchName };
-    this.props.history.push(`/search/${newSearch.search}`);
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const newSearch = this.state.searchName;
+    this.props.history.push(`/search/${newSearch}`);
+  };
+  handleChange = (event) => {
+    this.setState({ searchName: event.target.value });
   };
   logoutHandler = () => {
     localStorage.clear();
@@ -47,14 +55,15 @@ class Navbar extends Component {
   };
 
   render() {
+    const { clickLogout, searchClicked, searchName } = this.state;
     let logoutModal = null;
-    if (this.state.clickLogout) {
+    if (clickLogout) {
       logoutModal = (
-        <Modal size="mini" open={this.state.clickLogout} dimmer="blurring">
+        <Modal size="mini" open={clickLogout} dimmer="blurring">
           <Modal.Header>Sign Out</Modal.Header>
           <Modal.Content>
             <Modal.Description>
-              <p style={{ color: "darkgrey" }}>
+              <p className="NavbarModalSignout">
                 Are you sure you want to sign out?
               </p>
             </Modal.Description>
@@ -70,16 +79,13 @@ class Navbar extends Component {
         </Modal>
       );
     }
-    const schema = Yup.object().shape({
-      searchName: Yup.string().required(),
-    });
     let searchBarIcon = (
       <Menu.Item onClick={this.searchClickedHandler} position="right">
         <Icon name="search" />
         Search
       </Menu.Item>
     );
-    if (this.state.searchClicked) {
+    if (searchClicked) {
       searchBarIcon = (
         <Menu.Item onClick={this.searchCancelClickedHandler} position="right">
           <Icon name="delete" />
@@ -89,45 +95,23 @@ class Navbar extends Component {
     }
 
     let searchBar = null;
-    if (this.state.searchClicked) {
+    if (searchClicked) {
       searchBar = (
-        <Formik
-          validationSchema={schema}
-          onSubmit={(values) => this.submitSearchHandler(values)}
-          initialValues={{
-            searchName: "",
-          }}
-          render={({
-            handleSubmit,
-            handleChange,
-            values,
-            touched,
-            isInvalid,
-            handleBlur,
-            errors,
-          }) => (
-            <Form
-              style={{ position: "absolute", top: "59px", width: "100%" }}
-              onSubmit={(event) => {
-                handleSubmit(values);
-              }}
-            >
-              <Form.Field>
-                <div className="SearchBarDivInput">
-                  <Input
-                    className="SearchBarInput"
-                    placeholder="Search for a movie, tv show, person..."
-                    name="searchName"
-                    value={values.searchName}
-                    onChange={handleChange}
-                    isInvalid={!!errors.searchName && !!touched.searchName}
-                    onBlur={handleBlur}
-                  />
-                </div>
-              </Form.Field>
-            </Form>
-          )}
-        />
+        <Form
+          className="NavbarFormStyle"
+          onSubmit={searchName ? this.handleSubmit : null}
+        >
+          <Form.Field>
+            <div className="SearchBarDivInput">
+              <Input
+                className="SearchBarInput"
+                placeholder="Search for a movie, tv show, person..."
+                name="searchName"
+                onChange={this.handleChange}
+              />
+            </div>
+          </Form.Field>
+        </Form>
       );
     }
     return (
@@ -140,7 +124,7 @@ class Navbar extends Component {
                 <Image
                   size="mini"
                   src={MoviesLogo}
-                  style={{ marginRight: "1.5em" }}
+                  className="NavbarImageStyle"
                 />
               </a>
               <a href="/home"> WikiMovies </a>
@@ -148,27 +132,27 @@ class Navbar extends Component {
             <Dropdown item text="Movies">
               <Dropdown.Menu>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/movies">
+                  <a className="NavbarDropdownItem" href="/movies">
                     Discover
                   </a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/popularmovies">
+                  <a className="NavbarDropdownItem" href="/popularmovies">
                     Popular
                   </a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/nowplayingmovies">
+                  <a className="NavbarDropdownItem" href="/nowplayingmovies">
                     Now Playing
                   </a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/upcomingmovies">
+                  <a className="NavbarDropdownItem" href="/upcomingmovies">
                     Upcoming
                   </a>
                 </Dropdown.Item>
                 <DropdownItem>
-                  <a style={{ color: "black" }} href="/topratedmovies">
+                  <a className="NavbarDropdownItem" href="/topratedmovies">
                     Top Rated
                   </a>
                 </DropdownItem>
@@ -178,27 +162,27 @@ class Navbar extends Component {
             <Dropdown item text="TV Shows">
               <Dropdown.Menu>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/tvshows">
+                  <a className="NavbarDropdownItem" href="/tvshows">
                     Discover
                   </a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/populartvshows">
+                  <a className="NavbarDropdownItem" href="/populartvshows">
                     Popular
                   </a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/airingtodaytvshows">
+                  <a className="NavbarDropdownItem" href="/airingtodaytvshows">
                     Airing Today
                   </a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/ontheairtvshows">
+                  <a className="NavbarDropdownItem" href="/ontheairtvshows">
                     On TV
                   </a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/topratedtvshows">
+                  <a className="NavbarDropdownItem" href="/topratedtvshows">
                     Top Rated
                   </a>
                 </Dropdown.Item>
@@ -207,7 +191,7 @@ class Navbar extends Component {
             <Dropdown item text="People">
               <Dropdown.Menu>
                 <Dropdown.Item>
-                  <a style={{ color: "black" }} href="/person">
+                  <a className="NavbarDropdownItem" href="/person">
                     Popular People
                   </a>
                 </Dropdown.Item>

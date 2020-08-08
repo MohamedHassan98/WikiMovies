@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./DiscoverTvShows.css";
 import {
   Container,
   Grid,
@@ -12,11 +11,41 @@ import {
 } from "semantic-ui-react";
 import axios from "axios";
 import NoImage from "../../../assets/NoImage.png";
-/*
+import "./DiscoverTvShows.css";
 
-TASK: FIX CARD HEIGHT FOR ALL TV SHOWS
+const sortByOptions = [
+  {
+    key: "1",
+    text: "Popularity Descending",
+    value: "popularity.desc",
+  },
+  {
+    key: "2",
+    text: "Popularity Ascending",
+    value: "popularity.asc",
+  },
+  {
+    key: "3",
+    text: "Rating Descending",
+    value: "vote_average.desc",
+  },
+  {
+    key: "4",
+    text: "Rating Ascending",
+    value: "vote_average.asc",
+  },
+  {
+    key: "5",
+    text: "Release Date Descending",
+    value: "primary_release_date.desc",
+  },
+  {
+    key: "6",
+    text: "Release Date Ascending",
+    value: "primary_release_date.asc",
+  },
+];
 
-*/
 class DiscoverTvShows extends Component {
   state = {
     discoverTvShows: [],
@@ -29,29 +58,27 @@ class DiscoverTvShows extends Component {
 
     this.sortByHandleSubmit = this.sortByHandleSubmit.bind(this);
   }
-  sortByOnChange = (e, data) => {
+  sortByOnChange = (_, data) => {
     this.setState({ sortByValue: data.value });
   };
 
-  setPageNum = (event, { activePage }) => {
+  setPageNum = (_, { activePage }) => {
+    const { sortByValue } = this.state;
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/discover/tv?language=en-US&page=${this.state.page}&sort_by=${this.state.sortByValue}&api_key=aa8a6567cb9ae791c14c0b267ac92c94&include_null_first_air_dates=false`
+          `${process.env.REACT_APP_BASE_URL}/discover/tv?language=en-US&page=${activePage}&sort_by=${sortByValue}&api_key=${process.env.REACT_APP_API_KEY}&include_null_first_air_dates=false`
         )
         .then((response) => {
           this.setState({
-            discoverTvShows: response.data.results.map((discoverTvShow) => {
-              return {
-                key: discoverTvShow.id,
-                tvShowName: discoverTvShow.name,
-                tvShowImage: discoverTvShow.poster_path
-                  ? `https://image.tmdb.org/t/p/w500` +
-                    discoverTvShow.poster_path
-                  : NoImage,
-                tvShowReleaseDate: discoverTvShow.first_air_date,
-              };
-            }),
+            discoverTvShows: response.data.results.map((discoverTvShow) => ({
+              key: discoverTvShow.id,
+              tvShowName: discoverTvShow.name,
+              tvShowImage: discoverTvShow.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${discoverTvShow.poster_path}`
+                : NoImage,
+              tvShowReleaseDate: discoverTvShow.first_air_date,
+            })),
           });
         })
     );
@@ -61,113 +88,61 @@ class DiscoverTvShows extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/discover/tv?language=en-US&page=1&sort_by=popularity.desc&api_key=aa8a6567cb9ae791c14c0b267ac92c94&include_null_first_air_dates=false`
+        `${process.env.REACT_APP_BASE_URL}/discover/tv?language=en-US&page=1&sort_by=popularity.desc&api_key=${process.env.REACT_APP_API_KEY}&include_null_first_air_dates=false`
       )
       .then((response) => {
         this.setState({
           totalPages: response.data.total_pages,
-          discoverTvShows: response.data.results.map((discoverTvShow) => {
-            return {
-              key: discoverTvShow.id,
-              tvShowName: discoverTvShow.name,
-              tvShowImage: discoverTvShow.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + discoverTvShow.poster_path
-                : NoImage,
-              tvShowReleaseDate: discoverTvShow.first_air_date,
-            };
-          }),
+          discoverTvShows: response.data.results.map((discoverTvShow) => ({
+            key: discoverTvShow.id,
+            tvShowName: discoverTvShow.name,
+            tvShowImage: discoverTvShow.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${discoverTvShow.poster_path}`
+              : NoImage,
+            tvShowReleaseDate: discoverTvShow.first_air_date,
+          })),
         });
       });
   }
 
   sortByHandleSubmit(event) {
+    const { sortByValue } = this.state;
     axios
       .get(
-        `https://api.themoviedb.org/3/discover/tv?language=en-US&page=1&sort_by=${this.state.sortByValue}&api_key=aa8a6567cb9ae791c14c0b267ac92c94&include_null_first_air_dates=false`
+        `${process.env.REACT_APP_BASE_URL}/discover/tv?language=en-US&page=1&sort_by=${sortByValue}&api_key=${process.env.REACT_APP_API_KEY}&include_null_first_air_dates=false`
       )
       .then((response) => {
         this.setState({
           page: 1,
-          discoverTvShows: response.data.results.map((discoverTvShow) => {
-            return {
-              key: discoverTvShow.id,
-              tvShowName: discoverTvShow.name,
-              tvShowImage: discoverTvShow.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + discoverTvShow.poster_path
-                : NoImage,
-              tvShowReleaseDate: discoverTvShow.first_air_date,
-            };
-          }),
+          discoverTvShows: response.data.results.map((discoverTvShow) => ({
+            key: discoverTvShow.id,
+            tvShowName: discoverTvShow.name,
+            tvShowImage: discoverTvShow.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${discoverTvShow.poster_path}`
+              : NoImage,
+            tvShowReleaseDate: discoverTvShow.first_air_date,
+          })),
         });
       });
     event.preventDefault();
   }
 
   render() {
-    const sortByOptions = [
-      {
-        key: "1",
-        text: "Popularity Descending",
-        value: "popularity.desc",
-      },
-      {
-        key: "2",
-        text: "Popularity Ascending",
-        value: "popularity.asc",
-      },
-      {
-        key: "3",
-        text: "Rating Descending",
-        value: "vote_average.desc",
-      },
-      {
-        key: "4",
-        text: "Rating Ascending",
-        value: "vote_average.asc",
-      },
-      {
-        key: "5",
-        text: "Release Date Descending",
-        value: "primary_release_date.desc",
-      },
-      {
-        key: "6",
-        text: "Release Date Ascending",
-        value: "primary_release_date.asc",
-      },
-    ];
-
+    const { sortByValue, discoverTvShows, page, totalPages } = this.state;
     return (
-      <Container style={{ marginTop: "80px" }}>
+      <Container className="ContainerStyle">
         <h1>Discover Tv Shows</h1>
         <Grid divided>
           <Grid.Row>
             <Grid.Column width={3}>
-              <div
-                style={{
-                  borderRadius: "20px",
-                  border: "2px solid black",
-                }}
-              >
-                <h2
-                  style={{
-                    padding: "14px 16px",
-                    marginBottom: "0px",
-                  }}
-                >
-                  Sort
-                </h2>
-                <div
-                  style={{
-                    borderTop: "1px solid black",
-                    padding: "16px",
-                  }}
-                >
+              <div className="DiscoverTvShowsSortByDiv">
+                <h2 className="DiscoverTvShowsSortByHeader">Sort</h2>
+                <div className="DiscoverTvShowsSortDropdownDiv">
                   <h4>Sort Results By</h4>
                   <Form onSubmit={this.sortByHandleSubmit}>
                     <Dropdown
                       placeholder="Please select"
-                      defaultValue={this.state.sortByValue}
+                      defaultValue={sortByValue}
                       fluid
                       selection
                       options={sortByOptions}
@@ -186,18 +161,18 @@ class DiscoverTvShows extends Component {
             <Grid.Column width={13}>
               <Grid container divided="vertically">
                 <Grid.Row>
-                  {this.state.discoverTvShows &&
-                    this.state.discoverTvShows.map((discoverTvShow) => (
+                  {discoverTvShows &&
+                    discoverTvShows.map((discoverTvShow) => (
                       <Grid.Column width={4}>
                         <Card>
-                          <a href={"/tvshowdetails/" + discoverTvShow.key}>
+                          <a href={`/tvshowdetails/${discoverTvShow.key}`}>
                             <Image src={discoverTvShow.tvShowImage} />
                           </a>
                           <Card.Content>
                             <Card.Header>
                               <a
-                                style={{ color: "black" }}
-                                href={"/tvshowdetails/" + discoverTvShow.key}
+                                className="CardHeader"
+                                href={`/tvshowdetails/${discoverTvShow.key}`}
                               >
                                 {discoverTvShow.tvShowName}
                               </a>
@@ -214,11 +189,11 @@ class DiscoverTvShows extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <div style={{ textAlign: "center" }}>
+        <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}
-            activePage={this.state.page}
-            totalPages={this.state.totalPages}
+            activePage={page}
+            totalPages={totalPages}
             onPageChange={this.setPageNum}
           />
         </div>

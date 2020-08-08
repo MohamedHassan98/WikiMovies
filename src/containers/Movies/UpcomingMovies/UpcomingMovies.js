@@ -13,30 +13,28 @@ class UpcomingMovies extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US&page=1`
+        `${process.env.REACT_APP_BASE_URL}/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`
       )
       .then((response) => {
         this.setState({
           totalPages: response.data.total_pages,
-          upcomingMovies: response.data.results.map((upcomingMovie) => {
-            return {
-              key: upcomingMovie.id,
-              movieName: upcomingMovie.title,
-              movieImage: upcomingMovie.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + upcomingMovie.poster_path
-                : NoImage,
-              movieReleaseDate: upcomingMovie.release_date,
-            };
-          }),
+          upcomingMovies: response.data.results.map((upcomingMovie) => ({
+            key: upcomingMovie.id,
+            movieName: upcomingMovie.title,
+            movieImage: upcomingMovie.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${upcomingMovie.poster_path}`
+              : NoImage,
+            movieReleaseDate: upcomingMovie.release_date,
+          })),
         });
       });
   }
 
-  setPageNum = (event, { activePage }) => {
+  setPageNum = (_, { activePage }) => {
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/movie/upcoming?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US&page=${this.state.page}`
+          `${process.env.REACT_APP_BASE_URL}/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${activePage}`
         )
         .then((response) => {
           this.setState({
@@ -45,8 +43,7 @@ class UpcomingMovies extends Component {
                 key: upcomingMovie.id,
                 movieName: upcomingMovie.title,
                 movieImage: upcomingMovie.poster_path
-                  ? `https://image.tmdb.org/t/p/w500` +
-                    upcomingMovie.poster_path
+                  ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${upcomingMovie.poster_path}`
                   : NoImage,
                 movieReleaseDate: upcomingMovie.release_date,
               };
@@ -58,23 +55,24 @@ class UpcomingMovies extends Component {
   };
 
   render() {
+    const { upcomingMovies, totalPages } = this.state;
     return (
-      <Container style={{ marginTop: "80px" }}>
+      <Container className="ContainerStyle">
         <h1>Upcoming Movies</h1>
         <Grid container divided="vertically">
           <Grid.Row>
-            {this.state.upcomingMovies &&
-              this.state.upcomingMovies.map((upcomingMovie) => (
+            {upcomingMovies &&
+              upcomingMovies.map((upcomingMovie) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <a href={"/moviedetails/" + upcomingMovie.key}>
+                    <a href={`/moviedetails/${upcomingMovie.key}`}>
                       <Image src={upcomingMovie.movieImage} />
                     </a>
                     <Card.Content>
                       <Card.Header>
                         <a
-                          style={{ color: "black" }}
-                          href={"/moviedetails/" + upcomingMovie.key}
+                          className="CardHeader"
+                          href={`/moviedetails/${upcomingMovie.key}`}
                         >
                           {upcomingMovie.movieName}
                         </a>
@@ -86,10 +84,10 @@ class UpcomingMovies extends Component {
               ))}
           </Grid.Row>
         </Grid>
-        <div style={{ textAlign: "center" }}>
+        <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}
-            totalPages={this.state.totalPages}
+            totalPages={totalPages}
             onPageChange={this.setPageNum}
           />
         </div>

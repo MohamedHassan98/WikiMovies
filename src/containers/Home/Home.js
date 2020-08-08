@@ -4,89 +4,82 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Toggle } from "react-toggle-component";
 import { Container, Image, Form, Button } from "semantic-ui-react";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import "./Home.css";
 import axios from "axios";
+import "./Home.css";
 
 class Home extends Component {
   state = {
     searchName: "",
-    popularMovies: [],
     popularToggle: false,
     topRatedToggle: false,
-    disocverToggle: false,
+    defaultPage: 1,
   };
 
   getPopularMovies = () => {
+    const { defaultPage } = this.state;
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/popular?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94&page=1`
+        `${process.env.REACT_APP_BASE_URL}/movie/popular?language=en-US&api_key=${process.env.REACT_APP_API_KEY}&page=${defaultPage}`
       )
       .then((response) => {
         this.setState({
-          populars: response.data.results.map((popular) => {
-            return {
-              key: popular.id,
-              name: popular.title,
-              releaseDate: popular.release_date,
-              image: `https://image.tmdb.org/t/p/w500/` + popular.poster_path,
-            };
-          }),
+          populars: response.data.results.map((popular) => ({
+            key: popular.id,
+            name: popular.title,
+            releaseDate: popular.release_date,
+            image: `${process.env.REACT_APP_BASE_IMAGE_URL}/${popular.poster_path}`,
+          })),
         });
       });
   };
   getTopMovies = () => {
+    const { defaultPage } = this.state;
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/movie/top_rated?language=en-US&page=${defaultPage}&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
-          topRateds: response.data.results.map((topRated) => {
-            return {
-              key: topRated.id,
-              name: topRated.title,
-              releaseDate: topRated.release_date,
-              image: `https://image.tmdb.org/t/p/w500/` + topRated.poster_path,
-            };
-          }),
+          topRateds: response.data.results.map((topRated) => ({
+            key: topRated.id,
+            name: topRated.title,
+            releaseDate: topRated.release_date,
+            image: `${process.env.REACT_APP_BASE_IMAGE_URL}/${topRated.poster_path}`,
+          })),
         });
       });
   };
   getPopularTV = () => {
+    const { defaultPage } = this.state;
     axios
       .get(
-        `https://api.themoviedb.org/3/tv/popular?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US&page=1`
+        `${process.env.REACT_APP_BASE_URL}/tv/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${defaultPage}`
       )
       .then((response) => {
         this.setState({
-          populars: response.data.results.map((popular) => {
-            return {
-              key: popular.id,
-              name: popular.original_name,
-              releaseDate: popular.first_air_date,
-              image: `https://image.tmdb.org/t/p/w500/` + popular.poster_path,
-            };
-          }),
+          populars: response.data.results.map((popular) => ({
+            key: popular.id,
+            name: popular.original_name,
+            releaseDate: popular.first_air_date,
+            image: `${process.env.REACT_APP_BASE_IMAGE_URL}/${popular.poster_path}`,
+          })),
         });
       });
   };
   getTopTV = () => {
+    const { defaultPage } = this.state;
     axios
       .get(
-        `https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/tv/top_rated?language=en-US&page=${defaultPage}&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
-          topRateds: response.data.results.map((topRated) => {
-            return {
-              key: topRated.id,
-              name: topRated.original_name,
-              releaseDate: topRated.first_air_date,
-              image: `https://image.tmdb.org/t/p/w500/` + topRated.poster_path,
-            };
-          }),
+          topRateds: response.data.results.map((topRated) => ({
+            key: topRated.id,
+            name: topRated.original_name,
+            releaseDate: topRated.first_air_date,
+            image: `${process.env.REACT_APP_BASE_IMAGE_URL}/${topRated.poster_path}`,
+          })),
         });
       });
   };
@@ -95,34 +88,38 @@ class Home extends Component {
     this.getPopularMovies();
     this.getTopMovies();
   }
-  submitSearchHandler = (values) => {
-    const newSearch = { search: values.searchName };
-    this.props.history.push(`/search/${newSearch.search}`);
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const newSearch = this.state.searchName;
+    this.props.history.push(`/search/${newSearch}`);
+  };
+  handleChange = (event) => {
+    this.setState({ searchName: event.target.value });
   };
 
   clickPopularToggle = (e) => {
+    const { popularToggle } = this.state;
     this.setState({ popularToggle: e.target.checked });
-    if (this.state.popularToggle === false) {
+    if (popularToggle === false) {
       this.getPopularTV();
     }
-    if (this.state.popularToggle === true) {
+    if (popularToggle === true) {
       this.getPopularMovies();
     }
   };
   clickTopRatedToggle = (e) => {
+    const { topRatedToggle } = this.state;
     this.setState({ topRatedToggle: e.target.checked });
-    if (this.state.topRatedToggle === false) {
+    if (topRatedToggle === false) {
       this.getTopTV();
     }
-    if (this.state.topRatedToggle === true) {
+    if (topRatedToggle === true) {
       this.getTopMovies();
     }
   };
 
   render() {
-    const schema = Yup.object().shape({
-      searchName: Yup.string().required(),
-    });
+    const { popularToggle, populars, topRateds } = this.state;
     const settings = {
       initialSlide: 0,
       dots: true,
@@ -132,68 +129,41 @@ class Home extends Component {
       slidesToScroll: 5,
     };
     let hrefImage = null;
-    if (this.state.popularToggle === false) {
+    if (popularToggle === false) {
       hrefImage = "/moviedetails/";
     }
-    if (this.state.popularToggle === true) {
+    if (popularToggle === true) {
       hrefImage = "/tvshowdetails/";
     }
     return (
-      <Container style={{ marginTop: "59px" }}>
+      <Container className="HomeContainerStyle">
         <section className="HomeSearchImageWrapper">
           <div className="HomeSearchContentWrapper">
-            <h1 className="HomeHeaderWelcome">Welcome.</h1>
+            <h1 className="HomeHeaderWelcome">Welcome</h1>
             <h3 className="HomeSecondHeader">
               Millions of movies, TV shows and people to discover. Explore now.
             </h3>
-            <Formik
-              validationSchema={schema}
-              onSubmit={(values) => this.submitSearchHandler(values)}
-              initialValues={{
-                searchName: "",
-              }}
-              render={({
-                handleSubmit,
-                handleChange,
-                values,
-                touched,
-                isInvalid,
-                handleBlur,
-                errors,
-              }) => (
-                <Form
-                  style={{ marginTop: "40px" }}
-                  onSubmit={(event) => {
-                    handleSubmit(values);
-                  }}
+            <Form className="HomeFormStyle" onSubmit={this.handleSubmit}>
+              <Form.Field>
+                <input
+                  className="HomeInputStyle"
+                  placeholder="Search for a movie, tv show, person..."
+                  name="searchName"
+                  onChange={this.handleChange}
+                />
+                <Button
+                  className="HomeInputButton"
+                  type="submit"
+                  disabled={!this.state.searchName}
                 >
-                  <Form.Field>
-                    <input
-                      className="HomeInputStyle"
-                      placeholder="Search for a movie, tv show, person..."
-                      name="searchName"
-                      value={values.searchName}
-                      onChange={handleChange}
-                      isInvalid={!!errors.searchName && !!touched.searchName}
-                      onBlur={handleBlur}
-                    />
-                    <Button className="HomeInputButton" type="submit">
-                      Submit
-                    </Button>
-                  </Form.Field>
-                </Form>
-              )}
-            />
+                  Submit
+                </Button>
+              </Form.Field>
+            </Form>
           </div>
         </section>
-        <h2 style={{ marginBottom: "30px" }}> What's Popular </h2>
-        <h3
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            paddingBottom: "30px",
-          }}
-        >
+        <h2 className="HomeHeaderStyle"> What's Popular </h2>
+        <h3 className="HomeToggleHeader">
           Movies
           <Toggle
             leftBackgroundColor="#3A539B"
@@ -206,36 +176,21 @@ class Home extends Component {
           TV
         </h3>
         <Slider {...settings}>
-          {this.state.populars &&
-            this.state.populars.map((popular) => (
+          {populars &&
+            populars.map((popular) => (
               <div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <a href={hrefImage + popular.key}>
-                    <Image
-                      style={{ width: "70%", borderRadius: "30px" }}
-                      src={popular.image}
-                    />
-                  </a>
-                  <h1 style={{ fontSize: "17px" }}>{popular.name}</h1>
-                  <p>{popular.releaseDate}</p>
-                </div>
+                <a href={`${hrefImage}${popular.key}`}>
+                  <div className="SliderDiv">
+                    <Image className="SliderImage" src={popular.image} />
+                    <h1 className="SliderHeader">{popular.name}</h1>
+                    <p>{popular.releaseDate}</p>
+                  </div>
+                </a>
               </div>
             ))}
         </Slider>
-        <h2 style={{ marginBottom: "30px" }}> What's Top Rated </h2>
-        <h3
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            paddingBottom: "30px",
-          }}
-        >
+        <h2 className="HomeHeaderStyle"> What's Top Rated </h2>
+        <h3 className="HomeToggleHeader">
           Movies
           <Toggle
             leftBackgroundColor="#3A539B"
@@ -248,25 +203,16 @@ class Home extends Component {
           TV
         </h3>
         <Slider {...settings}>
-          {this.state.topRateds &&
-            this.state.topRateds.map((topRated) => (
+          {topRateds &&
+            topRateds.map((topRated) => (
               <div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    style={{ width: "70%", borderRadius: "30px" }}
-                    src={topRated.image}
-                  />
-                  <h1 style={{ fontSize: "17px", textAlign: "center" }}>
-                    {topRated.name}
-                  </h1>
-                  <p>{topRated.releaseDate}</p>
-                </div>
+                <a href={`${hrefImage}${topRated.key}`}>
+                  <div className="SliderDiv">
+                    <Image className="SliderImage" src={topRated.image} />
+                    <h1 className="SliderHeader">{topRated.name}</h1>
+                    <p>{topRated.releaseDate}</p>
+                  </div>
+                </a>
               </div>
             ))}
         </Slider>

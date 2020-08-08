@@ -12,8 +12,8 @@ import {
 import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
 import * as Yup from "yup";
-import "./Signin.css";
 import { connect } from "react-redux";
+import "./Signin.css";
 import * as actions from "../store/actions/index";
 
 class Signin extends Component {
@@ -29,6 +29,7 @@ class Signin extends Component {
   };
 
   render() {
+    const { buttonDisabled } = this.state;
     const schema = Yup.object().shape({
       email: Yup.string().email().required("Email is required"),
       password: Yup.string().required("Password is required"),
@@ -66,7 +67,7 @@ class Signin extends Component {
                         <Form.Field>
                           <div className="SigninIconInput">
                             <Icon
-                              style={{ lineHeight: "1.5", color: "white" }}
+                              className="SignInIcon"
                               size="big"
                               disabled
                               name="mail"
@@ -91,7 +92,7 @@ class Signin extends Component {
                         <Form.Field>
                           <div className="SigninIconInput">
                             <Icon
-                              style={{ lineHeight: "1.5", color: "white" }}
+                              className="SignInIcon"
                               size="big"
                               disabled
                               name="key"
@@ -119,7 +120,7 @@ class Signin extends Component {
                           <Button
                             className="SigninButton"
                             type="submit"
-                            disabled={this.state.buttonDisabled}
+                            disabled={buttonDisabled}
                           >
                             Sign In
                           </Button>
@@ -131,9 +132,9 @@ class Signin extends Component {
               </Card.Content>
               <Card.Content extra>
                 <div className="SigninFooter">
-                  <footer style={{ color: "white" }}>
+                  <footer>
                     New member?{" "}
-                    <a style={{ color: "#5c97bf" }} href="/signup">
+                    <a className="SigninHrefSignup" href="/signup">
                       Sign Up!
                     </a>
                   </footer>

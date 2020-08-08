@@ -12,8 +12,8 @@ import {
 import { Formik } from "formik";
 import { withRouter } from "react-router-dom";
 import * as Yup from "yup";
-import "./Signup.css";
 import { connect } from "react-redux";
+import "./Signup.css";
 import * as actions from "../store/actions/index";
 
 class Signup extends Component {
@@ -28,6 +28,7 @@ class Signup extends Component {
     this.props.onAuth(values.email, values.password, this.state.isSignup);
   };
   render() {
+    const { buttonDisabled } = this.state;
     const schema = Yup.object().shape({
       name: Yup.string().required("Name is required"),
       email: Yup.string().email().required("Email is required"),
@@ -39,14 +40,10 @@ class Signup extends Component {
           <Container text>
             <Card className="SignupWelcomeText">
               <Card.Content>
-                <Card.Header
-                  style={{ fontSize: "35px", color: "antiquewhite" }}
-                >
+                <Card.Header className="SignupCardHeader">
                   Welcome to WikiMovies
                 </Card.Header>
-                <Card.Description
-                  style={{ fontSize: "25px", color: "antiquewhite" }}
-                >
+                <Card.Description className="SignupcardDescription">
                   <p>
                     Your new favourite way to navigate movies, tv series and
                     people
@@ -88,7 +85,7 @@ class Signup extends Component {
                         <Form.Field>
                           <div className="SignupIconInput">
                             <Icon
-                              style={{ lineHeight: "1.5", color: "white" }}
+                              className="SignupIcon"
                               size="big"
                               disabled
                               name="user"
@@ -111,7 +108,7 @@ class Signup extends Component {
                         <Form.Field>
                           <div className="SignupIconInput">
                             <Icon
-                              style={{ lineHeight: "1.5", color: "white" }}
+                              className="SignupIcon"
                               size="big"
                               disabled
                               name="mail"
@@ -136,7 +133,7 @@ class Signup extends Component {
                         <Form.Field>
                           <div className="SignupIconInput">
                             <Icon
-                              style={{ lineHeight: "1.5", color: "white" }}
+                              className="SignupIcon"
                               size="big"
                               disabled
                               name="key"
@@ -164,7 +161,7 @@ class Signup extends Component {
                           <Button
                             className="SignupButton"
                             type="submit"
-                            disabled={this.state.buttonDisabled}
+                            disabled={buttonDisabled}
                           >
                             Sign Up
                           </Button>
@@ -176,9 +173,9 @@ class Signup extends Component {
               </Card.Content>
               <Card.Content extra>
                 <div className="SignupFooter">
-                  <footer style={{ color: "white" }}>
+                  <footer>
                     Got an account?{" "}
-                    <a style={{ color: "#3a529c" }} href="/signin">
+                    <a className="SignupHrefSignin" href="/signin">
                       Sign In!
                     </a>
                   </footer>

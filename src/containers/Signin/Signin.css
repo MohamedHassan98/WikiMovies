@@ -10,6 +10,7 @@
   justify-content: center;
   font-size: 18px;
   font-family: Arial, Helvetica, sans-serif;
+  color: white;
 }
 .SigninButton {
   padding: 20px 30px !important;
@@ -76,4 +77,11 @@
       rgba(92, 151, 191, 0.73)
     ),
     url("https://i.pinimg.com/originals/da/58/27/da582791457dc1929269b9b2fd301eaa.jpg");
+}
+.SignInIcon {
+  line-height: 1.5 !important;
+  color: white;
+}
+.SigninHrefSignup {
+  color: #5c97bf;
 }

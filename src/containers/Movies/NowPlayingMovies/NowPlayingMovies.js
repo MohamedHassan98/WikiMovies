@@ -13,45 +13,39 @@ class NowPlaying extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/movie/now_playing?language=en-US&page=1&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
           totalPages: response.data.total_pages,
-          nowPlayingMovies: response.data.results.map((nowPlayingMovie) => {
-            return {
-              key: nowPlayingMovie.id,
-              movieName: nowPlayingMovie.title,
-              movieImage: nowPlayingMovie.poster_path
-                ? `https://image.tmdb.org/t/p/w500` +
-                  nowPlayingMovie.poster_path
-                : NoImage,
-              movieReleaseDate: nowPlayingMovie.release_date,
-            };
-          }),
+          nowPlayingMovies: response.data.results.map((nowPlayingMovie) => ({
+            key: nowPlayingMovie.id,
+            movieName: nowPlayingMovie.title,
+            movieImage: nowPlayingMovie.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${nowPlayingMovie.poster_path}`
+              : NoImage,
+            movieReleaseDate: nowPlayingMovie.release_date,
+          })),
         });
       });
   }
 
-  setPageNum = (event, { activePage }) => {
+  setPageNum = (_, { activePage }) => {
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${this.state.page}&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+          `${process.env.REACT_APP_BASE_URL}/movie/now_playing?language=en-US&page=${activePage}&api_key=${process.env.REACT_APP_API_KEY}`
         )
         .then((response) => {
           this.setState({
-            nowPlayingMovies: response.data.results.map((nowPlayingMovie) => {
-              return {
-                key: nowPlayingMovie.id,
-                movieName: nowPlayingMovie.title,
-                movieImage: nowPlayingMovie
-                  ? `https://image.tmdb.org/t/p/w500` +
-                    nowPlayingMovie.poster_path
-                  : NoImage,
-                movieReleaseDate: nowPlayingMovie.release_date,
-              };
-            }),
+            nowPlayingMovies: response.data.results.map((nowPlayingMovie) => ({
+              key: nowPlayingMovie.id,
+              movieName: nowPlayingMovie.title,
+              movieImage: nowPlayingMovie.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${nowPlayingMovie.poster_path}`
+                : NoImage,
+              movieReleaseDate: nowPlayingMovie.release_date,
+            })),
           });
         })
     );
@@ -59,23 +53,24 @@ class NowPlaying extends Component {
   };
 
   render() {
+    const { nowPlayingMovies, totalPages } = this.state;
     return (
-      <Container style={{ marginTop: "80px" }}>
+      <Container className="ContainerStyle">
         <h1>Now Playing Movies</h1>
         <Grid container divided="vertically">
           <Grid.Row>
-            {this.state.nowPlayingMovies &&
-              this.state.nowPlayingMovies.map((nowPlayingMovie) => (
+            {nowPlayingMovies &&
+              nowPlayingMovies.map((nowPlayingMovie) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <a href={"/moviedetails/" + nowPlayingMovie.key}>
+                    <a href={`moviedetails/${nowPlayingMovie.key}`}>
                       <Image src={nowPlayingMovie.movieImage} />
                     </a>
                     <Card.Content>
                       <Card.Header>
                         <a
-                          style={{ color: "black" }}
-                          href={"/moviedetails/" + nowPlayingMovie.key}
+                          className="CardHeader"
+                          href={`/moviedetails/${nowPlayingMovie.key}`}
                         >
                           {nowPlayingMovie.movieName}
                         </a>
@@ -87,10 +82,10 @@ class NowPlaying extends Component {
               ))}
           </Grid.Row>
         </Grid>
-        <div style={{ textAlign: "center" }}>
+        <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}
-            totalPages={this.state.totalPages}
+            totalPages={totalPages}
             onPageChange={this.setPageNum}
           />
         </div>

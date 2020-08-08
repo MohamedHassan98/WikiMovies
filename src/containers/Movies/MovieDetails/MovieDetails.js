@@ -5,8 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import CurrencyFormat from "react-currency-format";
 import axios from "axios";
-import NoImage from "../../../assets/NoImage.png";
 import ISO6391 from "iso-639-1";
+import NoImage from "../../../assets/NoImage.png";
+import "./MovieDetails.css";
 /*
 
 TASK: CAST REDIRECT TO THEIR PROFILE
@@ -14,6 +15,7 @@ TASK: CAST REDIRECT TO THEIR PROFILE
 */
 class MovieDetails extends Component {
   state = {
+    movie: {},
     coverPhoto: null,
     movieGenres: [],
     movieHomepage: null,
@@ -39,23 +41,20 @@ class MovieDetails extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/movie/${this.props.match.params.id}?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
-          coverPhoto:
-            `https://image.tmdb.org/t/p/original` + response.data.backdrop_path,
-          movieGenres: response.data.genres.map((movieGenre) => {
-            return {
-              key: movieGenre.id,
-              genre: movieGenre.name,
-            };
-          }),
+          coverPhoto: `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.backdrop_path}`,
+          movieGenres: response.data.genres.map((movieGenre) => ({
+            key: movieGenre.id,
+            genre: movieGenre.name,
+          })),
           movieHomepage: response.data.homepage,
           movieName: response.data.original_title,
           movieOverview: response.data.overview,
           mainPhoto: response.data.poster_path
-            ? `https://image.tmdb.org/t/p/original` + response.data.poster_path
+            ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.poster_path}`
             : NoImage,
           movieReleaseDate: response.data.release_date,
           movieRuntime: response.data.runtime,
@@ -68,25 +67,23 @@ class MovieDetails extends Component {
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/credits?api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/movie/${this.props.match.params.id}/credits?api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
-          movieCasts: response.data.cast.map((movieCast) => {
-            return {
-              key: movieCast.id,
-              actorName: movieCast.name,
-              characterName: movieCast.character,
-              actorImage: movieCast.profile_path
-                ? `https://image.tmdb.org/t/p/w500` + movieCast.profile_path
-                : NoImage,
-            };
-          }),
+          movieCasts: response.data.cast.map((movieCast) => ({
+            key: movieCast.id,
+            actorName: movieCast.name,
+            characterName: movieCast.character,
+            actorImage: movieCast.profile_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${movieCast.profile_path}`
+              : NoImage,
+          })),
         });
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/external_ids?api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/movie/${this.props.match.params.id}/external_ids?api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
@@ -97,7 +94,7 @@ class MovieDetails extends Component {
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/videos?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US`
+        `${process.env.REACT_APP_BASE_URL}/movie/${this.props.match.params.id}/videos?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
       )
       .then((response) => {
         this.setState({
@@ -107,38 +104,57 @@ class MovieDetails extends Component {
           movieTrailerId: response.data.results[0]
             ? response.data.results[0].id
             : null,
-          movieMedias: response.data.results.map((movieMedia) => {
-            return {
-              key: movieMedia.key,
-              id: movieMedia.id,
-            };
-          }),
+          movieMedias: response.data.results.map((movieMedia) => ({
+            key: movieMedia.key,
+            id: movieMedia.id,
+          })),
         });
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${this.props.match.params.id}/recommendations?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94&page=1`
+        `${process.env.REACT_APP_BASE_URL}/movie/${this.props.match.params.id}/recommendations?language=en-US&api_key=${process.env.REACT_APP_API_KEY}&page=1`
       )
       .then((response) => {
         this.setState({
-          movieRecommends: response.data.results.map((movieRecommend) => {
-            return {
-              key: movieRecommend.id,
-              recommendedMovieName: movieRecommend.original_title,
-              recommendedMovieImage: movieRecommend.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + movieRecommend.poster_path
-                : NoImage,
-              recommendedMovieReleaseDate: movieRecommend.release_date,
-            };
-          }),
+          movieRecommends: response.data.results.map((movieRecommend) => ({
+            key: movieRecommend.id,
+            recommendedMovieName: movieRecommend.original_title,
+            recommendedMovieImage: movieRecommend.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${movieRecommend.poster_path}`
+              : NoImage,
+            recommendedMovieReleaseDate: movieRecommend.release_date,
+          })),
         });
       });
   }
   render() {
-    const runtimeHours = Math.floor(this.state.movieRuntime / 60);
-    const runtimeMinutes = Math.round(
-      (this.state.movieRuntime / 60 - runtimeHours) * 60
-    );
+    const {
+      movieRuntime,
+      mainPhoto,
+      movieName,
+      movieReleaseDate,
+      movieGenres,
+      movieTrailer,
+      movieMedias,
+      movieTrailerId,
+      movieTagline,
+      movieOverview,
+      movieCasts,
+      movieFacebook,
+      movieInstagram,
+      movieTwitter,
+      movieHomepage,
+      movieStatus,
+      movieOriginalLanguage,
+      movieBudget,
+      movieRevenue,
+      movieRecommends,
+    } = this.state;
+    const runtimeHours = Math.floor(movieRuntime / 60);
+    const runtimeMinutes = Math.round((movieRuntime / 60 - runtimeHours) * 60);
+
+    const { coverPhoto } = this.state;
+
     const settings = {
       initialSlide: 0,
       dots: true,
@@ -157,7 +173,7 @@ class MovieDetails extends Component {
       adaptiveHeight: true,
     };
     return (
-      <Container style={{ marginTop: "150px" }}>
+      <Container className="MovieDetailsContainerStyle">
         <Grid>
           <Grid.Row
             style={{
@@ -166,114 +182,64 @@ class MovieDetails extends Component {
                                 rgba(100, 100, 100, 1),
                                 rgba(100, 100, 100, 0.5)
                                 ),
-                                url("${this.state.coverPhoto}")`,
-              backgroundSize: "cover",
+                                url("${coverPhoto}")`,
+              backgroundSize: "100% 100%",
             }}
           >
             <Grid.Column width={4}>
-              <Image
-                style={{ borderRadius: "30px" }}
-                src={this.state.mainPhoto}
-              />
+              <Image className="MovieDetailsMainPhotoStyle" src={mainPhoto} />
             </Grid.Column>
-            <Grid.Column
-              style={{
-                display: "flex",
-                alignContent: "center",
-                flexWrap: "wrap",
-                color: "white",
-              }}
-              width={12}
-            >
-              <h2
-                style={{
-                  fontSize: "40px",
-                  width: "100%",
-                  marginBottom: "25px",
-                }}
-              >
-                {this.state.movieName}
-              </h2>
-              <span style={{ fontSize: "15px" }}>
-                {this.state.movieReleaseDate}
-              </span>
-              {this.state.movieGenres &&
-                this.state.movieGenres.map((movieGenre) => (
-                  <span style={{ paddingLeft: "10px", fontSize: "15px" }}>
+            <Grid.Column className="MovieDetailsGridColumnInfo" width={12}>
+              <h2 className="MovieDetailsMovieName">{movieName}</h2>
+              <p className="MovieDetailsMovieInfoP">{movieReleaseDate}</p>
+              {movieGenres &&
+                movieGenres.map((movieGenre) => (
+                  <span className="MovieDetailsMovieInfoSpan">
                     {movieGenre.genre + "."}
                   </span>
                 ))}
-              <span style={{ paddingLeft: "10px", fontSize: "15px" }}>
+              <span className="MovieDetailsMovieInfoSpan">
                 {runtimeHours + " hrs " + runtimeMinutes + " mins"}
               </span>
-              <div style={{ width: "100%", marginTop: "25px" }}>
+              <div className="MovieDetailsModalDiv">
                 <Modal
                   closeIcon
                   trigger={
-                    <button
-                      style={{
-                        border: "none",
-                        background: "transparent",
-                        color: "white",
-                        fontSize: "20px",
-                      }}
-                    >
+                    <button className="MovieDetailsPlayTrailerButton">
                       <Icon name="play" />
                       Play Trailer
                     </button>
                   }
                 >
-                  <Modal.Content style={{ padding: "0", lineHeight: "0" }}>
-                    {this.state.movieTrailer && this.state.movieMedias ? (
+                  <Modal.Content className="MovieDetailsModalContent">
+                    {movieTrailer && movieMedias ? (
                       <iframe
-                        style={{ height: "600px", width: "100%" }}
-                        src={
-                          "https://www.youtube.com/embed/" +
-                          this.state.movieTrailer
-                        }
-                        title={this.state.movieTrailerId}
+                        className="MovieDetailsIframeStyle"
+                        src={`https://www.youtube.com/embed/${movieTrailer}`}
+                        title={movieTrailerId}
                       ></iframe>
                     ) : null}
                   </Modal.Content>
                 </Modal>
               </div>
-              <h3
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "400",
-                  fontStyle: "italic",
-                  width: "100%",
-                  opacity: "0.7",
-                }}
-              >
-                {this.state.movieTagline}
-              </h3>
-              <h3 style={{ fontSize: "25px", width: "100%" }}>Overview</h3>
-              <p style={{ fontSize: "15px" }}>{this.state.movieOverview}</p>
+              <h3 className="MovieDetailsTagline">{movieTagline}</h3>
+              <h3 className="MovieDetailsOverviewHeader">Overview</h3>
+              <p className="MovieDetailsMovieInfoP">{movieOverview}</p>
             </Grid.Column>
           </Grid.Row>
-
           <Grid.Row>
             <Grid.Column width={12}>
               <h1>Full Cast</h1>
               <Slider {...settings}>
-                {this.state.movieCasts &&
-                  this.state.movieCasts.map((movieCast) => (
+                {movieCasts &&
+                  movieCasts.map((movieCast) => (
                     <div>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
+                      <div className="SliderDiv">
                         <Image
-                          style={{ width: "70%", borderRadius: "30px" }}
+                          className="SliderImage"
                           src={movieCast.actorImage}
                         />
-                        <h1 style={{ fontSize: "17px", textAlign: "center" }}>
-                          {movieCast.actorName}
-                        </h1>
+                        <h1 className="SliderHeader">{movieCast.actorName}</h1>
                         <p>{movieCast.characterName}</p>
                       </div>
                     </div>
@@ -281,86 +247,60 @@ class MovieDetails extends Component {
               </Slider>
             </Grid.Column>
             <Grid.Column width={4}>
-              <div style={{ marginTop: "10px", marginBottom: "20px" }}>
-                {this.state.movieFacebook ? (
+              <div className="MovieDetailsExternalIconsDiv">
+                {movieFacebook ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={
-                      "https://www.facebook.com/" + this.state.movieFacebook
-                    }
+                    href={`https://www.facebook.com/${movieFacebook}`}
                   >
                     <Icon size="big" name="facebook" />
                   </a>
                 ) : null}
-                {this.state.movieInstagram ? (
+                {movieInstagram ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={
-                      "https://www.instagram.com/" + this.state.movieInstagram
-                    }
+                    href={`https://www.instagram.com/${movieInstagram}`}
                   >
                     <Icon size="big" name="instagram" />
                   </a>
                 ) : null}
-                {this.state.movieTwitter ? (
+                {movieTwitter ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={"https://www.twitter.com/" + this.state.movieTwitter}
+                    href={`https://www.twitter.com/${movieTwitter}`}
                   >
                     <Icon size="big" name="twitter" />
                   </a>
                 ) : null}
-                {this.state.movieHomepage ? (
+                {movieHomepage ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={this.state.movieHomepage}
+                    href={movieHomepage}
                   >
                     <Icon size="big" name="linkify" />
                   </a>
                 ) : null}
               </div>
               <div>
-                <p style={{ fontSize: "15px" }}>
-                  <strong
-                    style={{
-                      display: "block",
-                      fontSize: "18px",
-                      marginBottom: "5px",
-                    }}
-                  >
-                    Status
-                  </strong>
-                  {this.state.movieStatus}
+                <p className="MovieDetailsMovieInfoP">
+                  <strong className="MovieDetailsStrong">Status</strong>
+                  {movieStatus}
                 </p>
-                <p style={{ fontSize: "15px" }}>
-                  <strong
-                    style={{
-                      display: "block",
-                      fontSize: "18px",
-                      marginBottom: "5px",
-                    }}
-                  >
+                <p className="MovieDetailsMovieInfoP">
+                  <strong className="MovieDetailsStrong">
                     Original Language
                   </strong>
-                  {ISO6391.getName(this.state.movieOriginalLanguage)}
+                  {ISO6391.getName(movieOriginalLanguage)}
                 </p>
-                <p style={{ fontSize: "15px" }}>
-                  <strong
-                    style={{
-                      display: "block",
-                      fontSize: "18px",
-                      marginBottom: "5px",
-                    }}
-                  >
-                    Budget
-                  </strong>
-                  {this.state.movieBudget ? (
+                <p className="MovieDetailsMovieInfoP">
+                  <strong className="MovieDetailsStrong">Budget</strong>
+                  {movieBudget ? (
                     <CurrencyFormat
-                      value={this.state.movieBudget}
+                      value={movieBudget}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"$"}
@@ -370,19 +310,11 @@ class MovieDetails extends Component {
                     "-"
                   )}
                 </p>
-                <p style={{ fontSize: "15px" }}>
-                  <strong
-                    style={{
-                      display: "block",
-                      fontSize: "18px",
-                      marginBottom: "5px",
-                    }}
-                  >
-                    Revenue
-                  </strong>
-                  {this.state.movieRevenue ? (
+                <p className="MovieDetailsMovieInfoP">
+                  <strong className="MovieDetailsStrong">Revenue</strong>
+                  {movieRevenue ? (
                     <CurrencyFormat
-                      value={this.state.movieRevenue}
+                      value={movieRevenue}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"$"}
@@ -396,15 +328,15 @@ class MovieDetails extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column style={{ marginTop: "30px" }}>
+            <Grid.Column className="MovieDetailsColumn">
               <h1>Media</h1>
               <Slider {...settingss}>
-                {this.state.movieMedias &&
-                  this.state.movieMedias.map((movieMedia) => (
+                {movieMedias &&
+                  movieMedias.map((movieMedia) => (
                     <div>
                       <iframe
-                        style={{ height: "600px", width: "100%" }}
-                        src={"https://www.youtube.com/embed/" + movieMedia.key}
+                        className="MovieDetailsIframeStyle"
+                        src={`https://www.youtube.com/embed/${movieMedia.key}`}
                         title={movieMedia.id}
                       ></iframe>
                     </div>
@@ -413,24 +345,18 @@ class MovieDetails extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column style={{ marginTop: "30px" }}>
+            <Grid.Column className="MovieDetailsColumn">
               <h1>Recommendations</h1>
               <Slider {...settings}>
-                {this.state.movieRecommends &&
-                  this.state.movieRecommends.map((movieRecommend) => (
+                {movieRecommends &&
+                  movieRecommends.map((movieRecommend) => (
                     <div>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
+                      <div className="SliderDiv">
                         <Image
-                          style={{ width: "70%", borderRadius: "30px" }}
+                          className="SliderImage"
                           src={movieRecommend.recommendedMovieImage}
                         />
-                        <h1 style={{ fontSize: "17px", textAlign: "center" }}>
+                        <h1 className="SliderHeader">
                           {movieRecommend.recommendedMovieName}
                         </h1>
                         <p>{movieRecommend.recommendedMovieReleaseDate}</p>

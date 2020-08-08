@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Container, Image, Grid, Card } from "semantic-ui-react";
 import Slider from "react-slick";
 import axios from "axios";
-import NoImage from "../../../assets/NoImage.png";
 import ReadMoreAndLess from "react-read-more-less";
-
+import NoImage from "../../../assets/NoImage.png";
+import "./PersonDetails.css";
 /*
 
 TASK: FIX THE KNOWN FOR SECTION
@@ -30,7 +30,7 @@ class PersonDetails extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/person/${this.props.match.params.id}?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
@@ -43,13 +43,13 @@ class PersonDetails extends Component {
           biography: response.data.biography,
           placeOfBirth: response.data.place_of_birth,
           profilePicture: response.data.profile_path
-            ? `https://image.tmdb.org/t/p/w500` + response.data.profile_path
+            ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${response.data.profile_path}`
             : NoImage,
         });
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/person/${this.props.match.params.id}/movie_credits?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/movie_credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
@@ -58,41 +58,47 @@ class PersonDetails extends Component {
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/person/${this.props.match.params.id}/combined_credits?language=en-US&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/combined_credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
-          allCredits: response.data.cast.map((allCredit) => {
-            return {
-              key: allCredit.id,
-              creditName: allCredit.original_title
-                ? allCredit.original_title
-                : allCredit.original_name,
-              creditPicture: allCredit.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + allCredit.poster_path
-                : NoImage,
-            };
-          }),
+          allCredits: response.data.cast.map((allCredit) => ({
+            key: allCredit.id,
+            creditName: allCredit.original_title
+              ? allCredit.original_title
+              : allCredit.original_name,
+            creditPicture: allCredit.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${allCredit.poster_path}`
+              : NoImage,
+          })),
         });
       });
     axios
       .get(
-        `https://api.themoviedb.org/3/person/${this.props.match.params.id}/images?api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/images?api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
-          actorImages: response.data.profiles.map((actorImage) => {
-            return {
-              image: actorImage.file_path
-                ? `https://image.tmdb.org/t/p/w500` + actorImage.file_path
-                : NoImage,
-            };
-          }),
+          actorImages: response.data.profiles.map((actorImage) => ({
+            image: actorImage.file_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${actorImage.file_path}`
+              : NoImage,
+          })),
         });
       });
   }
 
   render() {
+    const {
+      gender,
+      profilePicture,
+      knownForDepartment,
+      placeOfBirth,
+      name,
+      biography,
+      allCredits,
+      actorImages,
+    } = this.state;
     const settings = {
       initialSlide: 0,
       dots: true,
@@ -102,85 +108,59 @@ class PersonDetails extends Component {
       slidesToScroll: 5,
     };
     let genderMaleFemale = null;
-    if (this.state.gender === 1) {
+    if (gender === 1) {
       genderMaleFemale = "Female";
     } else {
       genderMaleFemale = "Male";
     }
     return (
-      <Container style={{ marginTop: "150px" }}>
+      <Container className="PersonDetailsContainer">
         <Grid>
           <Grid.Row divided>
             <Grid.Column width={4}>
               <Image
-                style={{ borderRadius: "30px" }}
-                src={this.state.profilePicture}
+                className="PersonDetailsProfileImage"
+                src={profilePicture}
               />
-              <div style={{ marginTop: "30px" }}>
-                <h2
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1.3em",
-                    marginBottom: "8px",
-                  }}
-                >
+              <div className="PersonDetailsInfoDiv">
+                <h2 className="PersonDetailsPersonalInfoHeader">
                   Personal Info
                 </h2>
-                <p
-                  style={{
-                    marginBottom: "20px",
-                    fontSize: "1.1em",
-                  }}
-                >
-                  <strong style={{ display: "block" }}>Known for</strong>
-                  {this.state.knownForDepartment}
+                <p className="PersonDetailsInfoP">
+                  <strong className="PersonDetailsInfoStrong">Known for</strong>
+                  {knownForDepartment}
                 </p>
-                <p
-                  style={{
-                    marginBottom: "20px",
-                    fontSize: "1.1em",
-                  }}
-                >
-                  <strong style={{ display: "block" }}>Known Credits</strong>
+                <p className="PersonDetailsInfoP">
+                  <strong className="PersonDetailsInfoStrong">
+                    Known Credits
+                  </strong>
                   To be updated
                 </p>
-                <p
-                  style={{
-                    marginBottom: "20px",
-                    fontSize: "1.1em",
-                  }}
-                >
-                  <strong style={{ display: "block" }}>Gender</strong>
+                <p className="PersonDetailsInfoP">
+                  <strong className="PersonDetailsInfoStrong">Gender</strong>
                   {genderMaleFemale}
                 </p>
-                <p
-                  style={{
-                    marginBottom: "20px",
-                    fontSize: "1.1em",
-                  }}
-                >
-                  <strong style={{ display: "block" }}>Place of Birth</strong>
-                  {this.state.placeOfBirth === null
-                    ? "-"
-                    : this.state.placeOfBirth}
+                <p className="PersonDetailsInfoP">
+                  <strong className="PersonDetailsInfoStrong">
+                    Place of Birth
+                  </strong>
+                  {placeOfBirth === null ? "-" : placeOfBirth}
                 </p>
-                <p
-                  style={{
-                    marginBottom: "20px",
-                    fontSize: "1.1em",
-                  }}
-                >
-                  <strong style={{ display: "block" }}>Also Known As</strong>-
+                <p className="PersonDetailsInfoP">
+                  <strong className="PersonDetailsInfoStrong">
+                    Also Known As
+                  </strong>
+                  -
                 </p>
               </div>
             </Grid.Column>
             <Grid.Column width={12}>
               <>
-                <h1 style={{ fontSize: "2.2em" }}>
-                  <strong>{this.state.name}</strong>
+                <h1 className="PersonDetailsName">
+                  <strong>{name}</strong>
                 </h1>
-                <h3 style={{ marginTop: "30px" }}>Biography</h3>
-                {this.state.biography ? (
+                <h3 className="PersonDetailsSubHeader">Biography</h3>
+                {biography ? (
                   <ReadMoreAndLess
                     ref={this.ReadMore}
                     className="read-more-content"
@@ -188,46 +168,36 @@ class PersonDetails extends Component {
                     readMoreText="Read more"
                     readLessText="Read less"
                   >
-                    {this.state.biography}
+                    {biography}
                   </ReadMoreAndLess>
                 ) : (
-                  `We don't have a biography for ${this.state.name}.`
+                  `We don't have a biography for ${name}.`
                 )}
-                <h3 style={{ marginTop: "30px", marginBottom: "30px" }}>
-                  Known For
-                </h3>
+                <h3 className="PersonDetailsSubHeader">Known For</h3>
                 <Slider {...settings}>
-                  {this.state.allCredits &&
-                    this.state.allCredits.map((allCredit) => (
+                  {allCredits &&
+                    allCredits.map((allCredit) => (
                       <div>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div className="SliderDiv">
                           <Image
-                            style={{ width: "70%", borderRadius: "30px" }}
+                            className="SliderImage"
                             src={allCredit.creditPicture}
                           />
-                          <h1 style={{ fontSize: "17px", textAlign: "center" }}>
+                          <h1 className="SliderHeader">
                             {allCredit.creditName}
                           </h1>
                         </div>
                       </div>
                     ))}
                 </Slider>
-                <h3 style={{ marginTop: "30px", marginBottom: "30px" }}>
-                  Images
-                </h3>
+                <h3 className="PersonDetailsSubHeader">Images</h3>
                 <Grid divided="vertically">
                   <Grid.Row>
-                    {this.state.actorImages &&
-                      this.state.actorImages.map((actorImage) => (
+                    {actorImages &&
+                      actorImages.map((actorImage) => (
                         <Grid.Column width={4}>
                           <Card>
-                            <Image style={{}} src={actorImage.image} />
+                            <Image src={actorImage.image} />
                           </Card>
                         </Grid.Column>
                       ))}

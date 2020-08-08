@@ -13,43 +13,39 @@ class OnTvTvShows extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=1&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+        `${process.env.REACT_APP_BASE_URL}/tv/on_the_air?language=en-US&page=1&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
         this.setState({
           totalPages: response.data.total_pages,
-          onTvTvShows: response.data.results.map((onTvTvShow) => {
-            return {
-              key: onTvTvShow.id,
-              tvShowName: onTvTvShow.name,
-              tvShowImage: onTvTvShow.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + onTvTvShow.poster_path
-                : NoImage,
-              tvShowReleaseDate: onTvTvShow.first_air_date,
-            };
-          }),
+          onTvTvShows: response.data.results.map((onTvTvShow) => ({
+            key: onTvTvShow.id,
+            tvShowName: onTvTvShow.name,
+            tvShowImage: onTvTvShow.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${onTvTvShow.poster_path}`
+              : NoImage,
+            tvShowReleaseDate: onTvTvShow.first_air_date,
+          })),
         });
       });
   }
 
-  setPageNum = (event, { activePage }) => {
+  setPageNum = (_, { activePage }) => {
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=${this.state.page}&api_key=aa8a6567cb9ae791c14c0b267ac92c94`
+          `${process.env.REACT_APP_BASE_URL}/tv/on_the_air?language=en-US&page=${activePage}&api_key=${process.env.REACT_APP_API_KEY}`
         )
         .then((response) => {
           this.setState({
-            onTvTvShows: response.data.results.map((onTvTvShow) => {
-              return {
-                key: onTvTvShow.id,
-                tvShowName: onTvTvShow.name,
-                tvShowImage: onTvTvShow.poster_path
-                  ? `https://image.tmdb.org/t/p/w500` + onTvTvShow.poster_path
-                  : NoImage,
-                tvShowReleaseDate: onTvTvShow.first_air_date,
-              };
-            }),
+            onTvTvShows: response.data.results.map((onTvTvShow) => ({
+              key: onTvTvShow.id,
+              tvShowName: onTvTvShow.name,
+              tvShowImage: onTvTvShow.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${onTvTvShow.poster_path}`
+                : NoImage,
+              tvShowReleaseDate: onTvTvShow.first_air_date,
+            })),
           });
         })
     );
@@ -57,23 +53,24 @@ class OnTvTvShows extends Component {
   };
 
   render() {
+    const { onTvTvShows, totalPages } = this.state;
     return (
-      <Container style={{ marginTop: "80px" }}>
+      <Container className="ContainerStyle">
         <h1>Currently Airing Tv Shows</h1>
         <Grid container divided="vertically">
           <Grid.Row>
-            {this.state.onTvTvShows &&
-              this.state.onTvTvShows.map((onTvTvShow) => (
+            {onTvTvShows &&
+              onTvTvShows.map((onTvTvShow) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <a href={"/tvshowdetails/" + onTvTvShow.key}>
+                    <a href={`/tvshowdetails/${onTvTvShow.key}`}>
                       <Image src={onTvTvShow.tvShowImage} />
                     </a>
                     <Card.Content>
                       <Card.Header>
                         <a
-                          style={{ color: "black" }}
-                          href={"/tvshowdetails/" + onTvTvShow.key}
+                          className="CardHeader"
+                          href={`/tvshowdetails/${onTvTvShow.key}`}
                         >
                           {onTvTvShow.tvShowName}
                         </a>
@@ -85,10 +82,10 @@ class OnTvTvShows extends Component {
               ))}
           </Grid.Row>
         </Grid>
-        <div style={{ textAlign: "center" }}>
+        <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}
-            totalPages={this.state.totalPages}
+            totalPages={totalPages}
             onPageChange={this.setPageNum}
           />
         </div>

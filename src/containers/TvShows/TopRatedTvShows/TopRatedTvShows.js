@@ -13,44 +13,39 @@ class TopRatedTvShows extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/tv/top_rated?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US&page=1`
+        `${process.env.REACT_APP_BASE_URL}/tv/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`
       )
       .then((response) => {
         this.setState({
           totalPages: response.data.total_pages,
-          topRatedTvShows: response.data.results.map((topRatedTvShow) => {
-            return {
-              key: topRatedTvShow.id,
-              tvShowName: topRatedTvShow.name,
-              tvShowImage: topRatedTvShow.poster_path
-                ? `https://image.tmdb.org/t/p/w500` + topRatedTvShow.poster_path
-                : NoImage,
-              tvShowReleaseDate: topRatedTvShow.first_air_date,
-            };
-          }),
+          topRatedTvShows: response.data.results.map((topRatedTvShow) => ({
+            key: topRatedTvShow.id,
+            tvShowName: topRatedTvShow.name,
+            tvShowImage: topRatedTvShow.poster_path
+              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${topRatedTvShow.poster_path}`
+              : NoImage,
+            tvShowReleaseDate: topRatedTvShow.first_air_date,
+          })),
         });
       });
   }
 
-  setPageNum = (event, { activePage }) => {
+  setPageNum = (_, { activePage }) => {
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/tv/top_rated?api_key=aa8a6567cb9ae791c14c0b267ac92c94&language=en-US&page=${this.state.page}`
+          `${process.env.REACT_APP_BASE_URL}/tv/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${activePage}`
         )
         .then((response) => {
           this.setState({
-            topRatedTvShows: response.data.results.map((topRatedTvShow) => {
-              return {
-                key: topRatedTvShow.id,
-                tvShowName: topRatedTvShow.name,
-                tvShowImage: topRatedTvShow.poster_path
-                  ? `https://image.tmdb.org/t/p/w500` +
-                    topRatedTvShow.poster_path
-                  : NoImage,
-                tvShowReleaseDate: topRatedTvShow.first_air_date,
-              };
-            }),
+            topRatedTvShows: response.data.results.map((topRatedTvShow) => ({
+              key: topRatedTvShow.id,
+              tvShowName: topRatedTvShow.name,
+              tvShowImage: topRatedTvShow.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${topRatedTvShow.poster_path}`
+                : NoImage,
+              tvShowReleaseDate: topRatedTvShow.first_air_date,
+            })),
           });
         })
     );
@@ -58,23 +53,24 @@ class TopRatedTvShows extends Component {
   };
 
   render() {
+    const { topRatedTvShows, totalPages } = this.state;
     return (
-      <Container style={{ marginTop: "80px" }}>
+      <Container className="ContainerStyle">
         <h1>Top Rated Tv Shows</h1>
         <Grid container divided="vertically">
           <Grid.Row>
-            {this.state.topRatedTvShows &&
-              this.state.topRatedTvShows.map((topRatedTvShow) => (
+            {topRatedTvShows &&
+              topRatedTvShows.map((topRatedTvShow) => (
                 <Grid.Column width={4}>
                   <Card>
-                    <a href={"/tvshowdetails/" + topRatedTvShow.key}>
+                    <a href={`/tvshowdetails/${topRatedTvShow.key}`}>
                       <Image src={topRatedTvShow.tvShowImage} />
                     </a>
                     <Card.Content>
                       <Card.Header>
                         <a
-                          style={{ color: "black" }}
-                          href={"/tvshowdetails/" + topRatedTvShow.key}
+                          className="CardHeader"
+                          href={`/tvshowdetails/${topRatedTvShow.key}`}
                         >
                           {topRatedTvShow.tvShowName}
                         </a>
@@ -86,10 +82,10 @@ class TopRatedTvShows extends Component {
               ))}
           </Grid.Row>
         </Grid>
-        <div style={{ textAlign: "center" }}>
+        <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}
-            totalPages={this.state.totalPages}
+            totalPages={totalPages}
             onPageChange={this.setPageNum}
           />
         </div>

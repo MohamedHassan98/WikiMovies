@@ -57,3 +57,17 @@
   right: -1px;
   color: rgba(255, 255, 255, 1) !important;
 }
+.HomeContainerStyle {
+  margin-top: 59px;
+}
+.HomeFormStyle {
+  margin-top: 40px;
+}
+.HomeHeaderStyle {
+  margin-bottom: 30px;
+}
+.HomeToggleHeader {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+}

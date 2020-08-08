@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Image, Container, Item, Grid, Pagination } from "semantic-ui-react";
 import axios from "axios";
 import NoImage from "../../assets/NoImage.png";
+import "./SearchResults.css";
 /* 
 
 TASK: ADD SEARCH CATEGORY, DEFAULT MOVIES
@@ -21,7 +22,7 @@ class SearchResults extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://api.themoviedb.org/3/search/movie?api_key=aa8a6567cb9ae791c14c0b267ac92c94&page=1&query=${this.props.match.params.id}`
+        `${process.env.REACT_APP_BASE_URL}/search/movie?api_key=${process.env.REACT_APP_API_KEY}&page=1&query=${this.props.match.params.id}`
       )
       .then((response) => {
         if (response.data.total_results === 0) {
@@ -29,17 +30,15 @@ class SearchResults extends Component {
         } else {
           this.setState({
             totalPages: response.data.total_pages,
-            movies: response.data.results.map((movie) => {
-              return {
-                key: movie.id,
-                name: movie.title,
-                description: movie.overview,
-                releaseDate: movie.release_date,
-                image: movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w500/` + movie.poster_path
-                  : NoImage,
-              };
-            }),
+            movies: response.data.results.map((movie) => ({
+              key: movie.id,
+              name: movie.title,
+              description: movie.overview,
+              releaseDate: movie.release_date,
+              image: movie.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${movie.poster_path}`
+                : NoImage,
+            })),
           });
         }
       });
@@ -48,7 +47,7 @@ class SearchResults extends Component {
   componentWillReceiveProps(newProps) {
     axios
       .get(
-        `https://api.themoviedb.org/3/search/movie?api_key=aa8a6567cb9ae791c14c0b267ac92c94&page=1&query=${newProps.match.params.id}`
+        `${process.env.REACT_APP_BASE_URL}/search/movie?api_key=${process.env.REACT_APP_API_KEY}&page=1&query=${newProps.match.params.id}`
       )
       .then((response) => {
         if (response.data.total_results === 0) {
@@ -58,41 +57,37 @@ class SearchResults extends Component {
             page: 1,
             nothingFound: false,
             totalPages: response.data.total_pages,
-            movies: response.data.results.map((movie) => {
-              return {
-                key: movie.id,
-                name: movie.title,
-                description: movie.overview,
-                releaseDate: movie.release_date,
-                image: movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w500/` + movie.poster_path
-                  : NoImage,
-              };
-            }),
+            movies: response.data.results.map((movie) => ({
+              key: movie.id,
+              name: movie.title,
+              description: movie.overview,
+              releaseDate: movie.release_date,
+              image: movie.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${movie.poster_path}`
+                : NoImage,
+            })),
           });
         }
       });
   }
 
-  setPageNum = (event, { activePage }) => {
+  setPageNum = (_, { activePage }) => {
     this.setState({ page: activePage }, () =>
       axios
         .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=aa8a6567cb9ae791c14c0b267ac92c94&page=${this.state.page}&query=${this.props.match.params.id}`
+          `${process.env.REACT_APP_BASE_URL}/search/movie?api_key=${process.env.REACT_APP_API_KEY}&page=${activePage}&query=${this.props.match.params.id}`
         )
         .then((response) => {
           this.setState({
-            movies: response.data.results.map((movie) => {
-              return {
-                key: movie.id,
-                name: movie.title,
-                description: movie.overview,
-                releaseDate: movie.release_date,
-                image: movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w500/` + movie.poster_path
-                  : NoImage,
-              };
-            }),
+            movies: response.data.results.map((movie) => ({
+              key: movie.id,
+              name: movie.title,
+              description: movie.overview,
+              releaseDate: movie.release_date,
+              image: movie.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${movie.poster_path}`
+                : NoImage,
+            })),
           });
         })
     );
@@ -100,8 +95,9 @@ class SearchResults extends Component {
   };
 
   render() {
+    const { nothingFound, movies, page, totalPages } = this.state;
     let content = null;
-    if (this.state.nothingFound) {
+    if (nothingFound) {
       content = (
         <h1>Nothing found with the name of {this.props.match.params.id}</h1>
       );
@@ -109,41 +105,28 @@ class SearchResults extends Component {
       content = (
         <>
           <Grid>
-            {this.state.movies.map((movie) => (
-              <Grid
-                style={{
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                  marginBottom: "35px",
-                  borderRadius: "30px",
-                  width: "100%",
-                }}
-              >
-                <Item.Group style={{ marginBottom: "50px" }}>
+            {movies.map((movie) => (
+              <Grid className="SearchResultsGrid">
+                <Item.Group>
                   <Item>
                     <Image
-                      style={{ width: "20%", borderRadius: "30px" }}
+                      className="SearchResultsImage"
                       src={movie.image}
-                      href={"/moviedetails/" + movie.key}
+                      href={`/moviedetails/${movie.key}`}
                     />
-                    <Item.Content
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignContent: "center",
-                      }}
-                    >
-                      <Item.Header style={{ padding: "25px" }}>
+                    <Item.Content className="SearchResultsItemContent">
+                      <Item.Header className="SearchResultsItemInsideContent">
                         <a
-                          style={{ color: "black" }}
-                          href={"/moviedetails/" + movie.key}
+                          className="SearchResultsItemHeader"
+                          href={`/moviedetails/${movie.key}`}
                         >
                           {movie.name}
                         </a>
                       </Item.Header>
-                      <Item.Meta style={{ padding: "25px" }}>
+                      <Item.Meta className="SearchResultsItemInsideContent">
                         {movie.releaseDate}
                       </Item.Meta>
-                      <Item.Description style={{ padding: "25px" }}>
+                      <Item.Description className="SearchResultsItemInsideContent">
                         {movie.description}
                       </Item.Description>
                     </Item.Content>
@@ -152,18 +135,18 @@ class SearchResults extends Component {
               </Grid>
             ))}
           </Grid>
-          <div style={{ textAlign: "center" }}>
+          <div className="PaginationStyle">
             <Pagination
               defaultActivePage={1}
-              activePage={this.state.page}
-              totalPages={this.state.totalPages}
+              activePage={page}
+              totalPages={totalPages}
               onPageChange={this.setPageNum}
             />
           </div>
         </>
       );
     }
-    return <Container style={{ marginTop: "120px" }}>{content}</Container>;
+    return <Container className="SearchResultsContainer">{content}</Container>;
   }
 }
 export default SearchResults;
