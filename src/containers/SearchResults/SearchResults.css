@@ -27,3 +27,32 @@
 .SearchResultsItemHeader {
   color: black !important;
 }
+.SearchResultsPaginationStyle {
+  display: block;
+  margin: 0 auto;
+}
+.SearchResultsSortByDiv {
+  border-radius: 20px;
+  border: 2px solid black;
+}
+.SearchResultsSortByHeader {
+  padding: 14px 16px;
+  margin-bottom: 0px;
+}
+.SearchResultsSortDropdownDiv {
+  padding: 16px;
+  border-top: 1px solid black;
+}
+.SearchResultsSubmitButton {
+  width: 100%;
+  height: 44px;
+  margin-top: 20px !important;
+  border-radius: 30px !important;
+  font-size: 1.1em !important;
+  background: linear-gradient(
+    to right,
+    rgba(92, 151, 191, 0.73),
+    rgba(58, 83, 155, 0.151)
+  ) !important;
+  color: rgba(255, 255, 255, 1) !important;
+}

@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import {
   Container,
   Grid,
-  Image,
   Form,
-  Card,
   Dropdown,
   Button,
   Pagination,
 } from "semantic-ui-react";
 import axios from "axios";
+import Gridder from "../../../components/Gridder/Gridder";
 import NoImage from "../../../assets/NoImage.png";
 import "./DiscoverMovies.css";
 
@@ -156,43 +155,20 @@ class DiscoverMovies extends Component {
             </div>
           </Grid.Column>
           <Grid.Column width={13}>
-            <Grid container divided="vertically">
-              <Grid.Row>
-                {discoverMovies &&
-                  discoverMovies.map((discoverMovie) => (
-                    <Grid.Column width={4}>
-                      <Card>
-                        <a href={`/moviedetails/${discoverMovie.key}`}>
-                          <Image src={discoverMovie.movieImage} />
-                        </a>
-                        <Card.Content>
-                          <Card.Header>
-                            <a
-                              className="CardHeader"
-                              href={`/moviedetails/${discoverMovie.key}`}
-                            >
-                              {discoverMovie.movieName}
-                            </a>
-                          </Card.Header>
-                          <Card.Meta>
-                            {discoverMovie.movieReleaseDate}
-                          </Card.Meta>
-                        </Card.Content>
-                      </Card>
-                    </Grid.Column>
-                  ))}
-              </Grid.Row>
-            </Grid>
+            <Gridder
+              mainDatas={discoverMovies}
+              hrefMainUrl={`/moviedetails/`}
+            />
+            <div className="PaginationStyle">
+              <Pagination
+                defaultActivePage={1}
+                activePage={page}
+                totalPages={totalPages}
+                onPageChange={this.setPageNum}
+              />
+            </div>
           </Grid.Column>
         </Grid>
-        <div className="PaginationStyle">
-          <Pagination
-            defaultActivePage={1}
-            activePage={page}
-            totalPages={totalPages}
-            onPageChange={this.setPageNum}
-          />
-        </div>
       </Container>
     );
   }

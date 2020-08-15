@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Toggle } from "react-toggle-component";
-import { Container, Image, Form, Button } from "semantic-ui-react";
+import { Container, Form, Button } from "semantic-ui-react";
 import axios from "axios";
+import Slider from "../../components/Slider/Slider";
 import "./Home.css";
 
 class Home extends Component {
@@ -59,7 +57,7 @@ class Home extends Component {
         this.setState({
           populars: response.data.results.map((popular) => ({
             key: popular.id,
-            name: popular.original_name,
+            name: popular.name,
             releaseDate: popular.first_air_date,
             image: `${process.env.REACT_APP_BASE_IMAGE_URL}/${popular.poster_path}`,
           })),
@@ -76,7 +74,7 @@ class Home extends Component {
         this.setState({
           topRateds: response.data.results.map((topRated) => ({
             key: topRated.id,
-            name: topRated.original_name,
+            name: topRated.name,
             releaseDate: topRated.first_air_date,
             image: `${process.env.REACT_APP_BASE_IMAGE_URL}/${topRated.poster_path}`,
           })),
@@ -119,21 +117,20 @@ class Home extends Component {
   };
 
   render() {
-    const { popularToggle, populars, topRateds } = this.state;
-    const settings = {
-      initialSlide: 0,
-      dots: true,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 5,
-      slidesToScroll: 5,
-    };
-    let hrefImage = null;
+    const { popularToggle, populars, topRateds, topRatedToggle } = this.state;
+    let hrefImagePopular = null;
     if (popularToggle === false) {
-      hrefImage = "/moviedetails/";
+      hrefImagePopular = "/moviedetails/";
     }
     if (popularToggle === true) {
-      hrefImage = "/tvshowdetails/";
+      hrefImagePopular = "/tvshowdetails/";
+    }
+    let hrefImageTopRated = null;
+    if (topRatedToggle === false) {
+      hrefImageTopRated = "/moviedetails/";
+    }
+    if (topRatedToggle === true) {
+      hrefImageTopRated = "/tvshowdetails/";
     }
     return (
       <Container className="HomeContainerStyle">
@@ -175,20 +172,7 @@ class Home extends Component {
           />
           TV
         </h3>
-        <Slider {...settings}>
-          {populars &&
-            populars.map((popular) => (
-              <div>
-                <a href={`${hrefImage}${popular.key}`}>
-                  <div className="SliderDiv">
-                    <Image className="SliderImage" src={popular.image} />
-                    <h1 className="SliderHeader">{popular.name}</h1>
-                    <p>{popular.releaseDate}</p>
-                  </div>
-                </a>
-              </div>
-            ))}
-        </Slider>
+        <Slider mainDatas={populars} hrefMainUrl={hrefImagePopular} />
         <h2 className="HomeHeaderStyle"> What's Top Rated </h2>
         <h3 className="HomeToggleHeader">
           Movies
@@ -202,20 +186,7 @@ class Home extends Component {
           />
           TV
         </h3>
-        <Slider {...settings}>
-          {topRateds &&
-            topRateds.map((topRated) => (
-              <div>
-                <a href={`${hrefImage}${topRated.key}`}>
-                  <div className="SliderDiv">
-                    <Image className="SliderImage" src={topRated.image} />
-                    <h1 className="SliderHeader">{topRated.name}</h1>
-                    <p>{topRated.releaseDate}</p>
-                  </div>
-                </a>
-              </div>
-            ))}
-        </Slider>
+        <Slider mainDatas={topRateds} hrefMainUrl={hrefImageTopRated} />
       </Container>
     );
   }

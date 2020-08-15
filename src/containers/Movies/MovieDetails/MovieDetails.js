@@ -2,38 +2,18 @@ import React, { Component } from "react";
 import { Container, Grid, Image, Icon, Modal } from "semantic-ui-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import SliderMedia from "react-slick";
 import CurrencyFormat from "react-currency-format";
 import axios from "axios";
 import ISO6391 from "iso-639-1";
 import NoImage from "../../../assets/NoImage.png";
+import Slider from "../../../components/Slider/Slider";
 import "./MovieDetails.css";
-/*
 
-TASK: CAST REDIRECT TO THEIR PROFILE
-
-*/
 class MovieDetails extends Component {
   state = {
-    movie: {},
-    coverPhoto: null,
     movieGenres: [],
-    movieHomepage: null,
-    movieName: null,
-    movieOverview: null,
-    mainPhoto: null,
-    movieReleaseDate: null,
-    movieRuntime: null,
-    movieBudget: null,
-    movieRevenue: null,
-    movieOriginalLanguage: null,
-    movieStatus: null,
-    movieTagline: null,
     movieCasts: [],
-    movieFacebook: null,
-    movieInstagram: null,
-    movieTwitter: null,
-    movieTrailer: null,
     movieMedias: [],
     clickPlayTrailer: false,
     movieRecommends: [],
@@ -51,7 +31,7 @@ class MovieDetails extends Component {
             genre: movieGenre.name,
           })),
           movieHomepage: response.data.homepage,
-          movieName: response.data.original_title,
+          movieName: response.data.title,
           movieOverview: response.data.overview,
           mainPhoto: response.data.poster_path
             ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.poster_path}`
@@ -118,7 +98,7 @@ class MovieDetails extends Component {
         this.setState({
           movieRecommends: response.data.results.map((movieRecommend) => ({
             key: movieRecommend.id,
-            recommendedMovieName: movieRecommend.original_title,
+            recommendedMovieName: movieRecommend.title,
             recommendedMovieImage: movieRecommend.poster_path
               ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${movieRecommend.poster_path}`
               : NoImage,
@@ -155,14 +135,6 @@ class MovieDetails extends Component {
 
     const { coverPhoto } = this.state;
 
-    const settings = {
-      initialSlide: 0,
-      dots: true,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 5,
-      slidesToScroll: 5,
-    };
     const settingss = {
       initialSlide: 0,
       dots: true,
@@ -198,53 +170,54 @@ class MovieDetails extends Component {
                     {movieGenre.genre + "."}
                   </span>
                 ))}
-              <span className="MovieDetailsMovieInfoSpan">
-                {runtimeHours + " hrs " + runtimeMinutes + " mins"}
-              </span>
+
+              {runtimeHours === 0 && runtimeMinutes === 0 ? null : (
+                <span className="MovieDetailsMovieInfoSpan">
+                  {runtimeHours + " hrs " + runtimeMinutes + " mins"}
+                </span>
+              )}
               <div className="MovieDetailsModalDiv">
-                <Modal
-                  closeIcon
-                  trigger={
-                    <button className="MovieDetailsPlayTrailerButton">
-                      <Icon name="play" />
-                      Play Trailer
-                    </button>
-                  }
-                >
-                  <Modal.Content className="MovieDetailsModalContent">
-                    {movieTrailer && movieMedias ? (
-                      <iframe
-                        className="MovieDetailsIframeStyle"
-                        src={`https://www.youtube.com/embed/${movieTrailer}`}
-                        title={movieTrailerId}
-                      ></iframe>
-                    ) : null}
-                  </Modal.Content>
-                </Modal>
+                {movieTrailer ? (
+                  <Modal
+                    closeIcon
+                    trigger={
+                      <button className="MovieDetailsPlayTrailerButton">
+                        <Icon name="play" />
+                        Play Trailer
+                      </button>
+                    }
+                  >
+                    <Modal.Content className="MovieDetailsModalContent">
+                      {movieTrailer && movieMedias ? (
+                        <iframe
+                          className="MovieDetailsIframeStyle"
+                          src={`https://www.youtube.com/embed/${movieTrailer}`}
+                          title={movieTrailerId}
+                        ></iframe>
+                      ) : null}
+                    </Modal.Content>
+                  </Modal>
+                ) : null}
               </div>
-              <h3 className="MovieDetailsTagline">{movieTagline}</h3>
-              <h3 className="MovieDetailsOverviewHeader">Overview</h3>
-              <p className="MovieDetailsMovieInfoP">{movieOverview}</p>
+              {movieTagline ? (
+                <h3 className="MovieDetailsTagline">{movieTagline}</h3>
+              ) : null}
+              {movieOverview ? (
+                <>
+                  <h3 className="MovieDetailsOverviewHeader">Overview</h3>
+                  <p className="MovieDetailsMovieInfoP">{movieOverview}</p>
+                </>
+              ) : null}
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={12}>
               <h1>Full Cast</h1>
-              <Slider {...settings}>
-                {movieCasts &&
-                  movieCasts.map((movieCast) => (
-                    <div>
-                      <div className="SliderDiv">
-                        <Image
-                          className="SliderImage"
-                          src={movieCast.actorImage}
-                        />
-                        <h1 className="SliderHeader">{movieCast.actorName}</h1>
-                        <p>{movieCast.characterName}</p>
-                      </div>
-                    </div>
-                  ))}
-              </Slider>
+              {movieCasts[0] ? (
+                <Slider mainDatas={movieCasts} hrefMainUrl={`/person/`} />
+              ) : (
+                <h1>No Cast crew found</h1>
+              )}
             </Grid.Column>
             <Grid.Column width={4}>
               <div className="MovieDetailsExternalIconsDiv">
@@ -330,40 +303,35 @@ class MovieDetails extends Component {
           <Grid.Row>
             <Grid.Column className="MovieDetailsColumn">
               <h1>Media</h1>
-              <Slider {...settingss}>
-                {movieMedias &&
-                  movieMedias.map((movieMedia) => (
-                    <div>
-                      <iframe
-                        className="MovieDetailsIframeStyle"
-                        src={`https://www.youtube.com/embed/${movieMedia.key}`}
-                        title={movieMedia.id}
-                      ></iframe>
-                    </div>
-                  ))}
-              </Slider>
+              {movieMedias[0] ? (
+                <SliderMedia {...settingss}>
+                  {movieMedias &&
+                    movieMedias.map((movieMedia) => (
+                      <div>
+                        <iframe
+                          className="MovieDetailsIframeStyle"
+                          src={`https://www.youtube.com/embed/${movieMedia.key}`}
+                          title={movieMedia.id}
+                        ></iframe>
+                      </div>
+                    ))}
+                </SliderMedia>
+              ) : (
+                <h3>No Medias found</h3>
+              )}
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column className="MovieDetailsColumn">
               <h1>Recommendations</h1>
-              <Slider {...settings}>
-                {movieRecommends &&
-                  movieRecommends.map((movieRecommend) => (
-                    <div>
-                      <div className="SliderDiv">
-                        <Image
-                          className="SliderImage"
-                          src={movieRecommend.recommendedMovieImage}
-                        />
-                        <h1 className="SliderHeader">
-                          {movieRecommend.recommendedMovieName}
-                        </h1>
-                        <p>{movieRecommend.recommendedMovieReleaseDate}</p>
-                      </div>
-                    </div>
-                  ))}
-              </Slider>
+              {movieRecommends[0] ? (
+                <Slider
+                  mainDatas={movieRecommends}
+                  hrefMainUrl={"/moviedetails/"}
+                />
+              ) : (
+                <h3>No Recommendations found</h3>
+              )}
             </Grid.Column>
           </Grid.Row>
         </Grid>

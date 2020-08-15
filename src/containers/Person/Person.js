@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Container, Card, Image, Grid, Pagination } from "semantic-ui-react";
+import { Container, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import Gridder from "../../components/Gridder/Gridder";
 import NoImage from "../../assets/NoImage.png";
 import "./Person.css";
 
@@ -68,38 +69,7 @@ class Person extends Component {
     return (
       <Container className="ContainerStyle">
         <h1 className="PersonPopularHeader">Popular People</h1>
-        <Grid container divided="vertically">
-          <Grid.Row>
-            {persons.map((person) => (
-              <Grid.Column width={4}>
-                <Card>
-                  <a href={`/person/${person.key}`}>
-                    <Image src={person.image} />
-                  </a>
-                  <Card.Content>
-                    <Card.Header>
-                      <a className="CardHeader" href={`/person/${person.key}`}>
-                        {person.name}
-                      </a>
-                    </Card.Header>
-                    <Card.Meta>
-                      {person.knownFors &&
-                        person.knownFors.map((knownFor) => (
-                          <>
-                            <span>
-                              {knownFor.movieTitle
-                                ? knownFor.movieTitle + "."
-                                : knownFor.tvTitles + "."}
-                            </span>
-                          </>
-                        ))}
-                    </Card.Meta>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            ))}
-          </Grid.Row>
-        </Grid>
+        <Gridder mainDatas={persons} hrefMainUrl={`/person/`} />
         <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}

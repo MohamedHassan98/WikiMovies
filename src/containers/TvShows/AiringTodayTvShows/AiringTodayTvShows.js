@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
+import { Container, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import Gridder from "../../../components/Gridder/Gridder";
 import NoImage from "../../../assets/NoImage.png";
 
 class AiringTodayTvShows extends Component {
@@ -61,33 +62,10 @@ class AiringTodayTvShows extends Component {
     return (
       <Container className="ContainerStyle">
         <h1>Airing Today Tv Shows</h1>
-        <Grid container divided="vertically">
-          <Grid.Row>
-            {airingTodayTvShows &&
-              airingTodayTvShows.map((airingTodayTvShow) => (
-                <Grid.Column width={4}>
-                  <Card>
-                    <a href={`/tvshowdetails/${airingTodayTvShow.key}`}>
-                      <Image src={airingTodayTvShow.tvShowImage} />
-                    </a>
-                    <Card.Content>
-                      <Card.Header>
-                        <a
-                          className="CardHeader"
-                          href={`/tvshowdetails/${airingTodayTvShow.key}`}
-                        >
-                          {airingTodayTvShow.tvShowName}
-                        </a>
-                      </Card.Header>
-                      <Card.Meta>
-                        {airingTodayTvShow.tvShowReleaseDate}
-                      </Card.Meta>
-                    </Card.Content>
-                  </Card>
-                </Grid.Column>
-              ))}
-          </Grid.Row>
-        </Grid>
+        <Gridder
+          mainDatas={airingTodayTvShows}
+          hrefMainUrl={`/tvshowdetails/`}
+        />
         <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}

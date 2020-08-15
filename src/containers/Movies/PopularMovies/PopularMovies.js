@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Container, Grid, Image, Card, Pagination } from "semantic-ui-react";
+import { Container, Pagination } from "semantic-ui-react";
 import axios from "axios";
+import Gridder from "../../../components/Gridder/Gridder";
 import NoImage from "../../../assets/NoImage.png";
 
 class PopularMovies extends Component {
@@ -57,32 +58,7 @@ class PopularMovies extends Component {
     return (
       <Container className="ContainerStyle">
         <h1>Popular Movies</h1>
-
-        <Grid container divided="vertically">
-          <Grid.Row>
-            {popularMovies &&
-              popularMovies.map((popularMovie) => (
-                <Grid.Column width={4}>
-                  <Card>
-                    <a href={`/moviedetails/${popularMovie.key}`}>
-                      <Image src={popularMovie.movieImage} />
-                    </a>
-                    <Card.Content>
-                      <Card.Header>
-                        <a
-                          className="CardHeader"
-                          href={`/moviedetails/${popularMovie.key}`}
-                        >
-                          {popularMovie.movieName}
-                        </a>
-                      </Card.Header>
-                      <Card.Meta>{popularMovie.movieReleaseDate}</Card.Meta>
-                    </Card.Content>
-                  </Card>
-                </Grid.Column>
-              ))}
-          </Grid.Row>
-        </Grid>
+        <Gridder mainDatas={popularMovies} hrefMainUrl={`/moviedetails/`} />
         <div className="PaginationStyle">
           <Pagination
             defaultActivePage={1}

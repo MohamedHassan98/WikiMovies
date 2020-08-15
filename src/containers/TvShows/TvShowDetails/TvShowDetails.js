@@ -2,34 +2,17 @@ import React, { Component } from "react";
 import { Container, Grid, Image, Icon, Modal } from "semantic-ui-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import SliderMedia from "react-slick";
 import axios from "axios";
 import ISO6391 from "iso-639-1";
 import NoImage from "../../../assets/NoImage.png";
+import Slider from "../../../components/Slider/Slider";
 import "./TvShowDetails.css";
-/*
 
-TASK: CAST REDIRECT TO THEIR PROFILE
-
-*/
 class TvShowDetails extends Component {
   state = {
-    coverPhoto: null,
     tvShowGenres: [],
-    tvshowHomepage: null,
-    tvshowName: null,
-    tvshowOverview: null,
-    mainPhoto: null,
-    tvshowReleaseDate: null,
-    tvshowRuntime: null,
-    tvshowNetwork: null,
-    tvshowOriginalLanguage: null,
-    tvshowStatus: null,
     tvshowCasts: [],
-    tvshowFacebook: null,
-    tvshowInstagram: null,
-    tvshowTwitter: null,
-    tvshowTrailer: null,
     tvshowMedias: [],
     tvshowRecommends: [],
     clickPlayTrailer: false,
@@ -47,17 +30,18 @@ class TvShowDetails extends Component {
             genre: tvshowGenre.name,
           })),
           tvshowHomepage: response.data.homepage,
-          tvshowName: response.data.original_name,
+          tvshowName: response.data.name,
           tvshoweOverview: response.data.overview,
           mainPhoto: response.data.poster_path
             ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.poster_path}`
             : NoImage,
           tvshowReleaseDate: response.data.first_air_date,
-          tvshowRuntime: response.data.episode_run_time.join(),
+          tvshowRuntime: response.data.episode_run_time.join(" / "),
           tvshowNetwork: response.data.networks[0].logo_path,
           tvshowOverview: response.data.overview,
           tvshowOriginalLanguage: response.data.original_language,
           tvshowStatus: response.data.status,
+          numberOfSeasons: response.data.seasons,
         });
       });
     axios
@@ -113,7 +97,7 @@ class TvShowDetails extends Component {
         this.setState({
           tvshowRecommends: response.data.results.map((tvshowRecommend) => ({
             key: tvshowRecommend.id,
-            recommendedTvShowName: tvshowRecommend.original_name,
+            recommendedTvShowName: tvshowRecommend.name,
             recommendedTvShowDate: tvshowRecommend.first_air_date,
             recommendedTvShowImage: tvshowRecommend.poster_path
               ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${tvshowRecommend.poster_path}`
@@ -145,14 +129,6 @@ class TvShowDetails extends Component {
       tvshowRecommends,
     } = this.state;
 
-    const settings = {
-      initialSlide: 0,
-      dots: true,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 5,
-      slidesToScroll: 5,
-    };
     const settingss = {
       initialSlide: 0,
       dots: true,
@@ -189,52 +165,50 @@ class TvShowDetails extends Component {
                   </span>
                 ))}
               <span className="TvShowDetailsTvShowInfoSpan">
-                {tvshowRuntime} minutes
+                {this.state.numberOfSeasons &&
+                  this.state.numberOfSeasons.length}{" "}
+                Season(s).
+              </span>
+              <span className="TvShowDetailsTvShowInfoSpan">
+                {tvshowRuntime ? `${tvshowRuntime} Minutes.` : null}
               </span>
               <div className="TvShowDetailsModalDiv">
-                <Modal
-                  closeIcon
-                  trigger={
-                    <button className="TvShowDetailsPlayTrailerButton">
-                      <Icon name="play" />
-                      Play Trailer
-                    </button>
-                  }
-                >
-                  <Modal.Content className="TvShowDetailsModalContent">
-                    {tvshowTrailer && tvshowMedias ? (
+                {tvshowTrailer ? (
+                  <Modal
+                    closeIcon
+                    trigger={
+                      <button className="TvShowDetailsPlayTrailerButton">
+                        <Icon name="play" />
+                        Play Trailer
+                      </button>
+                    }
+                  >
+                    <Modal.Content className="TvShowDetailsModalContent">
                       <iframe
                         className="TvShowDetailsIframeStyle"
                         src={`https://www.youtube.com/embed/${tvshowTrailer}`}
                         title={tvshowTrailerId}
                       ></iframe>
-                    ) : null}
-                  </Modal.Content>
-                </Modal>
+                    </Modal.Content>
+                  </Modal>
+                ) : null}
               </div>
-              <h3 className="TvShowDetailsOverviewHeader">Overview</h3>
-              <p className="TvShowDetailsTvShowInfoP">{tvshowOverview}</p>
+              {tvshowOverview ? (
+                <>
+                  <h3 className="TvShowDetailsOverviewHeader">Overview</h3>
+                  <p className="TvShowDetailsTvShowInfoP">{tvshowOverview}</p>
+                </>
+              ) : null}
             </Grid.Column>
           </Grid.Row>
-
           <Grid.Row>
             <Grid.Column width={12}>
               <h1>Full Cast</h1>
-              <Slider {...settings}>
-                {tvshowCasts &&
-                  tvshowCasts.map((tvshowCast) => (
-                    <div>
-                      <div className="SliderDiv">
-                        <Image
-                          className="SliderImage"
-                          src={tvshowCast.actorImage}
-                        />
-                        <h1 className="SliderHeader">{tvshowCast.actorName}</h1>
-                        <p>{tvshowCast.characterName}</p>
-                      </div>
-                    </div>
-                  ))}
-              </Slider>
+              {tvshowCasts[0] ? (
+                <Slider mainDatas={tvshowCasts} hrefMainUrl={"/person/"} />
+              ) : (
+                <h3>No Cast crew found</h3>
+              )}
             </Grid.Column>
             <Grid.Column width={4}>
               <div className="TvShowDetailsExternalIconsDiv">
@@ -278,20 +252,26 @@ class TvShowDetails extends Component {
               <div>
                 <p className="TvShowDetailsTvShowInfoP">
                   <strong className="TvShowDetailsStrong">Status</strong>
-                  {tvshowStatus}
+                  {tvshowStatus ? tvshowStatus : "-"}
                 </p>
                 <p className="TvShowDetailsTvShowInfoP">
                   <strong className="TvShowDetailsStrong">Network</strong>
-                  <Image
-                    className="TvShowDetailsNetworkImage"
-                    src={`${process.env.REACT_APP_BASE_IMAGE_URL}${tvshowNetwork}`}
-                  />
+                  {tvshowNetwork ? (
+                    <Image
+                      className="TvShowDetailsNetworkImage"
+                      src={`${process.env.REACT_APP_BASE_IMAGE_URL}${tvshowNetwork}`}
+                    />
+                  ) : (
+                    "-"
+                  )}
                 </p>
                 <p className="TvShowDetailsTvShowInfoP">
                   <strong className="TvShowDetailsStrong">
                     Original Language
                   </strong>
-                  {ISO6391.getName(tvshowOriginalLanguage)}
+                  {tvshowOriginalLanguage
+                    ? ISO6391.getName(tvshowOriginalLanguage)
+                    : "-"}
                 </p>
               </div>
             </Grid.Column>
@@ -299,40 +279,35 @@ class TvShowDetails extends Component {
           <Grid.Row>
             <Grid.Column className="TvShowDetailsColumn">
               <h1>Media</h1>
-              <Slider {...settingss}>
-                {tvshowMedias &&
-                  tvshowMedias.map((tvshowMedia) => (
-                    <div>
-                      <iframe
-                        className="TvShowDetailsIframeStyle"
-                        src={`https://www.youtube.com/embed/${tvshowMedia.key}`}
-                        title={tvshowMedia.id}
-                      ></iframe>
-                    </div>
-                  ))}
-              </Slider>
+              {tvshowMedias[0] ? (
+                <SliderMedia {...settingss}>
+                  {tvshowMedias &&
+                    tvshowMedias.map((tvshowMedia) => (
+                      <div>
+                        <iframe
+                          className="TvShowDetailsIframeStyle"
+                          src={`https://www.youtube.com/embed/${tvshowMedia.key}`}
+                          title={tvshowMedia.id}
+                        ></iframe>
+                      </div>
+                    ))}
+                </SliderMedia>
+              ) : (
+                <h3>No Medias found</h3>
+              )}
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column className="TvShowDetailsColumn">
               <h1>Recommendations</h1>
-              <Slider {...settings}>
-                {tvshowRecommends &&
-                  tvshowRecommends.map((tvshowRecommend) => (
-                    <div>
-                      <div className="SliderDiv">
-                        <Image
-                          className="SliderImage"
-                          src={tvshowRecommend.recommendedTvShowImage}
-                        />
-                        <h1 className="SliderHeader">
-                          {tvshowRecommend.recommendedTvShowName}
-                        </h1>
-                        <p>{tvshowRecommend.recommendedTvShowDate}</p>
-                      </div>
-                    </div>
-                  ))}
-              </Slider>
+              {tvshowRecommends[0] ? (
+                <Slider
+                  mainDatas={tvshowRecommends}
+                  hrefMainUrl={"/tvshowdetails/"}
+                />
+              ) : (
+                <h3>No Recommendations found</h3>
+              )}
             </Grid.Column>
           </Grid.Row>
         </Grid>

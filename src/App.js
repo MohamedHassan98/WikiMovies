@@ -24,9 +24,9 @@ import DiscoverMovies from "./containers/Movies/DiscoverMovies/DiscoverMovies";
 import TvShowDetails from "./containers/TvShows/TvShowDetails/TvShowDetails";
 /*
 
-TASK: /{somewhere wrong} redirects to /home
 TASK: add redux authentication here
 TASK: remove all console errors
+TASK : add loader in every page
 
 */
 const isAuth = () => localStorage.getItem("token");
@@ -38,7 +38,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
         isAuth() ? (
           <>
             <Navbar />
-            <Component {...props} />
+            <Component {...props} />z
           </>
         ) : (
           <Redirect
@@ -207,6 +207,7 @@ class App extends Component {
             name="Sign Up"
             render={() => (isAuth() ? <Redirect to="/" /> : <Signup />)}
           />
+          <Route render={() => <Redirect to={{ pathname: "/" }} />} />
         </Switch>
       </div>
     );

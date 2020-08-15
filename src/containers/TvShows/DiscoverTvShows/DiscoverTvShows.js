@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import {
   Container,
   Grid,
-  Image,
   Form,
-  Card,
   Dropdown,
   Button,
   Pagination,
 } from "semantic-ui-react";
 import axios from "axios";
+import Gridder from "../../../components/Gridder/Gridder";
 import NoImage from "../../../assets/NoImage.png";
 import "./DiscoverTvShows.css";
 
@@ -159,33 +158,10 @@ class DiscoverTvShows extends Component {
               </div>
             </Grid.Column>
             <Grid.Column width={13}>
-              <Grid container divided="vertically">
-                <Grid.Row>
-                  {discoverTvShows &&
-                    discoverTvShows.map((discoverTvShow) => (
-                      <Grid.Column width={4}>
-                        <Card>
-                          <a href={`/tvshowdetails/${discoverTvShow.key}`}>
-                            <Image src={discoverTvShow.tvShowImage} />
-                          </a>
-                          <Card.Content>
-                            <Card.Header>
-                              <a
-                                className="CardHeader"
-                                href={`/tvshowdetails/${discoverTvShow.key}`}
-                              >
-                                {discoverTvShow.tvShowName}
-                              </a>
-                            </Card.Header>
-                            <Card.Meta>
-                              {discoverTvShow.tvShowReleaseDate}
-                            </Card.Meta>
-                          </Card.Content>
-                        </Card>
-                      </Grid.Column>
-                    ))}
-                </Grid.Row>
-              </Grid>
+              <Gridder
+                mainDatas={discoverTvShows}
+                hrefMainUrl={`/tvshowdetails/`}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>

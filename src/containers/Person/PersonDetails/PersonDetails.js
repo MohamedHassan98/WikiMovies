@@ -1,17 +1,10 @@
 import React, { Component } from "react";
 import { Container, Image, Grid, Card } from "semantic-ui-react";
-import Slider from "react-slick";
 import axios from "axios";
 import ReadMoreAndLess from "react-read-more-less";
 import NoImage from "../../../assets/NoImage.png";
+import Slider from "../../../components/Slider/Slider";
 import "./PersonDetails.css";
-/*
-
-TASK: FIX THE KNOWN FOR SECTION
-TASK: ADD KNOWN CREDITS NUMBER
-TASK: ADD KNOWN AS DATA
-
-*/
 
 class PersonDetails extends Component {
   state = {
@@ -52,9 +45,7 @@ class PersonDetails extends Component {
         `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/movie_credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
-        this.setState({
-          knownCredits: response.data.cast,
-        });
+        console.log("seb deh dlw2ty keda");
       });
     axios
       .get(
@@ -62,11 +53,14 @@ class PersonDetails extends Component {
       )
       .then((response) => {
         this.setState({
+          knownCredits: response.data.cast,
           allCredits: response.data.cast.map((allCredit) => ({
             key: allCredit.id,
-            creditName: allCredit.original_title
-              ? allCredit.original_title
-              : allCredit.original_name,
+            creditName: allCredit.title ? allCredit.title : allCredit.name,
+            creditReleaseDate: allCredit.release_date
+              ? allCredit.release_date
+              : allCredit.first_air_date,
+            creditUrl: allCredit.title ? "/moviedetails/" : "/tvshowdetails/",
             creditPicture: allCredit.poster_path
               ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${allCredit.poster_path}`
               : NoImage,
@@ -99,14 +93,7 @@ class PersonDetails extends Component {
       allCredits,
       actorImages,
     } = this.state;
-    const settings = {
-      initialSlide: 0,
-      dots: true,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 5,
-      slidesToScroll: 5,
-    };
+
     let genderMaleFemale = null;
     if (gender === 1) {
       genderMaleFemale = "Female";
@@ -134,7 +121,7 @@ class PersonDetails extends Component {
                   <strong className="PersonDetailsInfoStrong">
                     Known Credits
                   </strong>
-                  To be updated
+                  {this.state.knownCredits && this.state.knownCredits.length}
                 </p>
                 <p className="PersonDetailsInfoP">
                   <strong className="PersonDetailsInfoStrong">Gender</strong>
@@ -150,7 +137,13 @@ class PersonDetails extends Component {
                   <strong className="PersonDetailsInfoStrong">
                     Also Known As
                   </strong>
-                  -
+                  {this.state.alsoKnownAs ? (
+                    this.state.alsoKnownAs.map(function (object, i) {
+                      return <p>{object.toString().split(",")}</p>;
+                    })
+                  ) : (
+                    <p>-</p>
+                  )}
                 </p>
               </div>
             </Grid.Column>
@@ -174,22 +167,7 @@ class PersonDetails extends Component {
                   `We don't have a biography for ${name}.`
                 )}
                 <h3 className="PersonDetailsSubHeader">Known For</h3>
-                <Slider {...settings}>
-                  {allCredits &&
-                    allCredits.map((allCredit) => (
-                      <div>
-                        <div className="SliderDiv">
-                          <Image
-                            className="SliderImage"
-                            src={allCredit.creditPicture}
-                          />
-                          <h1 className="SliderHeader">
-                            {allCredit.creditName}
-                          </h1>
-                        </div>
-                      </div>
-                    ))}
-                </Slider>
+                <Slider mainDatas={allCredits} />
                 <h3 className="PersonDetailsSubHeader">Images</h3>
                 <Grid divided="vertically">
                   <Grid.Row>
