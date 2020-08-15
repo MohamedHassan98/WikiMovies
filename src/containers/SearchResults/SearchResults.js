@@ -270,7 +270,6 @@ class SearchResults extends Component {
             )}
           </div>
         </Grid>
-        {console.log(this.state.searchHref)}
       </Container>
     );
   }

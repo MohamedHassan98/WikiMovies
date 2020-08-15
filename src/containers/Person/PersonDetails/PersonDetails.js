@@ -42,13 +42,6 @@ class PersonDetails extends Component {
       });
     axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/movie_credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
-      )
-      .then((response) => {
-        console.log("seb deh dlw2ty keda");
-      });
-    axios
-      .get(
         `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/combined_credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
       )
       .then((response) => {
@@ -92,6 +85,8 @@ class PersonDetails extends Component {
       biography,
       allCredits,
       actorImages,
+      knownCredits,
+      alsoKnownAs,
     } = this.state;
 
     let genderMaleFemale = null;
@@ -121,7 +116,7 @@ class PersonDetails extends Component {
                   <strong className="PersonDetailsInfoStrong">
                     Known Credits
                   </strong>
-                  {this.state.knownCredits && this.state.knownCredits.length}
+                  {knownCredits && knownCredits.length}
                 </p>
                 <p className="PersonDetailsInfoP">
                   <strong className="PersonDetailsInfoStrong">Gender</strong>
@@ -137,8 +132,8 @@ class PersonDetails extends Component {
                   <strong className="PersonDetailsInfoStrong">
                     Also Known As
                   </strong>
-                  {this.state.alsoKnownAs ? (
-                    this.state.alsoKnownAs.map(function (object, i) {
+                  {alsoKnownAs ? (
+                    alsoKnownAs.map(function (object, i) {
                       return <p>{object.toString().split(",")}</p>;
                     })
                   ) : (

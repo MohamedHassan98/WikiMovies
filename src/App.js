@@ -38,7 +38,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
         isAuth() ? (
           <>
             <Navbar />
-            <Component {...props} />z
+            <Component {...props} />
           </>
         ) : (
           <Redirect

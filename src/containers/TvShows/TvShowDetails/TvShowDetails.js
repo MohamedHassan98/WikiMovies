@@ -127,6 +127,7 @@ class TvShowDetails extends Component {
       tvshowNetwork,
       tvshowOriginalLanguage,
       tvshowRecommends,
+      numberOfSeasons,
     } = this.state;
 
     const settingss = {
@@ -165,9 +166,7 @@ class TvShowDetails extends Component {
                   </span>
                 ))}
               <span className="TvShowDetailsTvShowInfoSpan">
-                {this.state.numberOfSeasons &&
-                  this.state.numberOfSeasons.length}{" "}
-                Season(s).
+                {numberOfSeasons && numberOfSeasons.length} Season(s).
               </span>
               <span className="TvShowDetailsTvShowInfoSpan">
                 {tvshowRuntime ? `${tvshowRuntime} Minutes.` : null}
