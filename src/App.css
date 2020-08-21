@@ -12,6 +12,9 @@ body.dark-mode .navbar {
 body.dark-mode .dark-mode-toggle > button {
   color: #999;
 }
+body.dark-mode .svg-inline--fa {
+  color: #10171d;
+}
 body.dark-mode .ui.card {
   background: transparent !important;
 }

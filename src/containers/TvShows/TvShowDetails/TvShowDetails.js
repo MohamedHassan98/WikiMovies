@@ -31,7 +31,6 @@ class TvShowDetails extends Component {
           })),
           tvshowHomepage: response.data.homepage,
           tvshowName: response.data.name,
-          tvshoweOverview: response.data.overview,
           mainPhoto: response.data.poster_path
             ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.poster_path}`
             : NoImage,

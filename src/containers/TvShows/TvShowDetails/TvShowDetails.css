@@ -51,7 +51,7 @@
 }
 .TvShowDetailsOverviewHeader {
   font-size: 25px;
-  widows: 100%;
+  width: 100%;
 }
 .TvShowDetailsColumn {
   margin-top: 30px !important;
