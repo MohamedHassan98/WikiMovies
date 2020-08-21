@@ -7,7 +7,7 @@ import NoImage from "../../../assets/NoImage.png";
 class TopRatedMovies extends Component {
   state = {
     topRatedMovies: [],
-    totalPages: null,
+    totalPages: 1,
     page: 1,
   };
 

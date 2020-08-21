@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import "./App.css";
-import Signin from "./containers/Signin/Signin";
-import Signup from "./containers/Signup/Signup";
-import Home from "./containers/Home/Home";
+import ScrollButton from "react-scroll-button";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "./containers/store/actions/index";
+import Signin from "./containers/Signin/Signin";
+import Signup from "./containers/Signup/Signup";
+import Home from "./containers/Home/Home";
 import Navbar from "./containers/Home/Navbar";
 import SearchResults from "./containers/SearchResults/SearchResults";
 import Person from "./containers/Person/Person";
@@ -22,6 +22,7 @@ import TopRatedTvShows from "./containers/TvShows/TopRatedTvShows/TopRatedTvShow
 import MovieDetails from "./containers/Movies/MovieDetails/MovieDetails";
 import DiscoverMovies from "./containers/Movies/DiscoverMovies/DiscoverMovies";
 import TvShowDetails from "./containers/TvShows/TvShowDetails/TvShowDetails";
+import "./App.css";
 /*
 
 TASK: add redux authentication here
@@ -37,8 +38,17 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
       render={(props) =>
         isAuth() ? (
           <>
-            <Navbar />
+            <div id={"navbar"}>
+              <Navbar />
+            </div>
             <Component {...props} />
+            <ScrollButton
+              behavior={"smooth"}
+              buttonBackgroundColor={"rgba(92, 151, 191, 0.73)"}
+              iconType={"arrow-up"}
+              style={{ fontSize: "14px" }}
+              targetId={"navbar"}
+            />
           </>
         ) : (
           <Redirect
@@ -178,9 +188,10 @@ class App extends Component {
               )
             }
           />
-          {routes.map((route) => {
+          {routes.map((route, idx) => {
             return route.component ? (
               <Route
+                key={idx}
                 path={route.path}
                 exact={route.exact}
                 name={route.name}

@@ -49,7 +49,7 @@ class DiscoverTvShows extends Component {
   state = {
     discoverTvShows: [],
     sortByValue: "popularity.desc",
-    totalPages: null,
+    totalPages: 1,
     page: 1,
   };
   constructor(props) {
@@ -130,7 +130,7 @@ class DiscoverTvShows extends Component {
     const { sortByValue, discoverTvShows, page, totalPages } = this.state;
     return (
       <Container className="ContainerStyle">
-        <h1>Discover Tv Shows</h1>
+        <h1 className="DiscoverTvShowsHeader">Discover Tv Shows</h1>
         <Grid divided>
           <Grid.Row>
             <Grid.Column width={3}>
@@ -167,7 +167,6 @@ class DiscoverTvShows extends Component {
         </Grid>
         <div className="PaginationStyle">
           <Pagination
-            defaultActivePage={1}
             activePage={page}
             totalPages={totalPages}
             onPageChange={this.setPageNum}

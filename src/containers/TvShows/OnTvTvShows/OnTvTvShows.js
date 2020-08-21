@@ -7,7 +7,7 @@ import NoImage from "../../../assets/NoImage.png";
 class OnTvTvShows extends Component {
   state = {
     onTvTvShows: [],
-    totalPages: null,
+    totalPages: 1,
     page: 1,
   };
 

@@ -6,6 +6,8 @@
   margin-bottom: 35px !important;
   border-radius: 30px;
   width: 100%;
+  animation: moveLeft 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
 }
 .SearchResultsItemGroup {
   margin-bottom: 50px !important;
@@ -34,6 +36,8 @@
 .SearchResultsSortByDiv {
   border-radius: 20px;
   border: 2px solid black;
+  animation: moveRight 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
 }
 .SearchResultsSortByHeader {
   padding: 14px 16px;
@@ -55,4 +59,32 @@
     rgba(58, 83, 155, 0.151)
   ) !important;
   color: rgba(255, 255, 255, 1) !important;
+  transition: all 0.2s;
+  position: relative;
+  border: none;
+  cursor: pointer;
+}
+.SearchResultsSubmitButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem black;
+}
+.SearchResultsSubmitButton:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+}
+.SearchResultsSubmitButton::after {
+  content: "";
+  height: 100%;
+  width: 100%;
+  border-radius: 30px;
+  position: absolute;
+  background: linear-gradient(
+    to right,
+    rgba(58, 83, 155, 0.151),
+    rgba(92, 151, 191, 0.73)
+  );
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all 0.4s;
 }

@@ -1,13 +1,14 @@
 import React from "react";
 import { Image, Card, Grid } from "semantic-ui-react";
+import "./Gridder.css";
 
 const Gridder = (props) => (
-  <Grid container divided="vertically">
+  <Grid container divided="vertically" className="GridderStyle">
     <Grid.Row>
       {props.mainDatas &&
         props.mainDatas.map((mainData) => (
           <Grid.Column width={4}>
-            <Card>
+            <Card className="CardStylerTest">
               <a href={`${props.hrefMainUrl}${mainData.key}`}>
                 <Image
                   src={
@@ -32,7 +33,7 @@ const Gridder = (props) => (
                     (mainData.knownFors &&
                       mainData.knownFors.map((knownFor) => (
                         <>
-                          <span>
+                          <span key={knownFor.key}>
                             {knownFor.movieTitle
                               ? knownFor.movieTitle + "."
                               : knownFor.tvTitles + "."}

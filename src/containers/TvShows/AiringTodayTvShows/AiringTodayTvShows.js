@@ -7,7 +7,7 @@ import NoImage from "../../../assets/NoImage.png";
 class AiringTodayTvShows extends Component {
   state = {
     airingTodayTvShows: [],
-    totalPages: null,
+    totalPages: 1,
     page: 1,
   };
 

@@ -198,7 +198,7 @@ class Navbar extends Component {
               </Dropdown.Menu>
             </Dropdown>
             {searchBarIcon}
-            <Menu.Item onClick={this.clickLogoutHandler} position="secondright">
+            <Menu.Item onClick={this.clickLogoutHandler}>
               <Icon disabled name="sign-out" />
               Sign Out
             </Menu.Item>

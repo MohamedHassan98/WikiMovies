@@ -51,7 +51,7 @@ class DiscoverMovies extends Component {
     this.state = {
       discoverMovies: [],
       sortByValue: "popularity.desc",
-      totalPages: null,
+      totalPages: 1,
       page: 1,
     };
     this.sortByHandleSubmit = this.sortByHandleSubmit.bind(this);
@@ -131,7 +131,7 @@ class DiscoverMovies extends Component {
     const { sortByValue, discoverMovies, page, totalPages } = this.state;
     return (
       <Container className="ContainerStyle">
-        <h1>Discover Movies</h1>
+        <h1 className="DiscoverMoviesHeader">Discover Movies</h1>
         <Grid divided>
           <Grid.Column width={3}>
             <div className="DiscoverMoviesSortByDiv">
@@ -161,7 +161,6 @@ class DiscoverMovies extends Component {
             />
             <div className="PaginationStyle">
               <Pagination
-                defaultActivePage={1}
                 activePage={page}
                 totalPages={totalPages}
                 onPageChange={this.setPageNum}

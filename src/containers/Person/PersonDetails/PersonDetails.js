@@ -67,6 +67,7 @@ class PersonDetails extends Component {
       .then((response) => {
         this.setState({
           actorImages: response.data.profiles.map((actorImage) => ({
+            key: actorImage.id,
             image: actorImage.file_path
               ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${actorImage.file_path}`
               : NoImage,
@@ -99,7 +100,7 @@ class PersonDetails extends Component {
       <Container className="PersonDetailsContainer">
         <Grid>
           <Grid.Row divided>
-            <Grid.Column width={4}>
+            <Grid.Column width={4} className="PersonDetailsLeftCol">
               <Image
                 className="PersonDetailsProfileImage"
                 src={profilePicture}
@@ -134,15 +135,20 @@ class PersonDetails extends Component {
                   </strong>
                   {alsoKnownAs ? (
                     alsoKnownAs.map(function (object, i) {
-                      return <p>{object.toString().split(",")}</p>;
+                      return (
+                        <>
+                          {object.toString().split(",")}
+                          <br />
+                        </>
+                      );
                     })
                   ) : (
-                    <p>-</p>
+                    <>-</>
                   )}
                 </p>
               </div>
             </Grid.Column>
-            <Grid.Column width={12}>
+            <Grid.Column width={12} className="PersonDetailsRightCol">
               <>
                 <h1 className="PersonDetailsName">
                   <strong>{name}</strong>
@@ -168,7 +174,7 @@ class PersonDetails extends Component {
                   <Grid.Row>
                     {actorImages &&
                       actorImages.map((actorImage) => (
-                        <Grid.Column width={4}>
+                        <Grid.Column key={actorImage.key} width={4}>
                           <Card>
                             <Image src={actorImage.image} />
                           </Card>

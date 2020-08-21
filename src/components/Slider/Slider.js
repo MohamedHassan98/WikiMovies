@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Image } from "semantic-ui-react";
+import "./Slider.css";
 
 const settings = {
   initialSlide: 0,
@@ -17,8 +18,9 @@ const Slide = (props) => (
   <Slider {...settings}>
     {props.mainDatas &&
       props.mainDatas.map((mainData) => (
-        <div>
+        <div key={mainData.key}>
           <a
+            className="SliderAnchor"
             href={
               props.hrefMainUrl
                 ? `${props.hrefMainUrl}${mainData.key}`

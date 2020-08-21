@@ -7,7 +7,7 @@ import NoImage from "../../../assets/NoImage.png";
 class PopularMovies extends Component {
   state = {
     popularMovies: [],
-    totalPages: null,
+    totalPages: 1,
     page: 1,
   };
 

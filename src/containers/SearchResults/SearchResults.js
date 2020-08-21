@@ -40,7 +40,7 @@ class SearchResults extends Component {
       paginationNumber: 1,
       nothingFound: false,
       sortByValue: "movie",
-      totalPages: null,
+      totalPages: 1,
       page: 1,
       searchHref: null,
     };
@@ -204,7 +204,6 @@ class SearchResults extends Component {
                 <Form onSubmit={this.sortByHandleSubmit}>
                   <Dropdown
                     placeholder="Please select"
-                    defaultValue={sortByValue}
                     value={sortByValue}
                     fluid
                     selection
@@ -225,7 +224,7 @@ class SearchResults extends Component {
               </h1>
             ) : (
               searchResults.map((searchResult) => (
-                <Grid className="SearchResultsGrid">
+                <Grid key={`${searchResult.key}`} className="SearchResultsGrid">
                   <Item.Group>
                     <Item>
                       <Image
@@ -262,7 +261,6 @@ class SearchResults extends Component {
           <div className="SearchResultsPaginationStyle">
             {nothingFound ? null : (
               <Pagination
-                defaultActivePage={1}
                 activePage={page}
                 totalPages={totalPages}
                 onPageChange={this.setPageNum}

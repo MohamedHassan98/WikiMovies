@@ -118,7 +118,7 @@ class Signin extends Component {
                         </Form.Field>
                         <div className="SigninButtonDiv">
                           <Button
-                            className="SigninButton"
+                            className="SigninButton "
                             type="submit"
                             disabled={buttonDisabled}
                           >

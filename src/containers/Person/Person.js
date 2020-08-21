@@ -3,12 +3,11 @@ import { Container, Pagination } from "semantic-ui-react";
 import axios from "axios";
 import Gridder from "../../components/Gridder/Gridder";
 import NoImage from "../../assets/NoImage.png";
-import "./Person.css";
 
 class Person extends Component {
   state = {
     persons: [],
-    totalPages: null,
+    totalPages: 1,
     page: 1,
   };
 
@@ -68,7 +67,7 @@ class Person extends Component {
     const { persons, totalPages } = this.state;
     return (
       <Container className="ContainerStyle">
-        <h1 className="PersonPopularHeader">Popular People</h1>
+        <h1>Popular People</h1>
         <Gridder mainDatas={persons} hrefMainUrl={`/person/`} />
         <div className="PaginationStyle">
           <Pagination

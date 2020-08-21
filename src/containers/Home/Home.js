@@ -117,7 +117,13 @@ class Home extends Component {
   };
 
   render() {
-    const { popularToggle, populars, topRateds, topRatedToggle } = this.state;
+    const {
+      popularToggle,
+      populars,
+      topRateds,
+      topRatedToggle,
+      searchName,
+    } = this.state;
     let hrefImagePopular = null;
     if (popularToggle === false) {
       hrefImagePopular = "/moviedetails/";
@@ -151,7 +157,7 @@ class Home extends Component {
                 <Button
                   className="HomeInputButton"
                   type="submit"
-                  disabled={!this.state.searchName}
+                  disabled={!searchName}
                 >
                   Submit
                 </Button>
@@ -159,34 +165,36 @@ class Home extends Component {
             </Form>
           </div>
         </section>
-        <h2 className="HomeHeaderStyle"> What's Popular </h2>
-        <h3 className="HomeToggleHeader">
-          Movies
-          <Toggle
-            leftBackgroundColor="#3A539B"
-            rightBackgroundColor="#5C97BF"
-            borderColor="black"
-            knobColor="white"
-            name="toggle-1"
-            onToggle={(e) => this.clickPopularToggle(e)}
-          />
-          TV
-        </h3>
-        <Slider mainDatas={populars} hrefMainUrl={hrefImagePopular} />
-        <h2 className="HomeHeaderStyle"> What's Top Rated </h2>
-        <h3 className="HomeToggleHeader">
-          Movies
-          <Toggle
-            leftBackgroundColor="#3A539B"
-            rightBackgroundColor="#5C97BF"
-            borderColor="black"
-            knobColor="white"
-            name="toggle-2"
-            onToggle={(e) => this.clickTopRatedToggle(e)}
-          />
-          TV
-        </h3>
-        <Slider mainDatas={topRateds} hrefMainUrl={hrefImageTopRated} />
+        <section className="HomeContentWrapper">
+          <h2 className="HomeHeaderStyle"> What's Popular </h2>
+          <h3 className="HomeToggleHeader">
+            Movies
+            <Toggle
+              leftBackgroundColor="#3A539B"
+              rightBackgroundColor="#5C97BF"
+              borderColor="black"
+              knobColor="white"
+              name="toggle-1"
+              onToggle={(e) => this.clickPopularToggle(e)}
+            />
+            TV
+          </h3>
+          <Slider mainDatas={populars} hrefMainUrl={hrefImagePopular} />
+          <h2 className="HomeHeaderStyle"> What's Top Rated </h2>
+          <h3 className="HomeToggleHeader">
+            Movies
+            <Toggle
+              leftBackgroundColor="#3A539B"
+              rightBackgroundColor="#5C97BF"
+              borderColor="black"
+              knobColor="white"
+              name="toggle-2"
+              onToggle={(e) => this.clickTopRatedToggle(e)}
+            />
+            TV
+          </h3>
+          <Slider mainDatas={topRateds} hrefMainUrl={hrefImageTopRated} />
+        </section>
       </Container>
     );
   }

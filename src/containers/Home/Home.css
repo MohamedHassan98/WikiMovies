@@ -13,6 +13,8 @@
       rgba(92, 151, 191, 0.73)
     ),
     url("https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg");
+  animation: moveRight 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
 }
 .HomeSearchContentWrapper {
   width: 100%;
@@ -70,4 +72,8 @@
   display: flex;
   justify-content: center;
   padding-bottom: 30px;
+}
+.HomeContentWrapper {
+  animation: moveLeft 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
 }

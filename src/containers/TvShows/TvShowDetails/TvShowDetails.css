@@ -1,5 +1,5 @@
 .TvShowDetailsContainerStyle {
-  margin-top: 150px;
+  margin-top: 73px;
 }
 .TvShowDetailsMainPhotoStyle {
   border-radius: 30px;
@@ -58,4 +58,16 @@
 }
 .TvShowDetailsNetworkImage {
   width: 25%;
+}
+.TvShowDetailsLeftCol {
+  animation: moveRight 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
+}
+.TvShowDetailsRightCol {
+  animation: moveLeft 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
+}
+.TvShowDetailsRow {
+  animation: moveInBottom 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
 }

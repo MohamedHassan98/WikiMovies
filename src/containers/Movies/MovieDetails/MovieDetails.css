@@ -1,5 +1,5 @@
 .MovieDetailsContainerStyle {
-  margin-top: 150px;
+  margin-top: 73px;
 }
 .MovieDetailsMainPhotoStyle {
   border-radius: 30px;
@@ -60,6 +60,21 @@
   font-size: 25px;
   widows: 100%;
 }
+.MovieDetailsNotFound {
+  padding: 10px 10px;
+}
 .MovieDetailsColumn {
   margin-top: 30px !important;
+}
+.MovieDetailsLeftCol {
+  animation: moveRight 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
+}
+.MovieDetailsRightCol {
+  animation: moveLeft 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
+}
+.MovieDetailsRow {
+  animation: moveInBottom 0.5s ease-out 0.75s;
+  animation-fill-mode: backwards;
 }

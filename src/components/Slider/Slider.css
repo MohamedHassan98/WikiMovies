@@ -1,0 +1,16 @@
+.SliderAnchor {
+  color: inherit !important;
+}
+.SliderDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.SliderImage {
+  border-radius: 30px;
+  width: 70%;
+}
+.SliderHeader {
+  text-align: center;
+  font-size: 17px;
+}

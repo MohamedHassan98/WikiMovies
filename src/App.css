@@ -137,16 +137,38 @@ input[type="checkbox"].dmcheck + label {
   overflow: hidden;
   white-space: nowrap;
 }
-.SliderDiv {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.ui.container {
+  width: 65% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
-.SliderImage {
-  border-radius: 30px;
-  width: 70%;
+@keyframes moveRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
 }
-.SliderHeader {
-  text-align: center;
-  font-size: 17px;
+@keyframes moveLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
 }

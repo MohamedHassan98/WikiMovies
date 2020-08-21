@@ -153,10 +153,13 @@ class TvShowDetails extends Component {
               backgroundSize: "100% 100%",
             }}
           >
-            <Grid.Column width={4}>
+            <Grid.Column width={4} className="TvShowDetailsLeftCol">
               <Image className="TvShowDetailsMainPhotoStyle" src={mainPhoto} />
             </Grid.Column>
-            <Grid.Column className="TvShowDetailsGridColumnInfo" width={12}>
+            <Grid.Column
+              className="TvShowDetailsGridColumnInfo TvShowDetailsRightCol"
+              width={12}
+            >
               <h2 className="TvShowDetailsTvShowName">{tvshowName}</h2>
               <p className="TvShowDetailsTvShowInfoP">{tvshowReleaseDate}</p>
               {tvshowGenres &&
@@ -201,7 +204,7 @@ class TvShowDetails extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={12}>
+            <Grid.Column width={12} className="TvShowDetailsLeftCol">
               <h1>Full Cast</h1>
               {tvshowCasts[0] ? (
                 <Slider mainDatas={tvshowCasts} hrefMainUrl={"/person/"} />
@@ -209,7 +212,7 @@ class TvShowDetails extends Component {
                 <h3>No Cast crew found</h3>
               )}
             </Grid.Column>
-            <Grid.Column width={4}>
+            <Grid.Column width={4} className="TvShowDetailsRightCol">
               <div className="TvShowDetailsExternalIconsDiv">
                 {tvshowFacebook ? (
                   <a
@@ -275,7 +278,7 @@ class TvShowDetails extends Component {
               </div>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row className="TvShowDetailsRow">
             <Grid.Column className="TvShowDetailsColumn">
               <h1>Media</h1>
               {tvshowMedias[0] ? (
@@ -296,7 +299,7 @@ class TvShowDetails extends Component {
               )}
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row className="TvShowDetailsRow">
             <Grid.Column className="TvShowDetailsColumn">
               <h1>Recommendations</h1>
               {tvshowRecommends[0] ? (

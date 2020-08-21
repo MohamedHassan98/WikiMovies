@@ -158,19 +158,24 @@ class MovieDetails extends Component {
               backgroundSize: "100% 100%",
             }}
           >
-            <Grid.Column width={4}>
+            <Grid.Column width={4} className="MovieDetailsLeftCol">
               <Image className="MovieDetailsMainPhotoStyle" src={mainPhoto} />
             </Grid.Column>
-            <Grid.Column className="MovieDetailsGridColumnInfo" width={12}>
+            <Grid.Column
+              className="MovieDetailsGridColumnInfo MovieDetailsRightCol"
+              width={12}
+            >
               <h2 className="MovieDetailsMovieName">{movieName}</h2>
               <p className="MovieDetailsMovieInfoP">{movieReleaseDate}</p>
               {movieGenres &&
                 movieGenres.map((movieGenre) => (
-                  <span className="MovieDetailsMovieInfoSpan">
+                  <span
+                    key={movieGenre.key}
+                    className="MovieDetailsMovieInfoSpan"
+                  >
                     {movieGenre.genre + "."}
                   </span>
                 ))}
-
               {runtimeHours === 0 && runtimeMinutes === 0 ? null : (
                 <span className="MovieDetailsMovieInfoSpan">
                   {runtimeHours + " hrs " + runtimeMinutes + " mins"}
@@ -211,15 +216,15 @@ class MovieDetails extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={12}>
+            <Grid.Column width={12} className="MovieDetailsLeftCol">
               <h1>Full Cast</h1>
               {movieCasts[0] ? (
                 <Slider mainDatas={movieCasts} hrefMainUrl={`/person/`} />
               ) : (
-                <h1>No Cast crew found</h1>
+                <h1 className="MovieDetailsNotFound">No Cast crew found</h1>
               )}
             </Grid.Column>
-            <Grid.Column width={4}>
+            <Grid.Column width={4} className="MovieDetailsRightCol">
               <div className="MovieDetailsExternalIconsDiv">
                 {movieFacebook ? (
                   <a
@@ -277,7 +282,7 @@ class MovieDetails extends Component {
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"$"}
-                      renderText={(value) => <div>{value}</div>}
+                      renderText={(value) => <>{value}</>}
                     />
                   ) : (
                     "-"
@@ -291,7 +296,7 @@ class MovieDetails extends Component {
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"$"}
-                      renderText={(value) => <div>{value}</div>}
+                      renderText={(value) => <>{value}</>}
                     />
                   ) : (
                     "-"
@@ -300,14 +305,14 @@ class MovieDetails extends Component {
               </div>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row className="MovieDetailsRow">
             <Grid.Column className="MovieDetailsColumn">
               <h1>Media</h1>
               {movieMedias[0] ? (
                 <SliderMedia {...settingss}>
                   {movieMedias &&
                     movieMedias.map((movieMedia) => (
-                      <div>
+                      <div key={movieMedia.key}>
                         <iframe
                           className="MovieDetailsIframeStyle"
                           src={`https://www.youtube.com/embed/${movieMedia.key}`}
@@ -317,11 +322,11 @@ class MovieDetails extends Component {
                     ))}
                 </SliderMedia>
               ) : (
-                <h3>No Medias found</h3>
+                <h3 className="MovieDetailsNotFound">No Medias found</h3>
               )}
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row className="MovieDetailsRow">
             <Grid.Column className="MovieDetailsColumn">
               <h1>Recommendations</h1>
               {movieRecommends[0] ? (
@@ -330,7 +335,9 @@ class MovieDetails extends Component {
                   hrefMainUrl={"/moviedetails/"}
                 />
               ) : (
-                <h3>No Recommendations found</h3>
+                <h3 className="MovieDetailsNotFound">
+                  No Recommendations found
+                </h3>
               )}
             </Grid.Column>
           </Grid.Row>
