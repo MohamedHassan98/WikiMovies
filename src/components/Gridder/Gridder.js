@@ -7,8 +7,8 @@ const Gridder = (props) => (
     <Grid.Row>
       {props.mainDatas &&
         props.mainDatas.map((mainData) => (
-          <Grid.Column width={4}>
-            <Card className="CardStylerTest">
+          <Grid.Column mobile={16} tablet={8} computer={4}>
+            <Card className="CardStyler">
               <a href={`${props.hrefMainUrl}${mainData.key}`}>
                 <Image
                   src={

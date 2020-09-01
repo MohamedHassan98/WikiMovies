@@ -158,12 +158,19 @@ class MovieDetails extends Component {
               backgroundSize: "100% 100%",
             }}
           >
-            <Grid.Column width={4} className="MovieDetailsLeftCol">
+            <Grid.Column
+              mobile={16}
+              tablet={16}
+              computer={4}
+              className="MovieDetailsLeftCol"
+            >
               <Image className="MovieDetailsMainPhotoStyle" src={mainPhoto} />
             </Grid.Column>
             <Grid.Column
+              mobile={16}
+              tablet={16}
+              computer={12}
               className="MovieDetailsGridColumnInfo MovieDetailsRightCol"
-              width={12}
             >
               <h2 className="MovieDetailsMovieName">{movieName}</h2>
               <p className="MovieDetailsMovieInfoP">{movieReleaseDate}</p>
@@ -216,7 +223,12 @@ class MovieDetails extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={12} className="MovieDetailsLeftCol">
+            <Grid.Column
+              mobile={16}
+              tablet={16}
+              computer={12}
+              className="MovieDetailsLeftCol"
+            >
               <h1>Full Cast</h1>
               {movieCasts[0] ? (
                 <Slider mainDatas={movieCasts} hrefMainUrl={`/person/`} />
@@ -224,7 +236,12 @@ class MovieDetails extends Component {
                 <h1 className="MovieDetailsNotFound">No Cast crew found</h1>
               )}
             </Grid.Column>
-            <Grid.Column width={4} className="MovieDetailsRightCol">
+            <Grid.Column
+              mobile={16}
+              tablet={16}
+              computer={4}
+              className="MovieDetailsRightCol"
+            >
               <div className="MovieDetailsExternalIconsDiv">
                 {movieFacebook ? (
                   <a

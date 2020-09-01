@@ -18,9 +18,13 @@ class PersonDetails extends Component {
     placeOfBirth: null,
     profilePicture: null,
     knownCredits: null,
+    divided: true,
   };
 
   componentDidMount() {
+    if (window.innerWidth < 991) {
+      this.setState({ divided: false });
+    }
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
@@ -99,8 +103,16 @@ class PersonDetails extends Component {
     return (
       <Container className="PersonDetailsContainer">
         <Grid>
-          <Grid.Row divided>
-            <Grid.Column width={4} className="PersonDetailsLeftCol">
+          <Grid.Row divided={this.state.divided}>
+            <Grid.Column
+              mobile={16}
+              tablet={16}
+              computer={4}
+              className="PersonDetailsLeftCol"
+            >
+              <h1 className="PersonDetailsName">
+                <strong>{name}</strong>
+              </h1>
               <Image
                 className="PersonDetailsProfileImage"
                 src={profilePicture}
@@ -148,12 +160,16 @@ class PersonDetails extends Component {
                 </p>
               </div>
             </Grid.Column>
-            <Grid.Column width={12} className="PersonDetailsRightCol">
+            <Grid.Column
+              mobile={16}
+              tablet={16}
+              computer={12}
+              className="PersonDetailsRightCol"
+            >
               <>
-                <h1 className="PersonDetailsName">
-                  <strong>{name}</strong>
-                </h1>
-                <h3 className="PersonDetailsSubHeader">Biography</h3>
+                <h3 className="PersonDetailsSubHeader PersonDetailsBiography">
+                  Biography
+                </h3>
                 {biography ? (
                   <ReadMoreAndLess
                     ref={this.ReadMore}

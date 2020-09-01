@@ -197,7 +197,7 @@ class SearchResults extends Component {
     return (
       <Container className="SearchResultsContainer">
         <Grid>
-          <Grid.Column width={4}>
+          <Grid.Column mobile={16} tablet={16} computer={4}>
             <div className="SearchResultsSortByDiv">
               <h2 className="SearchResultsSortByHeader">Search Result</h2>
               <div className="SearchResultsSortDropdownDiv">
@@ -217,7 +217,7 @@ class SearchResults extends Component {
               </div>
             </div>
           </Grid.Column>
-          <Grid.Column width={12}>
+          <Grid.Column mobile={16} tablet={16} computer={12}>
             {nothingFound ? (
               <h1>
                 Nothing found with the name of {this.props.match.params.id}

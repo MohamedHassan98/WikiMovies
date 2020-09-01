@@ -36,7 +36,12 @@ class Signup extends Component {
     });
     return (
       <Grid className="SignupGrid">
-        <Grid.Column width={8} className="SignupColumn">
+        <Grid.Column
+          mobile={16}
+          tablet={16}
+          computer={8}
+          className="SignupColumn"
+        >
           <Container text>
             <Card className="SignupWelcomeText">
               <Card.Content>
@@ -53,7 +58,12 @@ class Signup extends Component {
             </Card>
           </Container>
         </Grid.Column>
-        <Grid.Column width={8} className="SignupColumn">
+        <Grid.Column
+          mobile={16}
+          tablet={16}
+          computer={8}
+          className="SignupColumn"
+        >
           <Container text>
             <Card className="SignupCard">
               <Card.Content>

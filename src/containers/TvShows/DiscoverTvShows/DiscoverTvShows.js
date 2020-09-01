@@ -51,6 +51,7 @@ class DiscoverTvShows extends Component {
     sortByValue: "popularity.desc",
     totalPages: 1,
     page: 1,
+    divided: true,
   };
   constructor(props) {
     super(props);
@@ -85,6 +86,9 @@ class DiscoverTvShows extends Component {
   };
 
   componentDidMount() {
+    if (window.innerWidth < 991) {
+      this.setState({ divided: false });
+    }
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/discover/tv?language=en-US&page=1&sort_by=popularity.desc&api_key=${process.env.REACT_APP_API_KEY}&include_null_first_air_dates=false`
@@ -131,39 +135,34 @@ class DiscoverTvShows extends Component {
     return (
       <Container className="ContainerStyle">
         <h1 className="DiscoverTvShowsHeader">Discover Tv Shows</h1>
-        <Grid divided>
-          <Grid.Row>
-            <Grid.Column width={3}>
-              <div className="DiscoverTvShowsSortByDiv">
-                <h2 className="DiscoverTvShowsSortByHeader">Sort</h2>
-                <div className="DiscoverTvShowsSortDropdownDiv">
-                  <h4>Sort Results By</h4>
-                  <Form onSubmit={this.sortByHandleSubmit}>
-                    <Dropdown
-                      placeholder="Please select"
-                      defaultValue={sortByValue}
-                      fluid
-                      selection
-                      options={sortByOptions}
-                      onChange={this.sortByOnChange}
-                    />
-                    <Button
-                      className="DiscoverTvShowsSubmitButton"
-                      type="submit"
-                    >
-                      Submit
-                    </Button>
-                  </Form>
-                </div>
+        <Grid divided={this.state.divided}>
+          <Grid.Column mobile={16} tablet={16} computer={4}>
+            <div className="DiscoverTvShowsSortByDiv">
+              <h2 className="DiscoverTvShowsSortByHeader">Sort</h2>
+              <div className="DiscoverTvShowsSortDropdownDiv">
+                <h4>Sort Results By</h4>
+                <Form onSubmit={this.sortByHandleSubmit}>
+                  <Dropdown
+                    placeholder="Please select"
+                    defaultValue={sortByValue}
+                    fluid
+                    selection
+                    options={sortByOptions}
+                    onChange={this.sortByOnChange}
+                  />
+                  <Button className="DiscoverTvShowsSubmitButton" type="submit">
+                    Submit
+                  </Button>
+                </Form>
               </div>
-            </Grid.Column>
-            <Grid.Column width={13}>
-              <Gridder
-                mainDatas={discoverTvShows}
-                hrefMainUrl={`/tvshowdetails/`}
-              />
-            </Grid.Column>
-          </Grid.Row>
+            </div>
+          </Grid.Column>
+          <Grid.Column mobile={16} tablet={16} computer={12}>
+            <Gridder
+              mainDatas={discoverTvShows}
+              hrefMainUrl={`/tvshowdetails/`}
+            />
+          </Grid.Column>
         </Grid>
         <div className="PaginationStyle">
           <Pagination

@@ -53,11 +53,15 @@ class DiscoverMovies extends Component {
       sortByValue: "popularity.desc",
       totalPages: 1,
       page: 1,
+      divided: true,
     };
     this.sortByHandleSubmit = this.sortByHandleSubmit.bind(this);
   }
 
   componentDidMount() {
+    if (window.innerWidth < 991) {
+      this.setState({ divided: false });
+    }
     const { page } = this.state;
     axios
       .get(
@@ -132,8 +136,8 @@ class DiscoverMovies extends Component {
     return (
       <Container className="ContainerStyle">
         <h1 className="DiscoverMoviesHeader">Discover Movies</h1>
-        <Grid divided>
-          <Grid.Column width={3}>
+        <Grid divided={this.state.divided}>
+          <Grid.Column mobile={16} tablet={16} computer={4}>
             <div className="DiscoverMoviesSortByDiv">
               <h2 className="DiscoverMoviesSortByHeader">Sort</h2>
               <div className="DiscoverMoviesSortDropdownDiv">
@@ -154,7 +158,7 @@ class DiscoverMovies extends Component {
               </div>
             </div>
           </Grid.Column>
-          <Grid.Column width={13}>
+          <Grid.Column mobile={16} tablet={16} computer={12}>
             <Gridder
               mainDatas={discoverMovies}
               hrefMainUrl={`/moviedetails/`}

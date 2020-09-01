@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Media from "react-media";
+import { slide as BurgerMenu } from "react-burger-menu";
 import {
-  Container,
   Dropdown,
   Icon,
   Image,
@@ -16,11 +17,6 @@ import MoviesLogo from "../../assets/MoviesLogo.png";
 import { withRouter } from "react-router-dom";
 import DarkMode from "../DarkMode/DarkModeToggle";
 import "./Navbar.css";
-/*
-
-TASK: FIX LOGOUT MODAL
-
-*/
 
 class Navbar extends Component {
   state = {
@@ -80,14 +76,22 @@ class Navbar extends Component {
       );
     }
     let searchBarIcon = (
-      <Menu.Item onClick={this.searchClickedHandler} position="right">
+      <Menu.Item
+        className="BurgerMenu"
+        onClick={this.searchClickedHandler}
+        position="right"
+      >
         <Icon name="search" />
         Search
       </Menu.Item>
     );
     if (searchClicked) {
       searchBarIcon = (
-        <Menu.Item onClick={this.searchCancelClickedHandler} position="right">
+        <Menu.Item
+          className="BurgerMenu"
+          onClick={this.searchCancelClickedHandler}
+          position="right"
+        >
           <Icon name="delete" />
           Search
         </Menu.Item>
@@ -116,96 +120,233 @@ class Navbar extends Component {
     }
     return (
       <>
+        <Media query={{ maxWidth: 950 }}>
+          {(matches) =>
+            matches ? (
+              <BurgerMenu>
+                <>
+                  <Dropdown className="BurgerMenu" item text="Movies">
+                    <Dropdown.Menu>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/movies">
+                          Discover
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/popularmovies">
+                          Popular
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/nowplayingmovies"
+                        >
+                          Now Playing
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/upcomingmovies"
+                        >
+                          Upcoming
+                        </a>
+                      </Dropdown.Item>
+                      <DropdownItem>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/topratedmovies"
+                        >
+                          Top Rated
+                        </a>
+                      </DropdownItem>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Dropdown className="BurgerMenu" item text="TV Shows">
+                    <Dropdown.Menu>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/tvshows">
+                          Discover
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/populartvshows"
+                        >
+                          Popular
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/airingtodaytvshows"
+                        >
+                          Airing Today
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/ontheairtvshows"
+                        >
+                          On TV
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/topratedtvshows"
+                        >
+                          Top Rated
+                        </a>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Dropdown className="BurgerMenu" item text="People">
+                    <Dropdown.Menu>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/person">
+                          Popular People
+                        </a>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  {searchBarIcon}
+                  <Menu.Item
+                    className="BurgerMenu"
+                    onClick={this.clickLogoutHandler}
+                  >
+                    <Icon disabled name="sign-out" />
+                    Sign Out
+                  </Menu.Item>
+                  <Menu.Item>
+                    <DarkMode />
+                  </Menu.Item>
+                </>
+              </BurgerMenu>
+            ) : null
+          }
+        </Media>
         {logoutModal}
         <Menu fixed="top" inverted>
-          <Container>
-            <Menu.Item header>
-              <a href="/home">
-                <Image
-                  size="mini"
-                  src={MoviesLogo}
-                  className="NavbarImageStyle"
-                />
-              </a>
-              <a href="/home"> WikiMovies </a>
-            </Menu.Item>
-            <Dropdown item text="Movies">
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/movies">
-                    Discover
-                  </a>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/popularmovies">
-                    Popular
-                  </a>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/nowplayingmovies">
-                    Now Playing
-                  </a>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/upcomingmovies">
-                    Upcoming
-                  </a>
-                </Dropdown.Item>
-                <DropdownItem>
-                  <a className="NavbarDropdownItem" href="/topratedmovies">
-                    Top Rated
-                  </a>
-                </DropdownItem>
-              </Dropdown.Menu>
-            </Dropdown>
+          <Menu.Item header>
+            <a href="/home">
+              <Image
+                size="mini"
+                src={MoviesLogo}
+                className="NavbarImageStyle"
+              />
+            </a>
+            <a href="/home"> WikiMovies </a>
+          </Menu.Item>
+          <Media query={{ maxWidth: 950 }}>
+            {(matches) =>
+              matches ? null : (
+                <>
+                  <Dropdown item text="Movies">
+                    <Dropdown.Menu>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/movies">
+                          Discover
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/popularmovies">
+                          Popular
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/nowplayingmovies"
+                        >
+                          Now Playing
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/upcomingmovies"
+                        >
+                          Upcoming
+                        </a>
+                      </Dropdown.Item>
+                      <DropdownItem>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/topratedmovies"
+                        >
+                          Top Rated
+                        </a>
+                      </DropdownItem>
+                    </Dropdown.Menu>
+                  </Dropdown>
 
-            <Dropdown item text="TV Shows">
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/tvshows">
-                    Discover
-                  </a>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/populartvshows">
-                    Popular
-                  </a>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/airingtodaytvshows">
-                    Airing Today
-                  </a>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/ontheairtvshows">
-                    On TV
-                  </a>
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/topratedtvshows">
-                    Top Rated
-                  </a>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown item text="People">
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  <a className="NavbarDropdownItem" href="/person">
-                    Popular People
-                  </a>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            {searchBarIcon}
-            <Menu.Item onClick={this.clickLogoutHandler}>
-              <Icon disabled name="sign-out" />
-              Sign Out
-            </Menu.Item>
-            <Menu.Item>
-              <DarkMode />
-            </Menu.Item>
-          </Container>
+                  <Dropdown item text="TV Shows">
+                    <Dropdown.Menu>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/tvshows">
+                          Discover
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/populartvshows"
+                        >
+                          Popular
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/airingtodaytvshows"
+                        >
+                          Airing Today
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/ontheairtvshows"
+                        >
+                          On TV
+                        </a>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <a
+                          className="NavbarDropdownItem"
+                          href="/topratedtvshows"
+                        >
+                          Top Rated
+                        </a>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+
+                  <Dropdown item text="People">
+                    <Dropdown.Menu>
+                      <Dropdown.Item>
+                        <a className="NavbarDropdownItem" href="/person">
+                          Popular People
+                        </a>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  {searchBarIcon}
+                  <Menu.Item onClick={this.clickLogoutHandler}>
+                    <Icon disabled name="sign-out" />
+                    Sign Out
+                  </Menu.Item>
+                  <Menu.Item>
+                    <DarkMode />
+                  </Menu.Item>
+                </>
+              )
+            }
+          </Media>
           {searchBar}
         </Menu>
       </>

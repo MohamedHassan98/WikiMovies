@@ -36,7 +36,12 @@ class Signin extends Component {
     });
     return (
       <Grid className="SigninGrid">
-        <Grid.Column width={8} className="SigninColumn">
+        <Grid.Column
+          mobile={16}
+          tablet={16}
+          computer={8}
+          className="SigninColumn"
+        >
           <Container text>
             <Card className="SigninCard">
               <Card.Content>

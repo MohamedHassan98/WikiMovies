@@ -1,7 +1,7 @@
 .HomeSearchImageWrapper {
   background-size: 100% 100%;
   margin-bottom: 30px;
-  height: calc(100vh / 2.5);
+  height: 360px;
   max-height: 360px;
   background-position: top center;
   width: 100%;
@@ -76,4 +76,12 @@
 .HomeContentWrapper {
   animation: moveLeft 0.5s ease-out 0.75s;
   animation-fill-mode: backwards;
+}
+@media only screen and (max-width: 375px) {
+  .HomeHeaderWelcome {
+    font-size: 2.3em;
+  }
+  .HomeSecondHeader {
+    font-size: 1.3em;
+  }
 }

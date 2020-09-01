@@ -34,3 +34,6 @@
   animation: moveLeft 0.5s ease-out 0.75s;
   animation-fill-mode: backwards;
 }
+.PersonDetailsBiography {
+  margin-top: 30px !important;
+}

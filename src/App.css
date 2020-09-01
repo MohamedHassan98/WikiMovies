@@ -18,6 +18,27 @@ body.dark-mode .svg-inline--fa {
 body.dark-mode .ui.card {
   background: transparent !important;
 }
+.ui[class*="top fixed"].menu {
+  background: linear-gradient(
+    to right,
+    rgba(58, 83, 155, 0.651),
+    rgba(92, 151, 191, 0.83)
+  ) !important;
+}
+body.dark-mode .ui[class*="top fixed"].menu {
+  background: linear-gradient(
+    to right,
+    rgba(10, 19, 48, 0.951),
+    rgba(11, 34, 49, 0.93)
+  ) !important;
+}
+body.dark-mode .ui.menu .dropdown.item .menu {
+  background: linear-gradient(
+    to right,
+    rgba(10, 19, 48, 0.951),
+    rgba(11, 34, 49, 0.93)
+  );
+}
 body.dark-mode .ui.card > .content a:not(.ui),
 .ui.cards > .card > .content a:not(.ui) {
   color: #dfdfdf !important;
