@@ -12,6 +12,16 @@ body.dark-mode .navbar {
 body.dark-mode .dark-mode-toggle > button {
   color: #999;
 }
+body.dark-mode .ui.fluid.dropdown {
+  color: white;
+  background-color: #1b2938;
+}
+body.dark-mode .ui.selection.dropdown .menu > .item {
+  color: white;
+}
+body.dark-mode .ui.dropdown .menu {
+  background-color: #1b2938;
+}
 body.dark-mode .svg-inline--fa {
   color: #10171d;
 }
