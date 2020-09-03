@@ -229,7 +229,7 @@ class MovieDetails extends Component {
               computer={12}
               className="MovieDetailsLeftCol"
             >
-              <h1>Full Cast</h1>
+              <h1 className="MovieDetailsFullCast">Full Cast</h1>
               {movieCasts[0] ? (
                 <Slider mainDatas={movieCasts} hrefMainUrl={`/person/`} />
               ) : (

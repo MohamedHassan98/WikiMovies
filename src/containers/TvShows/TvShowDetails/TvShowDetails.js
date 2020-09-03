@@ -216,7 +216,7 @@ class TvShowDetails extends Component {
               computer={12}
               className="TvShowDetailsLeftCol"
             >
-              <h1>Full Cast</h1>
+              <h1 className="TvShowDetailsFullCast">Full Cast</h1>
               {tvshowCasts[0] ? (
                 <Slider mainDatas={tvshowCasts} hrefMainUrl={"/person/"} />
               ) : (

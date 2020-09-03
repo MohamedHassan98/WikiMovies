@@ -71,3 +71,16 @@
   animation: moveInBottom 0.5s ease-out 0.75s;
   animation-fill-mode: backwards;
 }
+@media only screen and (max-width: 991px) {
+  .TvShowDetailsTvShowName {
+    padding-top: 25px;
+  }
+  .TvShowDetailsFullCast {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+  .TvShowDetailsExternalIconsDiv {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+}

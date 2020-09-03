@@ -78,3 +78,16 @@
   animation: moveInBottom 0.5s ease-out 0.75s;
   animation-fill-mode: backwards;
 }
+@media only screen and (max-width: 991px) {
+  .MovieDetailsMovieName {
+    padding-top: 25px;
+  }
+  .MovieDetailsFullCast {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+  .MovieDetailsExternalIconsDiv {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+}
