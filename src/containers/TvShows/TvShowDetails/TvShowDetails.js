@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Icon, Modal } from "semantic-ui-react";
+import { Redirect } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SliderMedia from "react-slick";
@@ -16,6 +17,7 @@ class TvShowDetails extends Component {
     tvshowMedias: [],
     tvshowRecommends: [],
     clickPlayTrailer: false,
+    redirect: null,
   };
   componentDidMount() {
     axios
@@ -42,7 +44,8 @@ class TvShowDetails extends Component {
           tvshowStatus: response.data.status,
           numberOfSeasons: response.data.seasons,
         });
-      });
+      })
+      .catch((error) => this.setState({ redirect: "/page404" }));
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/tv/${this.props.match.params.id}/credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
@@ -127,8 +130,11 @@ class TvShowDetails extends Component {
       tvshowOriginalLanguage,
       tvshowRecommends,
       numberOfSeasons,
+      redirect,
     } = this.state;
-
+    if (redirect) {
+      return <Redirect to={redirect} />;
+    }
     const settingss = {
       initialSlide: 0,
       dots: true,

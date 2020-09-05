@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Container, Grid, Image, Icon, Modal } from "semantic-ui-react";
+import { Redirect } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SliderMedia from "react-slick";
@@ -17,6 +18,7 @@ class MovieDetails extends Component {
     movieMedias: [],
     clickPlayTrailer: false,
     movieRecommends: [],
+    redirect: null,
   };
   componentDidMount() {
     axios
@@ -44,7 +46,8 @@ class MovieDetails extends Component {
           movieStatus: response.data.status,
           movieTagline: response.data.tagline,
         });
-      });
+      })
+      .catch((error) => this.setState({ redirect: "/page404" }));
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/movie/${this.props.match.params.id}/credits?api_key=${process.env.REACT_APP_API_KEY}`
@@ -129,12 +132,15 @@ class MovieDetails extends Component {
       movieBudget,
       movieRevenue,
       movieRecommends,
+      coverPhoto,
+      redirect,
     } = this.state;
     const runtimeHours = Math.floor(movieRuntime / 60);
     const runtimeMinutes = Math.round((movieRuntime / 60 - runtimeHours) * 60);
 
-    const { coverPhoto } = this.state;
-
+    if (redirect) {
+      return <Redirect to={redirect} />;
+    }
     const settingss = {
       initialSlide: 0,
       dots: true,

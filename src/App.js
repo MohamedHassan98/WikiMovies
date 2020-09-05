@@ -22,6 +22,7 @@ import TopRatedTvShows from "./containers/TvShows/TopRatedTvShows/TopRatedTvShow
 import MovieDetails from "./containers/Movies/MovieDetails/MovieDetails";
 import DiscoverMovies from "./containers/Movies/DiscoverMovies/DiscoverMovies";
 import TvShowDetails from "./containers/TvShows/TvShowDetails/TvShowDetails";
+import Page404 from "./containers/Page404/Page404";
 import "./App.css";
 /*
 
@@ -170,6 +171,12 @@ class App extends Component {
         exact: true,
         name: "Tv Show Details",
         component: TvShowDetails,
+      },
+      {
+        path: "/page404",
+        exact: true,
+        name: "404 Page",
+        component: Page404,
       },
     ];
 

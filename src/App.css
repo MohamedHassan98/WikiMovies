@@ -206,3 +206,8 @@ input[type="checkbox"].dmcheck + label {
     transform: translate(0);
   }
 }
+@media only screen and (max-width: 767px) {
+  .cCbgxl {
+    right: 5% !important;
+  }
+}

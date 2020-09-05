@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Image, Grid, Card } from "semantic-ui-react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 import ReadMoreAndLess from "react-read-more-less";
 import NoImage from "../../../assets/NoImage.png";
 import Slider from "../../../components/Slider/Slider";
@@ -19,6 +20,7 @@ class PersonDetails extends Component {
     profilePicture: null,
     knownCredits: null,
     divided: true,
+    redirect: null,
   };
 
   componentDidMount() {
@@ -43,7 +45,8 @@ class PersonDetails extends Component {
             ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${response.data.profile_path}`
             : NoImage,
         });
-      });
+      })
+      .catch((error) => this.setState({ redirect: "/page404" }));
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/combined_credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
@@ -92,8 +95,13 @@ class PersonDetails extends Component {
       actorImages,
       knownCredits,
       alsoKnownAs,
+      deathDay,
+      divided,
+      redirect,
     } = this.state;
-
+    if (redirect) {
+      return <Redirect to={redirect} />;
+    }
     let genderMaleFemale = null;
     if (gender === 1) {
       genderMaleFemale = "Female";
@@ -103,7 +111,7 @@ class PersonDetails extends Component {
     return (
       <Container className="PersonDetailsContainer">
         <Grid>
-          <Grid.Row divided={this.state.divided}>
+          <Grid.Row divided={divided}>
             <Grid.Column
               mobile={16}
               tablet={16}
@@ -141,6 +149,12 @@ class PersonDetails extends Component {
                   </strong>
                   {placeOfBirth === null ? "-" : placeOfBirth}
                 </p>
+                {deathDay ? (
+                  <p className="PersonDetailsInfoP">
+                    <strong className="PersonDetailsInfoStrong">Died</strong>
+                    {deathDay === null ? "-" : deathDay}
+                  </p>
+                ) : null}
                 <p className="PersonDetailsInfoP">
                   <strong className="PersonDetailsInfoStrong">
                     Also Known As

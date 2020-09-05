@@ -131,11 +131,17 @@ class DiscoverTvShows extends Component {
   }
 
   render() {
-    const { sortByValue, discoverTvShows, page, totalPages } = this.state;
+    const {
+      sortByValue,
+      discoverTvShows,
+      page,
+      totalPages,
+      divided,
+    } = this.state;
     return (
       <Container className="ContainerStyle">
         <h1 className="DiscoverTvShowsHeader">Discover Tv Shows</h1>
-        <Grid divided={this.state.divided}>
+        <Grid divided={divided}>
           <Grid.Column mobile={16} tablet={16} computer={4}>
             <div className="DiscoverTvShowsSortByDiv">
               <h2 className="DiscoverTvShowsSortByHeader">Sort</h2>
