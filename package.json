@@ -21,6 +21,7 @@
     "react-scripts": "3.4.1",
     "react-scroll-button": "^1.1.2",
     "react-slick": "^0.26.1",
+    "react-toastify": "^6.0.8",
     "react-toggle-component": "^3.0.8",
     "react-word-limit": "^1.0.1",
     "redux": "^4.0.5",

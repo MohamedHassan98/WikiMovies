@@ -1,0 +1,15 @@
+.Toastify__toast-body {
+  margin: auto 0;
+  font-size: 18px;
+  text-align: center;
+}
+.Toastify__toast--error {
+  background: #e74c3c;
+  border-radius: 15px;
+  height: 60px;
+}
+.Toastify__toast--success {
+  background: #07bc0c;
+  border-radius: 15px;
+  height: 60px;
+}

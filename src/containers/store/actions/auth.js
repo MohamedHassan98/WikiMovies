@@ -1,6 +1,6 @@
 import axios from "axios";
-
 import * as actionTypes from "./actionTypes";
+import Notify from "../../../components/Toastify/Toastify";
 
 export const authStart = () => {
   return {
@@ -48,11 +48,9 @@ export const auth = (email, password, isSignup) => {
       password: password,
       returnSecureToken: true,
     };
-    let url =
-      "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyBfn8ck-fDeUL1vN37u_soFGQrycEGvlO0";
+    let url = `${process.env.REACT_APP_SIGNUP_URL}`;
     if (!isSignup) {
-      url =
-        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBfn8ck-fDeUL1vN37u_soFGQrycEGvlO0";
+      url = `${process.env.REACT_APP_SIGNIN_URL}`;
       axios
         .post(url, authData)
         .then((response) => {
@@ -64,8 +62,15 @@ export const auth = (email, password, isSignup) => {
           localStorage.setItem("userId", response.data.localId);
           dispatch(authSuccess(response.data.idToken, response.data.localId));
           dispatch(checkAuthTimeout(response.data.expiresIn));
+          Notify("Sign in successful", "success");
         })
         .catch((err) => {
+          Notify(
+            err.response.data.error.message === "INVALID_PASSWORD"
+              ? "Invalid Password"
+              : "Invalid Email",
+            "error"
+          );
           dispatch(authFail(err.response.data.error));
         });
     } else if (isSignup) {
@@ -80,8 +85,15 @@ export const auth = (email, password, isSignup) => {
           localStorage.setItem("userId", response.data.localId);
           dispatch(authSuccess(response.data.idToken, response.data.localId));
           dispatch(checkAuthTimeout(response.data.expiresIn));
+          Notify("Sign up successful", "success");
         })
         .catch((err) => {
+          Notify(
+            err.response.data.error.message === "EMAIL_EXISTS"
+              ? "Email already exists"
+              : "Password must be at least 6 characters",
+            "error"
+          );
           dispatch(authFail(err));
         });
     }
