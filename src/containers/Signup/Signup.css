@@ -134,7 +134,7 @@
     height: auto !important;
   }
 }
-@media only screen and (max-width: 425px) {
+@media only screen and (max-width: 525px) {
   .BecomeOneOfUs {
     font-size: 15px !important;
   }
@@ -153,5 +153,8 @@
   .SignupButton {
     padding: 10px 25px !important;
     font-size: 13px !important;
+  }
+  .SignupInput {
+    width: 100% !important;
   }
 }

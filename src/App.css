@@ -171,11 +171,7 @@ input[type="checkbox"].dmcheck + label {
   overflow: hidden;
   white-space: nowrap;
 }
-.ui.container {
-  width: 65% !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
+
 @keyframes moveRight {
   0% {
     opacity: 0;

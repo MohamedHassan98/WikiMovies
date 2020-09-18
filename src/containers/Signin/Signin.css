@@ -114,3 +114,15 @@
 .SigninHrefSignup {
   color: #5c97bf;
 }
+
+@media only screen and (max-width: 525px) {
+  .SigninHeader {
+    font-size: 25px !important;
+  }
+  .WelcomeBack {
+    font-size: 20px !important;
+  }
+  .SigninInput {
+    width: 100% !important;
+  }
+}
