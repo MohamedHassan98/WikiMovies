@@ -91,6 +91,17 @@ body.dark-mode .content a {
 body.dark-mode .content button {
   color: #ee0 9;
 }
+body.dark-mode .ui.modal > .header {
+  color: white;
+  background-color: #1b2938;
+}
+body.dark-mode .ui.modal > .content {
+  color: white;
+  background-color: #1b2938;
+}
+body.dark-mode .ui.modal > .actions {
+  background-color: #1b2938;
+}
 .dark-mode-toggle {
   display: flex;
   margin: 0 auto;
@@ -155,6 +166,9 @@ input[type="checkbox"].dmcheck + label {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+.ui.modal .actions > .button {
+  border-radius: 15px;
 }
 .ContainerStyle {
   margin-top: 80px;

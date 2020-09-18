@@ -221,7 +221,7 @@ class Navbar extends Component {
                     <Icon disabled name="sign-out" />
                     Sign Out
                   </Menu.Item>
-                  <Menu.Item>
+                  <Menu.Item className="BurgerMenu">
                     <DarkMode />
                   </Menu.Item>
                 </>
@@ -245,7 +245,7 @@ class Navbar extends Component {
             {(matches) =>
               matches ? null : (
                 <>
-                  <Dropdown item text="Movies">
+                  <Dropdown className="NavbarHeaders" item text="Movies">
                     <Dropdown.Menu>
                       <Dropdown.Item>
                         <a className="NavbarDropdownItem" href="/movies">
@@ -284,7 +284,7 @@ class Navbar extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <Dropdown item text="TV Shows">
+                  <Dropdown className="NavbarHeaders" item text="TV Shows">
                     <Dropdown.Menu>
                       <Dropdown.Item>
                         <a className="NavbarDropdownItem" href="/tvshows">
@@ -326,7 +326,7 @@ class Navbar extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <Dropdown item text="People">
+                  <Dropdown className="NavbarHeaders" item text="People">
                     <Dropdown.Menu>
                       <Dropdown.Item>
                         <a className="NavbarDropdownItem" href="/person">
@@ -336,7 +336,10 @@ class Navbar extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
                   {searchBarIcon}
-                  <Menu.Item onClick={this.clickLogoutHandler}>
+                  <Menu.Item
+                    className="NavbarHeaders"
+                    onClick={this.clickLogoutHandler}
+                  >
                     <Icon disabled name="sign-out" />
                     Sign Out
                   </Menu.Item>

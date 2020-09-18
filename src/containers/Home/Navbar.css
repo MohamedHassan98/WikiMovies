@@ -7,8 +7,12 @@
   width: 50% !important;
   margin-bottom: 10px !important;
 }
+.NavbarHeaders {
+  font-weight: bold !important;
+}
 .NavbarDropdownItem {
   color: black !important;
+  font-weight: bold;
 }
 body.dark-mode .NavbarDropdownItem {
   color: white !important;
@@ -26,14 +30,18 @@ body.dark-mode .NavbarDropdownItem {
 }
 .BurgerMenu {
   color: black;
+  font-weight: bold !important;
 }
 body.dark-mode .BurgerMenu {
   color: white;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 950px) {
   .BurgerMenu {
+    color: black;
     display: block;
     margin-bottom: 10px;
+    margin-top: 2em;
+    font-weight: 600;
   }
 }
 /* Position and sizing of burger button */
