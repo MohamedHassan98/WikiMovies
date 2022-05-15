@@ -1,68 +1,129 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# [WikiMovies Website](https://wikimovies2498.netlify.app/)
 
-## Available Scripts
+<p  align="center">
+  <img src="https://mohamedhassan98.netlify.app/static/media/MoviesLogo.0d5525c6.png">
+</p>
 
-In the project directory, you can run:
+> **WikiMovies** is a movies website built with **ReactJS**
 
-### `npm start`
+### 👨‍💻 Technical Overview For the Project
+**Technologies & Tools used :**
+- ReactJS
+- ReduxJS
+- Semantic UI
+- HTML
+- CSS
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<hr>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### 🌍 General Overview For the Project
+ **This is movies website similar to a website called TMDB, It consists of 20 pages**
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Home page
+  - a welcome page and some showcasing of the categories and movies.
+- Category Page
+  - a page showing all the selected category's products.
+- Search Results Page
+  - a page showing the results of a searched keyword.
+- Person Page
+  - a page for the currently popular actors & actresses.
+- Person Details Page
+  - a page showing the details of the actor or actress you picked. 
+- Discover Movies Page
+  - a page showing the latest popular movies with a sort by feature.
+- Popular Movies  page
+  - a page showing the latest popular movies.
+- Now Playing Movies  page
+  - a page showing the latest movies being aired.
+- Upcoming Movies page
+  - a page showing the upcoming movies.
+- Top Rated Movies page
+  - a page showing the top rated movies of all time.
+- Movie Details page
+  - a page showing the details of the picked movie.
+- Discover Tv Shows page
+  - a page showing the latest popular tv shows with a sort by feature.
+- Popular Tv Shows page
+  - a page showing the latest popular tv shows.
+- Airing Today Tv Shows page
+  - a page showing the latest tv shows being aired.
+- On Tv Tv Shows page
+  - a page showing the latest on tv shows (that was how TMDB described it🤷‍♂️).
+- Top Rated Tv Shows page
+  - a page showing the top rated tv shows of all time.
+- Tv Show Details page
+  - a page showing the details of the picked tv show.
+- 404 page
+  - a page to show a 404 error.
+- Sign in page
+  - a form page to sign in your account.
+- Sign up page
+  - a form page to sign up your account.
+ 
+<hr>
 
-### `npm run build`
+### 📄 Some pictures of the website:
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/SigninWeb.e24d3c36.png">
+</p>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<hr>
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/SignupWeb.9e8faae1.png">
+</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<hr>
 
-### `npm run eject`
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/HomeWeb.afaa2cd4.png">
+</p>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<hr>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/PersonDetailsWeb.a50cc54d.png">
+</p>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<hr>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/SigninMobile.9064e4aa.png">
+</p>
 
-## Learn More
+<hr>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/SignupMobile.30fd8a58.png">
+</p>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<hr>
 
-### Code Splitting
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/HomeMobile.494ec16b.png">
+</p>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+<hr>
 
-### Analyzing the Bundle Size
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/MovieDetailsMobile.d6fddb31.png">
+</p>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+<hr>
 
-### Making a Progressive Web App
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/TvShowDetailsMobile.4c9b0ff7.png">
+</p>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+<hr>
 
-### Advanced Configuration
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/PersonDetailsMobile.647f8552.png">
+</p>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+<hr>
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+<p align="center">
+<img src="https://mohamedhassan98.netlify.app/static/media/SearchResultMobile.78c237cc.png">
+</p>
