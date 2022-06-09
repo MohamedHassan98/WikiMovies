@@ -1,13 +1,15 @@
 # [WikiMovies Website](https://wikimovies2498.netlify.app/)
 
 <p  align="center">
-  <img src="https://mohamedhassan98.netlify.app/static/media/MoviesLogo.0d5525c6.png">
+  <img src="https://firebasestorage.googleapis.com/v0/b/portfolio-ee47d.appspot.com/o/wikimoviesProject%2FMoviesLogo.png?alt=media">
 </p>
 
 > **WikiMovies** is a movies website built with **ReactJS**
 
 ### 👨‍💻 Technical Overview For the Project
+
 **Technologies & Tools used :**
+
 - ReactJS
 - ReduxJS
 - Semantic UI
@@ -17,8 +19,8 @@
 <hr>
 
 ### 🌍 General Overview For the Project
- **This is movies website similar to a website called TMDB, It consists of 20 pages**
 
+**This is movies website similar to a website called TMDB, It consists of 20 pages**
 
 - Home page
   - a welcome page and some showcasing of the categories and movies.
@@ -29,12 +31,12 @@
 - Person Page
   - a page for the currently popular actors & actresses.
 - Person Details Page
-  - a page showing the details of the actor or actress you picked. 
+  - a page showing the details of the actor or actress you picked.
 - Discover Movies Page
   - a page showing the latest popular movies with a sort by feature.
-- Popular Movies  page
+- Popular Movies page
   - a page showing the latest popular movies.
-- Now Playing Movies  page
+- Now Playing Movies page
   - a page showing the latest movies being aired.
 - Upcoming Movies page
   - a page showing the upcoming movies.
@@ -60,28 +62,29 @@
   - a form page to sign in your account.
 - Sign up page
   - a form page to sign up your account.
- 
+
 <hr>
 
 ### 📄 Some pictures of the website:
+
 <p align="center">
-<img src="https://mohamedhassan98.netlify.app/static/media/SigninWeb.e24d3c36.png">
+<img src="https://firebasestorage.googleapis.com/v0/b/portfolio-ee47d.appspot.com/o/wikimoviesProject%2FSigninWeb.png?alt=media">
 </p>
 
 <hr>
 
 <p align="center">
-<img src="https://mohamedhassan98.netlify.app/static/media/SignupWeb.9e8faae1.png">
+<img src="https://firebasestorage.googleapis.com/v0/b/portfolio-ee47d.appspot.com/o/wikimoviesProject%2FSignupWeb.png?alt=media">
 </p>
 
 <hr>
 
 <p align="center">
-<img src="https://mohamedhassan98.netlify.app/static/media/HomeWeb.afaa2cd4.png">
+<img src="https://firebasestorage.googleapis.com/v0/b/portfolio-ee47d.appspot.com/o/wikimoviesProject%2FHomeWeb.png?alt=media">
 </p>
 
 <hr>
 
 <p align="center">
-<img src="https://mohamedhassan98.netlify.app/static/media/PersonDetailsWeb.a50cc54d.png">
+<img src="https://firebasestorage.googleapis.com/v0/b/portfolio-ee47d.appspot.com/o/wikimoviesProject%2FPersonDetailsWeb.png?alt=media">
 </p>
