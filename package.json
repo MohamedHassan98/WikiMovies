@@ -29,6 +29,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "slick-carousel": "^1.8.1",
+    "styled-components": "^5.3.5",
     "superagent": "^5.2.2",
     "use-dark-mode": "^2.3.1",
     "yup": "^0.28.3"
