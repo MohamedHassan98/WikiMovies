@@ -11,12 +11,85 @@ import {
   Input,
   Modal,
   Button,
-  DropdownItem,
 } from "semantic-ui-react";
 import MoviesLogo from "../../assets/MoviesLogo.png";
 import { withRouter } from "react-router-dom";
-import DarkMode from "../DarkMode/DarkModeToggle";
+import DarkMode from "../../components/DarkMode/DarkModeToggle";
 import "./Navbar.css";
+
+const dropdownData = {
+  movies: [
+    {
+      key: 1,
+      href: "/movies",
+      name: "Discover",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 2,
+      href: "/popularmovies",
+      name: "Popular",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 3,
+      href: "/nowplayingmovies",
+      name: "Now Playing",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 4,
+      href: "/upcomingmovies",
+      name: "Upcoming",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 5,
+      href: "/topratedmovies",
+      name: "Top Rated",
+      className: "NavbarDropdownItem",
+    },
+  ],
+  tvshows: [
+    {
+      key: 1,
+      href: "/tvshows",
+      name: "Discover",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 2,
+      href: "/populartvshows",
+      name: "Popular",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 3,
+      href: "/airingtodaytvshows",
+      name: "Airing Today",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 4,
+      href: "/ontheairtvshows",
+      name: "On TV",
+      className: "NavbarDropdownItem",
+    },
+    {
+      key: 5,
+      href: "/topratedtvshows",
+      name: "Top Rated",
+      className: "NavbarDropdownItem",
+    },
+  ],
+  people: [
+    {
+      href: "/person",
+      name: "Popular People",
+      className: "NavbarDropdownItem",
+    },
+  ],
+};
 
 class Navbar extends Component {
   state = {
@@ -127,88 +200,34 @@ class Navbar extends Component {
                 <>
                   <Dropdown className="BurgerMenu" item text="Movies">
                     <Dropdown.Menu>
-                      <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/movies">
-                          Discover
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/popularmovies">
-                          Popular
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/nowplayingmovies"
-                        >
-                          Now Playing
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/upcomingmovies"
-                        >
-                          Upcoming
-                        </a>
-                      </Dropdown.Item>
-                      <DropdownItem>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/topratedmovies"
-                        >
-                          Top Rated
-                        </a>
-                      </DropdownItem>
+                      {dropdownData.movies.map((movie) => (
+                        <Dropdown.Item key={movie.key}>
+                          <a className={movie.className} href={movie.href}>
+                            {movie.name}
+                          </a>
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown className="BurgerMenu" item text="TV Shows">
                     <Dropdown.Menu>
-                      <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/tvshows">
-                          Discover
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/populartvshows"
-                        >
-                          Popular
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/airingtodaytvshows"
-                        >
-                          Airing Today
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/ontheairtvshows"
-                        >
-                          On TV
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/topratedtvshows"
-                        >
-                          Top Rated
-                        </a>
-                      </Dropdown.Item>
+                      {dropdownData.tvshows.map((tvshow) => (
+                        <Dropdown.Item key={tvshow.key}>
+                          <a className={tvshow.className} href={tvshow.href}>
+                            {tvshow.name}
+                          </a>
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
                   <Dropdown className="BurgerMenu" item text="People">
                     <Dropdown.Menu>
                       <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/person">
-                          Popular People
+                        <a
+                          className={dropdownData.people[0].className}
+                          href={dropdownData.people[0].href}
+                        >
+                          {dropdownData.people[0].name}
                         </a>
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -234,6 +253,7 @@ class Navbar extends Component {
           <Menu.Item header>
             <a href="/home">
               <Image
+                alt="Logo Image"
                 size="mini"
                 src={MoviesLogo}
                 className="NavbarImageStyle"
@@ -245,92 +265,51 @@ class Navbar extends Component {
             {(matches) =>
               matches ? null : (
                 <>
-                  <Dropdown className="NavbarHeaders" item text="Movies">
+                  <Dropdown
+                    className="NavbarHeaders"
+                    item
+                    text="Movies"
+                    aria-label="Movies Dropdown"
+                  >
                     <Dropdown.Menu>
-                      <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/movies">
-                          Discover
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/popularmovies">
-                          Popular
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/nowplayingmovies"
-                        >
-                          Now Playing
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/upcomingmovies"
-                        >
-                          Upcoming
-                        </a>
-                      </Dropdown.Item>
-                      <DropdownItem>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/topratedmovies"
-                        >
-                          Top Rated
-                        </a>
-                      </DropdownItem>
+                      {dropdownData.movies.map((movie) => (
+                        <Dropdown.Item key={movie.key}>
+                          <a className={movie.className} href={movie.href}>
+                            {movie.name}
+                          </a>
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
-
-                  <Dropdown className="NavbarHeaders" item text="TV Shows">
+                  <Dropdown
+                    className="NavbarHeaders"
+                    item
+                    text="TV Shows"
+                    aria-label="TV Shows Dropdown"
+                  >
                     <Dropdown.Menu>
-                      <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/tvshows">
-                          Discover
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/populartvshows"
-                        >
-                          Popular
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/airingtodaytvshows"
-                        >
-                          Airing Today
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/ontheairtvshows"
-                        >
-                          On TV
-                        </a>
-                      </Dropdown.Item>
-                      <Dropdown.Item>
-                        <a
-                          className="NavbarDropdownItem"
-                          href="/topratedtvshows"
-                        >
-                          Top Rated
-                        </a>
-                      </Dropdown.Item>
+                      {dropdownData.tvshows.map((tvshow) => (
+                        <Dropdown.Item key={tvshow.key}>
+                          <a className={tvshow.className} href={tvshow.href}>
+                            {tvshow.name}
+                          </a>
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
-
-                  <Dropdown className="NavbarHeaders" item text="People">
+                  <Dropdown
+                    className="NavbarHeaders"
+                    item
+                    text="People"
+                    aria-label="People Dropdown"
+                  >
                     <Dropdown.Menu>
                       <Dropdown.Item>
-                        <a className="NavbarDropdownItem" href="/person">
-                          Popular People
+                        <a
+                          className={dropdownData.people[0].className}
+                          href={dropdownData.people[0].href}
+                        >
+                          {dropdownData.people[0].name}
                         </a>
                       </Dropdown.Item>
                     </Dropdown.Menu>

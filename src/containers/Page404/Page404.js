@@ -20,7 +20,13 @@ class Page404 extends Component {
     return (
       <>
         <div className="videoDiv">
-          <video className="videoStyle" id="background-video" loop autoPlay>
+          <video
+            className="videoStyle"
+            id="background-video"
+            loop
+            autoPlay
+            muted
+          >
             <source src={Page404Gif} type="video/mp4" />
           </video>
         </div>

@@ -203,6 +203,7 @@ class SearchResults extends Component {
               <div className="SearchResultsSortDropdownDiv">
                 <Form onSubmit={this.sortByHandleSubmit}>
                   <Dropdown
+                    aria-label="Category Dropdown"
                     placeholder="Please select"
                     value={sortByValue}
                     fluid
@@ -230,6 +231,7 @@ class SearchResults extends Component {
                       <Image
                         className="SearchResultsImage"
                         src={searchResult.image}
+                        alt="Main Image"
                         href={`${searchHref}${searchResult.key}`}
                       />
                       <Item.Content className="SearchResultsItemContent">

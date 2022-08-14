@@ -26,9 +26,8 @@ import Page404 from "./containers/Page404/Page404";
 import "./App.css";
 /*
 
-TASK: add redux authentication here
-TASK: remove all console errors
-TASK : add loader in every page
+TASK(Feature) : Add loader in every page
+TASK (Feature) : Add to favourites for Movies & TV Shows details (Fix routing so that user can navigate the website without the need to login)
 
 */
 const isAuth = () => localStorage.getItem("token");

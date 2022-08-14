@@ -6,6 +6,8 @@
 
 > **WikiMovies** is a movies website built with **ReactJS**
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6c4d6895-9764-4072-8ce8-14d9c8c3d67b/deploy-status)](https://app.netlify.com/sites/wikimovies2498/deploys)
+
 ### 👨‍💻 Technical Overview For the Project
 
 **Technologies & Tools used :**
@@ -13,6 +15,8 @@
 - ReactJS
 - ReduxJS
 - Semantic UI
+- Axios
+- Formik & Yup
 - HTML
 - CSS
 

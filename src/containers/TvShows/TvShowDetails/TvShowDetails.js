@@ -12,7 +12,8 @@ import "./TvShowDetails.css";
 
 class TvShowDetails extends Component {
   state = {
-    tvShowGenres: [],
+    tvshowDetails: {},
+    tvshowSocials: {},
     tvshowCasts: [],
     tvshowMedias: [],
     tvshowRecommends: [],
@@ -26,26 +27,10 @@ class TvShowDetails extends Component {
       )
       .then((response) => {
         this.setState({
-          coverPhoto: `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.backdrop_path}`,
-          tvshowGenres: response.data.genres.map((tvshowGenre) => ({
-            key: tvshowGenre.id,
-            genre: tvshowGenre.name,
-          })),
-          tvshowHomepage: response.data.homepage,
-          tvshowName: response.data.name,
-          mainPhoto: response.data.poster_path
-            ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.poster_path}`
-            : NoImage,
-          tvshowReleaseDate: response.data.first_air_date,
-          tvshowRuntime: response.data.episode_run_time.join(" / "),
-          tvshowNetwork: response.data.networks[0].logo_path,
-          tvshowOverview: response.data.overview,
-          tvshowOriginalLanguage: response.data.original_language,
-          tvshowStatus: response.data.status,
-          numberOfSeasons: response.data.seasons,
+          tvshowDetails: response.data,
         });
       })
-      .catch((error) => this.setState({ redirect: "/page404" }));
+      .catch((_) => this.setState({ redirect: "/page404" }));
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/tv/${this.props.match.params.id}/credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
@@ -68,9 +53,7 @@ class TvShowDetails extends Component {
       )
       .then((response) => {
         this.setState({
-          tvshowFacebook: response.data.facebook_id,
-          tvshowInstagram: response.data.instagram_id,
-          tvshowTwitter: response.data.twitter_id,
+          tvshowSocials: response.data,
         });
       });
     axios
@@ -110,26 +93,13 @@ class TvShowDetails extends Component {
   }
   render() {
     const {
-      coverPhoto,
-      mainPhoto,
-      tvshowName,
-      tvshowReleaseDate,
-      tvshowGenres,
-      tvshowRuntime,
+      tvshowDetails,
+      tvshowSocials,
       tvshowTrailer,
       tvshowMedias,
       tvshowTrailerId,
-      tvshowOverview,
       tvshowCasts,
-      tvshowFacebook,
-      tvshowInstagram,
-      tvshowTwitter,
-      tvshowHomepage,
-      tvshowStatus,
-      tvshowNetwork,
-      tvshowOriginalLanguage,
       tvshowRecommends,
-      numberOfSeasons,
       redirect,
     } = this.state;
     if (redirect) {
@@ -154,7 +124,7 @@ class TvShowDetails extends Component {
                                 rgba(100, 100, 100, 1),
                                 rgba(100, 100, 100, 0.5)
                                 ),
-                                url("${coverPhoto}")`,
+                                url("${`${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${tvshowDetails.backdrop_path}`}")`,
               backgroundSize: "100% 100%",
             }}
           >
@@ -164,7 +134,15 @@ class TvShowDetails extends Component {
               computer={4}
               className="TvShowDetailsLeftCol"
             >
-              <Image className="TvShowDetailsMainPhotoStyle" src={mainPhoto} />
+              <Image
+                className="TvShowDetailsMainPhotoStyle"
+                src={
+                  tvshowDetails.poster_path
+                    ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${tvshowDetails.poster_path}`
+                    : NoImage
+                }
+                alt="Main Image"
+              />
             </Grid.Column>
             <Grid.Column
               className="TvShowDetailsGridColumnInfo TvShowDetailsRightCol"
@@ -172,19 +150,27 @@ class TvShowDetails extends Component {
               tablet={16}
               computer={12}
             >
-              <h2 className="TvShowDetailsTvShowName">{tvshowName}</h2>
-              <p className="TvShowDetailsTvShowInfoP">{tvshowReleaseDate}</p>
-              {tvshowGenres &&
-                tvshowGenres.map((tvshowGenre) => (
-                  <span className="TvShowDetailsTvShowInfoSpan">
-                    {tvshowGenre.genre + "."}
+              <h2 className="TvShowDetailsTvShowName">{tvshowDetails.name}</h2>
+              <p className="TvShowDetailsTvShowInfoP">
+                {tvshowDetails.first_air_date}
+              </p>
+              {tvshowDetails.genres &&
+                tvshowDetails.genres.map((tvshowGenre) => (
+                  <span
+                    className="TvShowDetailsTvShowInfoSpan"
+                    key={tvshowGenre.id}
+                  >
+                    {tvshowGenre.name + "."}
                   </span>
                 ))}
               <span className="TvShowDetailsTvShowInfoSpan">
-                {numberOfSeasons && numberOfSeasons.length} Season(s).
+                {tvshowDetails.seasons && tvshowDetails.seasons.length}{" "}
+                Season(s).
               </span>
               <span className="TvShowDetailsTvShowInfoSpan">
-                {tvshowRuntime ? `${tvshowRuntime} Minutes.` : null}
+                {tvshowDetails.episode_run_time
+                  ? `${tvshowDetails.episode_run_time.join(" / ")} Minutes.`
+                  : null}
               </span>
               <div className="TvShowDetailsModalDiv">
                 {tvshowTrailer ? (
@@ -207,10 +193,12 @@ class TvShowDetails extends Component {
                   </Modal>
                 ) : null}
               </div>
-              {tvshowOverview ? (
+              {tvshowDetails.overview ? (
                 <>
                   <h3 className="TvShowDetailsOverviewHeader">Overview</h3>
-                  <p className="TvShowDetailsTvShowInfoP">{tvshowOverview}</p>
+                  <p className="TvShowDetailsTvShowInfoP">
+                    {tvshowDetails.overview}
+                  </p>
                 </>
               ) : null}
             </Grid.Column>
@@ -226,7 +214,7 @@ class TvShowDetails extends Component {
               {tvshowCasts[0] ? (
                 <Slider mainDatas={tvshowCasts} hrefMainUrl={"/person/"} />
               ) : (
-                <h3>No Cast crew found</h3>
+                <h2>No Cast crew found</h2>
               )}
             </Grid.Column>
             <Grid.Column
@@ -236,38 +224,38 @@ class TvShowDetails extends Component {
               className="TvShowDetailsRightCol"
             >
               <div className="TvShowDetailsExternalIconsDiv">
-                {tvshowFacebook ? (
+                {tvshowSocials.facebook_id ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://www.facebook.com/${tvshowFacebook}`}
+                    href={`https://www.facebook.com/${tvshowSocials.facebook_id}`}
                   >
                     <Icon size="big" name="facebook" />
                   </a>
                 ) : null}
-                {tvshowInstagram ? (
+                {tvshowSocials.instagram_id ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://www.instagram.com/${tvshowInstagram}`}
+                    href={`https://www.instagram.com/${tvshowSocials.instagram_id}`}
                   >
                     <Icon size="big" name="instagram" />
                   </a>
                 ) : null}
-                {tvshowTwitter ? (
+                {tvshowSocials.twitter_id ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://www.twitter.com/${tvshowTwitter}`}
+                    href={`https://www.twitter.com/${tvshowSocials.twitter_id}`}
                   >
                     <Icon size="big" name="twitter" />
                   </a>
                 ) : null}
-                {tvshowHomepage ? (
+                {tvshowDetails.homepage ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={tvshowHomepage}
+                    href={tvshowDetails.homepage}
                   >
                     <Icon size="big" name="linkify" />
                   </a>
@@ -276,14 +264,15 @@ class TvShowDetails extends Component {
               <div>
                 <p className="TvShowDetailsTvShowInfoP">
                   <strong className="TvShowDetailsStrong">Status</strong>
-                  {tvshowStatus ? tvshowStatus : "-"}
+                  {tvshowDetails.status ? tvshowDetails.status : "-"}
                 </p>
                 <p className="TvShowDetailsTvShowInfoP">
                   <strong className="TvShowDetailsStrong">Network</strong>
-                  {tvshowNetwork ? (
+                  {tvshowDetails.networks ? (
                     <Image
                       className="TvShowDetailsNetworkImage"
-                      src={`${process.env.REACT_APP_BASE_IMAGE_URL}${tvshowNetwork}`}
+                      alt="Network Logo"
+                      src={`${process.env.REACT_APP_BASE_IMAGE_URL}${tvshowDetails.networks[0].logo_path}`}
                     />
                   ) : (
                     "-"
@@ -293,8 +282,8 @@ class TvShowDetails extends Component {
                   <strong className="TvShowDetailsStrong">
                     Original Language
                   </strong>
-                  {tvshowOriginalLanguage
-                    ? ISO6391.getName(tvshowOriginalLanguage)
+                  {tvshowDetails.original_language
+                    ? ISO6391.getName(tvshowDetails.original_language)
                     : "-"}
                 </p>
               </div>
@@ -307,7 +296,7 @@ class TvShowDetails extends Component {
                 <SliderMedia {...settingss}>
                   {tvshowMedias &&
                     tvshowMedias.map((tvshowMedia) => (
-                      <div>
+                      <div key={tvshowMedia.key}>
                         <iframe
                           className="TvShowDetailsIframeStyle"
                           src={`https://www.youtube.com/embed/${tvshowMedia.key}`}
@@ -330,7 +319,7 @@ class TvShowDetails extends Component {
                   hrefMainUrl={"/tvshowdetails/"}
                 />
               ) : (
-                <h3>No Recommendations found</h3>
+                <h2>No Recommendations found</h2>
               )}
             </Grid.Column>
           </Grid.Row>

@@ -13,7 +13,8 @@ import "./MovieDetails.css";
 
 class MovieDetails extends Component {
   state = {
-    movieGenres: [],
+    movieDetails: {},
+    movieSocials: {},
     movieCasts: [],
     movieMedias: [],
     clickPlayTrailer: false,
@@ -27,27 +28,10 @@ class MovieDetails extends Component {
       )
       .then((response) => {
         this.setState({
-          coverPhoto: `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.backdrop_path}`,
-          movieGenres: response.data.genres.map((movieGenre) => ({
-            key: movieGenre.id,
-            genre: movieGenre.name,
-          })),
-          movieHomepage: response.data.homepage,
-          movieName: response.data.title,
-          movieOverview: response.data.overview,
-          mainPhoto: response.data.poster_path
-            ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${response.data.poster_path}`
-            : NoImage,
-          movieReleaseDate: response.data.release_date,
-          movieRuntime: response.data.runtime,
-          movieBudget: response.data.budget,
-          movieRevenue: response.data.revenue,
-          movieOriginalLanguage: response.data.original_language,
-          movieStatus: response.data.status,
-          movieTagline: response.data.tagline,
+          movieDetails: response.data,
         });
       })
-      .catch((error) => this.setState({ redirect: "/page404" }));
+      .catch((_) => this.setState({ redirect: "/page404" }));
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/movie/${this.props.match.params.id}/credits?api_key=${process.env.REACT_APP_API_KEY}`
@@ -70,9 +54,7 @@ class MovieDetails extends Component {
       )
       .then((response) => {
         this.setState({
-          movieFacebook: response.data.facebook_id,
-          movieInstagram: response.data.instagram_id,
-          movieTwitter: response.data.twitter_id,
+          movieSocials: response.data,
         });
       });
     axios
@@ -112,31 +94,19 @@ class MovieDetails extends Component {
   }
   render() {
     const {
-      movieRuntime,
-      mainPhoto,
-      movieName,
-      movieReleaseDate,
-      movieGenres,
       movieTrailer,
       movieMedias,
       movieTrailerId,
-      movieTagline,
-      movieOverview,
       movieCasts,
-      movieFacebook,
-      movieInstagram,
-      movieTwitter,
-      movieHomepage,
-      movieStatus,
-      movieOriginalLanguage,
-      movieBudget,
-      movieRevenue,
+      movieSocials,
       movieRecommends,
-      coverPhoto,
+      movieDetails,
       redirect,
     } = this.state;
-    const runtimeHours = Math.floor(movieRuntime / 60);
-    const runtimeMinutes = Math.round((movieRuntime / 60 - runtimeHours) * 60);
+    const runtimeHours = Math.floor(movieDetails.runtime / 60);
+    const runtimeMinutes = Math.round(
+      (movieDetails.runtime / 60 - runtimeHours) * 60
+    );
 
     if (redirect) {
       return <Redirect to={redirect} />;
@@ -160,7 +130,7 @@ class MovieDetails extends Component {
                                 rgba(100, 100, 100, 1),
                                 rgba(100, 100, 100, 0.5)
                                 ),
-                                url("${coverPhoto}")`,
+                                url("${`${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${movieDetails.backdrop_path}`}")`,
               backgroundSize: "100% 100%",
             }}
           >
@@ -170,7 +140,15 @@ class MovieDetails extends Component {
               computer={4}
               className="MovieDetailsLeftCol"
             >
-              <Image className="MovieDetailsMainPhotoStyle" src={mainPhoto} />
+              <Image
+                className="MovieDetailsMainPhotoStyle"
+                alt="Main Image"
+                src={
+                  movieDetails.poster_path
+                    ? `${process.env.REACT_APP_ORIGINAL_IMAGE_URL}${movieDetails.poster_path}`
+                    : NoImage
+                }
+              />
             </Grid.Column>
             <Grid.Column
               mobile={16}
@@ -178,17 +156,24 @@ class MovieDetails extends Component {
               computer={12}
               className="MovieDetailsGridColumnInfo MovieDetailsRightCol"
             >
-              <h2 className="MovieDetailsMovieName">{movieName}</h2>
-              <p className="MovieDetailsMovieInfoP">{movieReleaseDate}</p>
-              {movieGenres &&
-                movieGenres.map((movieGenre) => (
-                  <span
-                    key={movieGenre.key}
-                    className="MovieDetailsMovieInfoSpan"
-                  >
-                    {movieGenre.genre + "."}
-                  </span>
-                ))}
+              <h2 className="MovieDetailsMovieName">{movieDetails.title}</h2>
+              <p className="MovieDetailsMovieInfoP">
+                {movieDetails.release_date}
+              </p>
+              {movieDetails.genres &&
+                movieDetails.genres
+                  .map((movieGenre) => ({
+                    key: movieGenre.id,
+                    genre: movieGenre.name,
+                  }))
+                  .map((movieGenre) => (
+                    <span
+                      key={movieGenre.key}
+                      className="MovieDetailsMovieInfoSpan"
+                    >
+                      {movieGenre.genre + "."}
+                    </span>
+                  ))}
               {runtimeHours === 0 && runtimeMinutes === 0 ? null : (
                 <span className="MovieDetailsMovieInfoSpan">
                   {runtimeHours + " hrs " + runtimeMinutes + " mins"}
@@ -217,13 +202,15 @@ class MovieDetails extends Component {
                   </Modal>
                 ) : null}
               </div>
-              {movieTagline ? (
-                <h3 className="MovieDetailsTagline">{movieTagline}</h3>
+              {movieDetails.tagline ? (
+                <h3 className="MovieDetailsTagline">{movieDetails.tagline}</h3>
               ) : null}
-              {movieOverview ? (
+              {movieDetails.overview ? (
                 <>
                   <h3 className="MovieDetailsOverviewHeader">Overview</h3>
-                  <p className="MovieDetailsMovieInfoP">{movieOverview}</p>
+                  <p className="MovieDetailsMovieInfoP">
+                    {movieDetails.overview}
+                  </p>
                 </>
               ) : null}
             </Grid.Column>
@@ -249,38 +236,41 @@ class MovieDetails extends Component {
               className="MovieDetailsRightCol"
             >
               <div className="MovieDetailsExternalIconsDiv">
-                {movieFacebook ? (
+                {movieSocials.facebook_id ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://www.facebook.com/${movieFacebook}`}
+                    aria-label="Facebook Hyperlink"
+                    href={`https://www.facebook.com/${movieSocials.facebook_id}`}
                   >
                     <Icon size="big" name="facebook" />
                   </a>
                 ) : null}
-                {movieInstagram ? (
+                {movieSocials.instagram_id ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://www.instagram.com/${movieInstagram}`}
+                    aria-label="Instagram Hyperlink"
+                    href={`https://www.instagram.com/${movieSocials.instagram_id}`}
                   >
                     <Icon size="big" name="instagram" />
                   </a>
                 ) : null}
-                {movieTwitter ? (
+                {movieSocials.twitter_id ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://www.twitter.com/${movieTwitter}`}
+                    aria-label="Twitter Hyperlink"
+                    href={`https://www.twitter.com/${movieSocials.twitter_id}`}
                   >
                     <Icon size="big" name="twitter" />
                   </a>
                 ) : null}
-                {movieHomepage ? (
+                {movieDetails.homepage ? (
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={movieHomepage}
+                    href={movieDetails.homepage}
                   >
                     <Icon size="big" name="linkify" />
                   </a>
@@ -289,19 +279,19 @@ class MovieDetails extends Component {
               <div>
                 <p className="MovieDetailsMovieInfoP">
                   <strong className="MovieDetailsStrong">Status</strong>
-                  {movieStatus}
+                  {movieDetails.status}
                 </p>
                 <p className="MovieDetailsMovieInfoP">
                   <strong className="MovieDetailsStrong">
                     Original Language
                   </strong>
-                  {ISO6391.getName(movieOriginalLanguage)}
+                  {ISO6391.getName(movieDetails.original_language)}
                 </p>
                 <p className="MovieDetailsMovieInfoP">
                   <strong className="MovieDetailsStrong">Budget</strong>
-                  {movieBudget ? (
+                  {movieDetails.budget ? (
                     <CurrencyFormat
-                      value={movieBudget}
+                      value={movieDetails.budget}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"$"}
@@ -313,9 +303,9 @@ class MovieDetails extends Component {
                 </p>
                 <p className="MovieDetailsMovieInfoP">
                   <strong className="MovieDetailsStrong">Revenue</strong>
-                  {movieRevenue ? (
+                  {movieDetails.revenue ? (
                     <CurrencyFormat
-                      value={movieRevenue}
+                      value={movieDetails.revenue}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"$"}
@@ -345,7 +335,7 @@ class MovieDetails extends Component {
                     ))}
                 </SliderMedia>
               ) : (
-                <h3 className="MovieDetailsNotFound">No Medias found</h3>
+                <h2 className="MovieDetailsNotFound">No Medias found</h2>
               )}
             </Grid.Column>
           </Grid.Row>
@@ -358,9 +348,9 @@ class MovieDetails extends Component {
                   hrefMainUrl={"/moviedetails/"}
                 />
               ) : (
-                <h3 className="MovieDetailsNotFound">
+                <h2 className="MovieDetailsNotFound">
                   No Recommendations found
-                </h3>
+                </h2>
               )}
             </Grid.Column>
           </Grid.Row>

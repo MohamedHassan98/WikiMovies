@@ -46,7 +46,7 @@ class PersonDetails extends Component {
             : NoImage,
         });
       })
-      .catch((error) => this.setState({ redirect: "/page404" }));
+      .catch((_) => this.setState({ redirect: "/page404" }));
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/person/${this.props.match.params.id}/combined_credits?language=en-US&api_key=${process.env.REACT_APP_API_KEY}`
@@ -117,6 +117,7 @@ class PersonDetails extends Component {
               tablet={16}
               computer={4}
               className="PersonDetailsLeftCol"
+              key={1}
             >
               <h1 className="PersonDetailsName">
                 <strong>{name}</strong>
@@ -124,6 +125,7 @@ class PersonDetails extends Component {
               <Image
                 className="PersonDetailsProfileImage"
                 src={profilePicture}
+                alt="Person Main Image"
               />
               <div className="PersonDetailsInfoDiv">
                 <h2 className="PersonDetailsPersonalInfoHeader">
@@ -179,6 +181,7 @@ class PersonDetails extends Component {
               tablet={16}
               computer={12}
               className="PersonDetailsRightCol"
+              key={2}
             >
               <>
                 <h3 className="PersonDetailsSubHeader PersonDetailsBiography">
@@ -206,7 +209,7 @@ class PersonDetails extends Component {
                       actorImages.map((actorImage) => (
                         <Grid.Column key={actorImage.key} width={4}>
                           <Card>
-                            <Image src={actorImage.image} />
+                            <Image src={actorImage.image} alt="Person Image" />
                           </Card>
                         </Grid.Column>
                       ))}

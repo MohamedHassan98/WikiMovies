@@ -83,7 +83,6 @@ class Signup extends Component {
                       handleChange,
                       values,
                       touched,
-                      isInvalid,
                       handleBlur,
                       errors,
                     }) => (
@@ -106,7 +105,6 @@ class Signup extends Component {
                               name="name"
                               value={values.name}
                               onChange={handleChange}
-                              isInvalid={!!errors.name && !!touched.name}
                               type="name"
                               onBlur={handleBlur}
                             />
@@ -129,7 +127,6 @@ class Signup extends Component {
                               name="email"
                               value={values.email}
                               onChange={handleChange}
-                              isInvalid={!!errors.email && !!touched.email}
                               type="email"
                               onBlur={handleBlur}
                             />
@@ -155,9 +152,6 @@ class Signup extends Component {
                               name="password"
                               value={values.password}
                               onChange={handleChange}
-                              isInvalid={
-                                !!touched.password && !!errors.password
-                              }
                               onBlur={handleBlur}
                             />
                           </div>

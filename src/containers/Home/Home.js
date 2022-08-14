@@ -95,9 +95,9 @@ class Home extends Component {
     this.setState({ searchName: event.target.value });
   };
 
-  clickPopularToggle = (e) => {
+  clickPopularToggle = (event) => {
     const { popularToggle } = this.state;
-    this.setState({ popularToggle: e.target.checked });
+    this.setState({ popularToggle: event.target.checked });
     if (popularToggle === false) {
       this.getPopularTV();
     }
@@ -105,9 +105,9 @@ class Home extends Component {
       this.getPopularMovies();
     }
   };
-  clickTopRatedToggle = (e) => {
+  clickTopRatedToggle = (event) => {
     const { topRatedToggle } = this.state;
-    this.setState({ topRatedToggle: e.target.checked });
+    this.setState({ topRatedToggle: event.target.checked });
     if (topRatedToggle === false) {
       this.getTopTV();
     }
@@ -117,13 +117,8 @@ class Home extends Component {
   };
 
   render() {
-    const {
-      popularToggle,
-      populars,
-      topRateds,
-      topRatedToggle,
-      searchName,
-    } = this.state;
+    const { popularToggle, populars, topRateds, topRatedToggle, searchName } =
+      this.state;
     let hrefImagePopular = null;
     if (popularToggle === false) {
       hrefImagePopular = "/moviedetails/";
@@ -143,9 +138,9 @@ class Home extends Component {
         <section className="HomeSearchImageWrapper">
           <div className="HomeSearchContentWrapper">
             <h1 className="HomeHeaderWelcome">Welcome</h1>
-            <h3 className="HomeSecondHeader">
+            <h2 className="HomeSecondHeader">
               Millions of movies, TV shows and people to discover. Explore now.
-            </h3>
+            </h2>
             <Form className="HomeFormStyle" onSubmit={this.handleSubmit}>
               <Form.Field>
                 <input

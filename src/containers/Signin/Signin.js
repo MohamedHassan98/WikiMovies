@@ -60,12 +60,11 @@ class Signin extends Component {
                       handleChange,
                       values,
                       touched,
-                      isInvalid,
                       handleBlur,
                       errors,
                     }) => (
                       <Form
-                        onSubmit={(event) => {
+                        onSubmit={(_) => {
                           handleSubmit(values);
                         }}
                       >
@@ -83,7 +82,6 @@ class Signin extends Component {
                               name="email"
                               value={values.email}
                               onChange={handleChange}
-                              isInvalid={!!errors.email && !!touched.email}
                               type="email"
                               onBlur={handleBlur}
                             />
@@ -109,9 +107,6 @@ class Signin extends Component {
                               name="password"
                               value={values.password}
                               onChange={handleChange}
-                              isInvalid={
-                                !!touched.password && !!errors.password
-                              }
                               onBlur={handleBlur}
                             />
                           </div>

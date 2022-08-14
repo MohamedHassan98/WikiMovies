@@ -8,7 +8,7 @@ const initialState = {
   loading: false,
 };
 
-const authStart = (state, action) => {
+const authStart = (state, _) => {
   return updateObject(state, { error: null, loading: true });
 };
 
@@ -28,7 +28,7 @@ const authFail = (state, action) => {
   });
 };
 
-const authLogout = (state, action) => {
+const authLogout = (state, _) => {
   return updateObject(state, { token: null, userId: null });
 };
 

@@ -39,7 +39,6 @@ export const checkAuthTimeout = (expirationTime) => {
     }, expirationTime * 1000);
   };
 };
-
 export const auth = (email, password, isSignup) => {
   return (dispatch) => {
     dispatch(authStart());
@@ -64,14 +63,14 @@ export const auth = (email, password, isSignup) => {
           dispatch(checkAuthTimeout(response.data.expiresIn));
           Notify("Sign in successful", "success");
         })
-        .catch((err) => {
+        .catch((error) => {
           Notify(
-            err.response.data.error.message === "INVALID_PASSWORD"
+            error.response.data.error.message === "INVALID_PASSWORD"
               ? "Invalid Password"
               : "Invalid Email",
             "error"
           );
-          dispatch(authFail(err.response.data.error));
+          dispatch(authFail(error.response.data.error));
         });
     } else if (isSignup) {
       axios
@@ -87,14 +86,14 @@ export const auth = (email, password, isSignup) => {
           dispatch(checkAuthTimeout(response.data.expiresIn));
           Notify("Sign up successful", "success");
         })
-        .catch((err) => {
+        .catch((error) => {
           Notify(
-            err.response.data.error.message === "EMAIL_EXISTS"
+            error.response.data.error.message === "EMAIL_EXISTS"
               ? "Email already exists"
               : "Password must be at least 6 characters",
             "error"
           );
-          dispatch(authFail(err));
+          dispatch(authFail(error));
         });
     }
   };
@@ -119,5 +118,6 @@ export const authCheckState = () => {
         );
       }
     }
+    return token;
   };
 };

@@ -56,6 +56,7 @@ const Slide = (props) => (
           >
             <div className="SliderDiv">
               <Image
+                alt="Main Image"
                 className="SliderImage"
                 src={
                   mainData.image ||

@@ -131,13 +131,8 @@ class DiscoverTvShows extends Component {
   }
 
   render() {
-    const {
-      sortByValue,
-      discoverTvShows,
-      page,
-      totalPages,
-      divided,
-    } = this.state;
+    const { sortByValue, discoverTvShows, page, totalPages, divided } =
+      this.state;
     return (
       <Container className="ContainerStyle">
         <h1 className="DiscoverTvShowsHeader">Discover Tv Shows</h1>
@@ -146,9 +141,10 @@ class DiscoverTvShows extends Component {
             <div className="DiscoverTvShowsSortByDiv">
               <h2 className="DiscoverTvShowsSortByHeader">Sort</h2>
               <div className="DiscoverTvShowsSortDropdownDiv">
-                <h4>Sort Results By</h4>
+                <h3>Sort Results By</h3>
                 <Form onSubmit={this.sortByHandleSubmit}>
                   <Dropdown
+                    aria-label="Sorting Dropdown"
                     placeholder="Please select"
                     defaultValue={sortByValue}
                     fluid

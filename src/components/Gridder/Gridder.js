@@ -7,10 +7,14 @@ const Gridder = (props) => (
     <Grid.Row>
       {props.mainDatas &&
         props.mainDatas.map((mainData) => (
-          <Grid.Column mobile={16} tablet={8} computer={4}>
+          <Grid.Column mobile={16} tablet={8} computer={4} key={mainData.key}>
             <Card className="CardStyler">
-              <a href={`${props.hrefMainUrl}${mainData.key}`}>
+              <a
+                href={`${props.hrefMainUrl}${mainData.key}`}
+                aria-label="Card Hyperlink"
+              >
                 <Image
+                  alt="Main Image"
                   src={
                     mainData.movieImage ||
                     mainData.image ||
@@ -32,13 +36,13 @@ const Gridder = (props) => (
                     mainData.tvShowReleaseDate ||
                     (mainData.knownFors &&
                       mainData.knownFors.map((knownFor) => (
-                        <>
-                          <span key={knownFor.key}>
+                        <div key={knownFor.key}>
+                          <span>
                             {knownFor.movieTitle
                               ? knownFor.movieTitle + "."
                               : knownFor.tvTitles + "."}
                           </span>
-                        </>
+                        </div>
                       )))}
                 </Card.Meta>
               </Card.Content>
