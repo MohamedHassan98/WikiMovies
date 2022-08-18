@@ -18,6 +18,7 @@ class TvShowDetails extends Component {
     tvshowMedias: [],
     tvshowRecommends: [],
     clickPlayTrailer: false,
+    favorites: false,
     redirect: null,
   };
   componentDidMount() {
@@ -90,7 +91,44 @@ class TvShowDetails extends Component {
           })),
         });
       });
+
+    if (localStorage.getItem("userName")) {
+      axios
+        .get(
+          `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+            "userId"
+          )}/favorites-series/${this.props.match.params.id}.json`
+        )
+        .then((response) => {
+          if (response.data !== null) {
+            this.setState({ favorites: true });
+          }
+        })
+        .catch((error) => console.log(error));
+    }
   }
+
+  addToFavorites = () => {
+    axios
+      .put(
+        `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+          "userId"
+        )}/favorites-series/${this.props.match.params.id}.json`,
+        this.props.match.params.id
+      )
+      .then((response) => this.setState({ favorites: true }));
+  };
+
+  removeFromFavorites = () => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+          "userId"
+        )}/favorites-series/${this.props.match.params.id}.json`
+      )
+      .then((response) => this.setState({ favorites: false }));
+  };
+
   render() {
     const {
       tvshowDetails,
@@ -101,6 +139,7 @@ class TvShowDetails extends Component {
       tvshowCasts,
       tvshowRecommends,
       redirect,
+      favorites,
     } = this.state;
     if (redirect) {
       return <Redirect to={redirect} />;
@@ -173,6 +212,35 @@ class TvShowDetails extends Component {
                   : null}
               </span>
               <div className="TvShowDetailsModalDiv">
+                {localStorage.getItem("userId") ? (
+                  favorites ? (
+                    <button
+                      onClick={() => this.removeFromFavorites()}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "white",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Icon name="favorite" color="yellow" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => this.addToFavorites()}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "white",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Icon name="favorite" />
+                    </button>
+                  )
+                ) : null}
                 {tvshowTrailer ? (
                   <Modal
                     closeIcon

@@ -150,8 +150,8 @@ class Signin extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password, isSignup) =>
-      dispatch(actions.auth(email, password, isSignup)),
+    onAuth: (email, password, _, isSignup) =>
+      dispatch(actions.auth(email, password, _, isSignup)),
   };
 };
 export default connect(null, mapDispatchToProps)(withRouter(Signin));

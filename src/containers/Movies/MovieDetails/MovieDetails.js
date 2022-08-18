@@ -17,8 +17,9 @@ class MovieDetails extends Component {
     movieSocials: {},
     movieCasts: [],
     movieMedias: [],
-    clickPlayTrailer: false,
     movieRecommends: [],
+    clickPlayTrailer: false,
+    favorites: false,
     redirect: null,
   };
   componentDidMount() {
@@ -91,7 +92,43 @@ class MovieDetails extends Component {
           })),
         });
       });
+    if (localStorage.getItem("userName")) {
+      axios
+        .get(
+          `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+            "userId"
+          )}/favorites-movies/${this.props.match.params.id}.json`
+        )
+        .then((response) => {
+          if (response.data !== null) {
+            this.setState({ favorites: true });
+          }
+        })
+        .catch((error) => console.log(error));
+    }
   }
+
+  addToFavorites = () => {
+    axios
+      .put(
+        `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+          "userId"
+        )}/favorites-movies/${this.props.match.params.id}.json`,
+        this.props.match.params.id
+      )
+      .then((response) => this.setState({ favorites: true }));
+  };
+
+  removeFromFavorites = () => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+          "userId"
+        )}/favorites-movies/${this.props.match.params.id}.json`
+      )
+      .then((response) => this.setState({ favorites: false }));
+  };
+
   render() {
     const {
       movieTrailer,
@@ -102,6 +139,7 @@ class MovieDetails extends Component {
       movieRecommends,
       movieDetails,
       redirect,
+      favorites,
     } = this.state;
     const runtimeHours = Math.floor(movieDetails.runtime / 60);
     const runtimeMinutes = Math.round(
@@ -180,6 +218,35 @@ class MovieDetails extends Component {
                 </span>
               )}
               <div className="MovieDetailsModalDiv">
+                {localStorage.getItem("userId") ? (
+                  favorites ? (
+                    <button
+                      onClick={() => this.removeFromFavorites()}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "white",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Icon name="favorite" color="yellow" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => this.addToFavorites()}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "white",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Icon name="favorite" />
+                    </button>
+                  )
+                ) : null}
                 {movieTrailer ? (
                   <Modal
                     closeIcon

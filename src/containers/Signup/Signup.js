@@ -25,7 +25,12 @@ class Signup extends Component {
   };
 
   submitHandler = (values) => {
-    this.props.onAuth(values.email, values.password, this.state.isSignup);
+    this.props.onAuth(
+      values.email,
+      values.password,
+      values.name,
+      this.state.isSignup
+    );
   };
   render() {
     const { buttonDisabled } = this.state;
@@ -194,8 +199,8 @@ class Signup extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password, isSignup) =>
-      dispatch(actions.auth(email, password, isSignup)),
+    onAuth: (email, password, name, isSignup) =>
+      dispatch(actions.auth(email, password, name, isSignup)),
   };
 };
 export default connect(null, mapDispatchToProps)(withRouter(Signup));

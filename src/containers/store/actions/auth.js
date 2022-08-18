@@ -39,12 +39,13 @@ export const checkAuthTimeout = (expirationTime) => {
     }, expirationTime * 1000);
   };
 };
-export const auth = (email, password, isSignup) => {
+export const auth = (email, password, name, isSignup) => {
   return (dispatch) => {
     dispatch(authStart());
     const authData = {
       email: email,
       password: password,
+      name: name,
       returnSecureToken: true,
     };
     let url = `${process.env.REACT_APP_SIGNUP_URL}`;
@@ -82,9 +83,19 @@ export const auth = (email, password, isSignup) => {
           localStorage.setItem("token", response.data.idToken);
           localStorage.setItem("expirationDate", expirationDate);
           localStorage.setItem("userId", response.data.localId);
+          localStorage.setItem("userName", authData.name);
           dispatch(authSuccess(response.data.idToken, response.data.localId));
           dispatch(checkAuthTimeout(response.data.expiresIn));
           Notify("Sign up successful", "success");
+          axios
+            .put(
+              `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+                "userId"
+              )}.json`,
+              { email: authData.email, name: authData.name }
+            )
+            .then((response) => console.log(response))
+            .catch((err) => console.log(err));
         })
         .catch((error) => {
           Notify(

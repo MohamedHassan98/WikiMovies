@@ -27,6 +27,7 @@
   margin-top: 25px;
 }
 .TvShowDetailsPlayTrailerButton {
+  cursor: pointer;
   border: none;
   background: transparent;
   color: white;

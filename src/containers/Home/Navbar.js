@@ -96,7 +96,12 @@ class Navbar extends Component {
     searchClicked: false,
     clickLogout: false,
     searchName: "",
+    signedIn: false,
   };
+
+  static getDerivedStateFromProps(props) {
+    return { signedIn: props.authentication };
+  }
 
   searchClickedHandler = () => {
     this.setState({ searchClicked: true });
@@ -113,7 +118,9 @@ class Navbar extends Component {
     this.setState({ searchName: event.target.value });
   };
   logoutHandler = () => {
-    localStorage.clear();
+    localStorage.removeItem("token");
+    localStorage.removeItem("expirationDate");
+    localStorage.removeItem("userId");
     window.location.reload();
   };
   clickLogoutHandler = () => {
@@ -124,7 +131,7 @@ class Navbar extends Component {
   };
 
   render() {
-    const { clickLogout, searchClicked, searchName } = this.state;
+    const { clickLogout, searchClicked, searchName, signedIn } = this.state;
     let logoutModal = null;
     if (clickLogout) {
       logoutModal = (
@@ -233,13 +240,24 @@ class Navbar extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
                   {searchBarIcon}
-                  <Menu.Item
-                    className="BurgerMenu"
-                    onClick={this.clickLogoutHandler}
-                  >
-                    <Icon disabled name="sign-out" />
-                    Sign Out
-                  </Menu.Item>
+                  {signedIn ? (
+                    <>
+                      <Menu.Item
+                        className="BurgerMenu"
+                        onClick={() => this.props.history.push("/favorites")}
+                      >
+                        <Icon name="favorite" />
+                        Favorites
+                      </Menu.Item>
+                      <Menu.Item
+                        className="BurgerMenu"
+                        onClick={this.clickLogoutHandler}
+                      >
+                        <Icon name="sign-out" />
+                        Sign Out
+                      </Menu.Item>
+                    </>
+                  ) : null}
                   <Menu.Item className="BurgerMenu">
                     <DarkMode />
                   </Menu.Item>
@@ -248,7 +266,7 @@ class Navbar extends Component {
             ) : null
           }
         </Media>
-        {logoutModal}
+        {signedIn ? logoutModal : null}
         <Menu fixed="top" inverted>
           <Menu.Item header>
             <a href="/home">
@@ -315,13 +333,32 @@ class Navbar extends Component {
                     </Dropdown.Menu>
                   </Dropdown>
                   {searchBarIcon}
-                  <Menu.Item
-                    className="NavbarHeaders"
-                    onClick={this.clickLogoutHandler}
-                  >
-                    <Icon disabled name="sign-out" />
-                    Sign Out
-                  </Menu.Item>
+                  {signedIn ? (
+                    <>
+                      <Menu.Item
+                        className="NavbarHeaders"
+                        onClick={() => this.props.history.push("/favorites")}
+                      >
+                        <Icon name="favorite" />
+                        Favorites
+                      </Menu.Item>
+                      <Menu.Item
+                        className="NavbarHeaders"
+                        onClick={this.clickLogoutHandler}
+                      >
+                        <Icon name="sign-out" />
+                        Sign Out
+                      </Menu.Item>
+                    </>
+                  ) : (
+                    <Menu.Item
+                      className="NavbarHeaders"
+                      onClick={() => this.props.history.push("/signin")}
+                    >
+                      <Icon name="sign-out" />
+                      Sign In/Up
+                    </Menu.Item>
+                  )}
                   <Menu.Item>
                     <DarkMode />
                   </Menu.Item>

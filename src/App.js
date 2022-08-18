@@ -23,45 +23,16 @@ import MovieDetails from "./containers/Movies/MovieDetails/MovieDetails";
 import DiscoverMovies from "./containers/Movies/DiscoverMovies/DiscoverMovies";
 import TvShowDetails from "./containers/TvShows/TvShowDetails/TvShowDetails";
 import Page404 from "./containers/Page404/Page404";
+import Favorites from "./containers/Favorites/Favorites";
 import "./App.css";
 /*
 
 TASK(Feature) : Add loader in every page
-TASK (Feature) : Add to favourites for Movies & TV Shows details (Fix routing so that user can navigate the website without the need to login)
+TASK (Refactor) : Add Hooks as much as possible
+TASK (Refactor) : Minimize the code as much as possible
 
 */
 const isAuth = () => localStorage.getItem("token");
-export const PrivateRoute = ({ component: Component, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuth() ? (
-          <>
-            <div id={"navbar"}>
-              <Navbar />
-            </div>
-            <Component {...props} />
-            <ScrollButton
-              behavior={"smooth"}
-              buttonBackgroundColor={"rgba(92, 151, 191, 0.73)"}
-              iconType={"arrow-up"}
-              style={{ fontSize: "14px" }}
-              targetId={"navbar"}
-            />
-          </>
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/signin",
-            }}
-          />
-        )
-      }
-    />
-  );
-};
-
 class App extends Component {
   componentDidMount() {
     this.props.onTryAutoSignup();
@@ -181,51 +152,41 @@ class App extends Component {
 
     return (
       <div style={{ height: "100%" }}>
+        <div id={"navbar"}>
+          <Navbar />
+        </div>
         <Switch>
+          {routes.map((route, id) => (
+            <Route
+              key={id}
+              path={route.path}
+              exact={route.exact}
+              name={route.name}
+              component={route.component}
+            />
+          ))}
+          {isAuth() ? (
+            <Route path="/favorites" exact={true} component={Favorites} />
+          ) : (
+            <>
+              <Route path="/signin" exact={true} component={Signin} />
+              <Route path="/signup" exact={true} component={Signup} />
+            </>
+          )}
           <Route
-            path="/"
+            path="*"
             basename="/"
             exact
-            render={(props) =>
-              isAuth() ? (
-                <Redirect to={{ pathname: "/home" }} />
-              ) : (
-                <Redirect to={{ pathname: "/signin" }} />
-              )
-            }
+            render={() => <Redirect to={{ pathname: "/home" }} />}
           />
-          {routes.map((route, idx) => {
-            return route.component ? (
-              <Route
-                key={idx}
-                path={route.path}
-                exact={route.exact}
-                name={route.name}
-                private={route.private}
-                render={(props) => {
-                  return route.private === false ? (
-                    <route.component {...props} />
-                  ) : (
-                    <PrivateRoute component={route.component} />
-                  );
-                }}
-              />
-            ) : null;
-          })}
-          <Route
-            exact
-            path="/signin"
-            name="Sign In"
-            render={() => (isAuth() ? <Redirect to="/" /> : <Signin />)}
-          />
-          <Route
-            exact
-            path="/signup"
-            name="Sign Up"
-            render={() => (isAuth() ? <Redirect to="/" /> : <Signup />)}
-          />
-          <Route render={() => <Redirect to={{ pathname: "/" }} />} />
         </Switch>
+        <ScrollButton
+          behavior={"smooth"}
+          buttonBackgroundColor={"rgba(92, 151, 191, 0.73)"}
+          iconType={"arrow-up"}
+          style={{ fontSize: "14px" }}
+          targetId={"navbar"}
+        />
       </div>
     );
   }
