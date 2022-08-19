@@ -269,7 +269,7 @@ class Navbar extends Component {
         {signedIn ? logoutModal : null}
         <Menu fixed="top" inverted>
           <Menu.Item header>
-            <a href="/home">
+            <a href="/">
               <Image
                 alt="Logo Image"
                 size="mini"
@@ -277,7 +277,7 @@ class Navbar extends Component {
                 className="NavbarImageStyle"
               />
             </a>
-            <a href="/home"> WikiMovies </a>
+            <a href="/"> WikiMovies </a>
           </Menu.Item>
           <Media query={{ maxWidth: 950 }}>
             {(matches) =>

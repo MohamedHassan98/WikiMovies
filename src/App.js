@@ -40,7 +40,7 @@ class App extends Component {
   render() {
     const routes = [
       {
-        path: "/home",
+        path: "/",
         exact: true,
         name: "Home",
         component: Home,
@@ -173,12 +173,7 @@ class App extends Component {
               <Route path="/signup" exact={true} component={Signup} />
             </>
           )}
-          <Route
-            path="*"
-            basename="/"
-            exact
-            render={() => <Redirect to={{ pathname: "/home" }} />}
-          />
+          <Route render={() => <Redirect to={{ pathname: "/" }} />} />
         </Switch>
         <ScrollButton
           behavior={"smooth"}
