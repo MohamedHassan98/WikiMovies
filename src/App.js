@@ -10,15 +10,9 @@ import Navbar from "./containers/Home/Navbar";
 import SearchResults from "./containers/SearchResults/SearchResults";
 import Person from "./containers/Person/Person";
 import PersonDetails from "./containers/Person/PersonDetails/PersonDetails";
-import PopularMovies from "./containers/Movies/PopularMovies/PopularMovies";
-import NowPlayingMovies from "./containers/Movies/NowPlayingMovies/NowPlayingMovies";
-import UpcomingMovies from "./containers/Movies/UpcomingMovies/UpcomingMovies";
-import TopRatedMovies from "./containers/Movies/TopRatedMovies/TopRatedMovies";
+import MoviesCategoryData from "./containers/Movies/MoviesCategoryData/MoviesCategoryData";
 import DiscoverTvShows from "./containers/TvShows/DiscoverTvShows/DiscoverTvShows";
-import PopularTvShows from "./containers/TvShows/PopularTvShows/PopularTvShows";
-import AiringTodayTvShows from "./containers/TvShows/AiringTodayTvShows/AiringTodayTvShows";
-import OnTvTvShows from "./containers/TvShows/OnTvTvShows/OnTvTvShows";
-import TopRatedTvShows from "./containers/TvShows/TopRatedTvShows/TopRatedTvShows";
+import TVShowsCategoryData from "./containers/TvShows/TVShowsCategoryData/TVShowsCategoryData";
 import MovieDetails from "./containers/Movies/MovieDetails/MovieDetails";
 import DiscoverMovies from "./containers/Movies/DiscoverMovies/DiscoverMovies";
 import TvShowDetails from "./containers/TvShows/TvShowDetails/TvShowDetails";
@@ -29,7 +23,6 @@ import "./App.css";
 
 TASK(Feature) : Add loader in every page
 TASK (Refactor) : Add Hooks as much as possible
-TASK (Refactor) : Minimize the code as much as possible
 
 */
 const isAuth = () => localStorage.getItem("token");
@@ -74,31 +67,25 @@ class App extends Component {
         exact: true,
 
         name: "Popular Movies",
-        component: PopularMovies,
+        component: MoviesCategoryData,
       },
       {
         path: "/nowplayingmovies",
         exact: true,
         name: "Now Playing Movies",
-        component: NowPlayingMovies,
+        component: MoviesCategoryData,
       },
       {
         path: `/upcomingmovies`,
         exact: true,
         name: "Upcoming Movies",
-        component: UpcomingMovies,
+        component: MoviesCategoryData,
       },
       {
         path: "/topratedmovies",
         exact: true,
         name: "Top Rated Movies",
-        component: TopRatedMovies,
-      },
-      {
-        path: "/topratedmovies",
-        exact: true,
-        name: "Top Rated Movies",
-        component: TopRatedMovies,
+        component: MoviesCategoryData,
       },
       {
         path: "/moviedetails/:id",
@@ -116,25 +103,25 @@ class App extends Component {
         path: "/populartvshows",
         exact: true,
         name: "Popular Tv Shows",
-        component: PopularTvShows,
+        component: TVShowsCategoryData,
       },
       {
         path: "/airingtodaytvshows",
         exact: true,
         name: "Airing Today Tv Shows",
-        component: AiringTodayTvShows,
+        component: TVShowsCategoryData,
       },
       {
         path: "/ontheairtvshows",
         exact: true,
         name: "On The Air Tv Shows",
-        component: OnTvTvShows,
+        component: TVShowsCategoryData,
       },
       {
         path: "/topratedtvshows",
         exact: true,
         name: "Top Rated Tv Shows",
-        component: TopRatedTvShows,
+        component: TVShowsCategoryData,
       },
       {
         path: "/tvshowdetails/:id",
