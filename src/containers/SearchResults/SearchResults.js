@@ -8,6 +8,7 @@ import {
   Form,
   Button,
   Dropdown,
+  Loader,
 } from "semantic-ui-react";
 import axios from "axios";
 import WordLimit from "react-word-limit";
@@ -43,6 +44,7 @@ class SearchResults extends Component {
       totalPages: 1,
       page: 1,
       searchHref: null,
+      loadingState: true,
     };
     this.sortByHandleSubmit = this.sortByHandleSubmit.bind(this);
   }
@@ -71,9 +73,11 @@ class SearchResults extends Component {
           });
         }
       });
+    this.setState({ loadingState: false });
   }
 
   componentWillReceiveProps(newProps) {
+    this.setState({ loadingState: true });
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/search/movie?api_key=${process.env.REACT_APP_API_KEY}&page=1&query=${newProps.match.params.id}`
@@ -97,6 +101,7 @@ class SearchResults extends Component {
                 ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${searchResult.poster_path}`
                 : NoImage,
             })),
+            loadingState: false,
           });
         }
       });
@@ -104,7 +109,7 @@ class SearchResults extends Component {
 
   setPageNum = (_, { activePage }) => {
     const { sortByValue } = this.state;
-    this.setState({ page: activePage }, () =>
+    this.setState({ page: activePage, loadingState: true }, () =>
       axios
         .get(
           `${process.env.REACT_APP_BASE_URL}/search/${sortByValue}?api_key=${process.env.REACT_APP_API_KEY}&page=${activePage}&query=${this.props.match.params.id}`
@@ -132,6 +137,7 @@ class SearchResults extends Component {
                     `${process.env.REACT_APP_BASE_IMAGE_URL}/${searchResult.profile_path}`
                   : NoImage,
             })),
+            loadingState: false,
           });
         })
     );
@@ -139,6 +145,7 @@ class SearchResults extends Component {
   };
 
   sortByHandleSubmit(event) {
+    this.setState({ loadingState: true });
     const { sortByValue } = this.state;
     axios
       .get(
@@ -146,7 +153,7 @@ class SearchResults extends Component {
       )
       .then((response) => {
         if (response.data.total_results === 0) {
-          this.setState({ nothingFound: true });
+          this.setState({ nothingFound: true, loadingState: false });
         } else {
           this.setState({
             totalPages: response.data.total_pages,
@@ -175,6 +182,7 @@ class SearchResults extends Component {
                   ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${searchResult.profile_path}`
                   : NoImage,
             })),
+            loadingState: false,
           });
         }
       });
@@ -192,6 +200,7 @@ class SearchResults extends Component {
       totalPages,
       sortByValue,
       searchHref,
+      loadingState,
     } = this.state;
 
     return (
@@ -218,57 +227,66 @@ class SearchResults extends Component {
               </div>
             </div>
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={16} computer={12}>
-            {nothingFound ? (
-              <h1>
-                Nothing found with the name of {this.props.match.params.id}
-              </h1>
-            ) : (
-              searchResults.map((searchResult) => (
-                <Grid key={`${searchResult.key}`} className="SearchResultsGrid">
-                  <Item.Group>
-                    <Item>
-                      <Image
-                        className="SearchResultsImage"
-                        src={searchResult.image}
-                        alt="Main Image"
-                        href={`${searchHref}${searchResult.key}`}
-                      />
-                      <Item.Content className="SearchResultsItemContent">
-                        <Item.Header className="SearchResultsItemInsideContent">
-                          <a
-                            className="SearchResultsItemHeader"
+          {loadingState ? (
+            <Loader active inline="centered" />
+          ) : (
+            <>
+              <Grid.Column mobile={16} tablet={16} computer={12}>
+                {nothingFound ? (
+                  <h1>
+                    Nothing found with the name of {this.props.match.params.id}
+                  </h1>
+                ) : (
+                  searchResults.map((searchResult) => (
+                    <Grid
+                      key={`${searchResult.key}`}
+                      className="SearchResultsGrid"
+                    >
+                      <Item.Group>
+                        <Item>
+                          <Image
+                            className="SearchResultsImage"
+                            src={searchResult.image}
+                            alt="Main Image"
                             href={`${searchHref}${searchResult.key}`}
-                          >
-                            {searchResult.name}
-                          </a>
-                        </Item.Header>
-                        <Item.Meta className="SearchResultsItemInsideContent">
-                          {searchResult.releaseDate}
-                        </Item.Meta>
-                        <Item.Description className="SearchResultsItemInsideContent">
-                          {searchResult.description ? (
-                            <WordLimit limit={250}>
-                              {searchResult.description}
-                            </WordLimit>
-                          ) : null}
-                        </Item.Description>
-                      </Item.Content>
-                    </Item>
-                  </Item.Group>
-                </Grid>
-              ))
-            )}
-          </Grid.Column>
-          <div className="SearchResultsPaginationStyle">
-            {nothingFound ? null : (
-              <Pagination
-                activePage={page}
-                totalPages={totalPages}
-                onPageChange={this.setPageNum}
-              />
-            )}
-          </div>
+                          />
+                          <Item.Content className="SearchResultsItemContent">
+                            <Item.Header className="SearchResultsItemInsideContent">
+                              <a
+                                className="SearchResultsItemHeader"
+                                href={`${searchHref}${searchResult.key}`}
+                              >
+                                {searchResult.name}
+                              </a>
+                            </Item.Header>
+                            <Item.Meta className="SearchResultsItemInsideContent">
+                              {searchResult.releaseDate}
+                            </Item.Meta>
+                            <Item.Description className="SearchResultsItemInsideContent">
+                              {searchResult.description ? (
+                                <WordLimit limit={250}>
+                                  {searchResult.description}
+                                </WordLimit>
+                              ) : null}
+                            </Item.Description>
+                          </Item.Content>
+                        </Item>
+                      </Item.Group>
+                    </Grid>
+                  ))
+                )}
+              </Grid.Column>
+              <div className="SearchResultsPaginationStyle">
+                {nothingFound ? null : (
+                  <Pagination
+                    activePage={page}
+                    totalPages={totalPages}
+                    onPageChange={this.setPageNum}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </Grid>
       </Container>
     );

@@ -26,6 +26,13 @@
   width: 100%;
   margin-top: 25px;
 }
+.TvShowDetailsFavorites {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
 .TvShowDetailsPlayTrailerButton {
   cursor: pointer;
   border: none;

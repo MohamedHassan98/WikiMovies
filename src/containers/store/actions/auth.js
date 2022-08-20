@@ -87,15 +87,12 @@ export const auth = (email, password, name, isSignup) => {
           dispatch(authSuccess(response.data.idToken, response.data.localId));
           dispatch(checkAuthTimeout(response.data.expiresIn));
           Notify("Sign up successful", "success");
-          axios
-            .put(
-              `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
-                "userId"
-              )}.json`,
-              { email: authData.email, name: authData.name }
-            )
-            .then((response) => console.log(response))
-            .catch((err) => console.log(err));
+          axios.put(
+            `${process.env.REACT_APP_FIREBASE_URL}${localStorage.getItem(
+              "userId"
+            )}.json`,
+            { email: authData.email, name: authData.name }
+          );
         })
         .catch((error) => {
           Notify(

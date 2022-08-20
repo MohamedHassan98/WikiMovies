@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Pagination } from "semantic-ui-react";
+import { Container, Pagination, Loader } from "semantic-ui-react";
 import axios from "axios";
 import Gridder from "../../components/Gridder/Gridder";
 import NoImage from "../../assets/NoImage.png";
@@ -9,6 +9,7 @@ class Person extends Component {
     persons: [],
     totalPages: 1,
     page: 1,
+    loadingState: true,
   };
 
   componentDidMount() {
@@ -32,12 +33,13 @@ class Person extends Component {
               tvTitles: knownFor.name,
             })),
           })),
+          loadingState: false,
         });
       });
   }
 
   setPageNum = (_, { activePage }) => {
-    this.setState({ page: activePage }, () =>
+    this.setState({ page: activePage, loadingState: true }, () =>
       axios
         .get(
           `${process.env.REACT_APP_BASE_URL}/person/popular?page=${activePage}&api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
@@ -57,6 +59,7 @@ class Person extends Component {
                 tvTitles: knownFor.name,
               })),
             })),
+            loadingState: false,
           });
         })
     );
@@ -64,18 +67,24 @@ class Person extends Component {
   };
 
   render() {
-    const { persons, totalPages } = this.state;
+    const { persons, totalPages, loadingState } = this.state;
     return (
       <Container className="ContainerStyle">
         <h1>Popular People</h1>
-        <Gridder mainDatas={persons} hrefMainUrl={`/person/`} />
-        <div className="PaginationStyle">
-          <Pagination
-            defaultActivePage={1}
-            totalPages={totalPages}
-            onPageChange={this.setPageNum}
-          />
-        </div>
+        {loadingState ? (
+          <Loader active inline="centered" />
+        ) : (
+          <>
+            <Gridder mainDatas={persons} hrefMainUrl={`/person/`} />
+            <div className="PaginationStyle">
+              <Pagination
+                defaultActivePage={1}
+                totalPages={totalPages}
+                onPageChange={this.setPageNum}
+              />
+            </div>
+          </>
+        )}
       </Container>
     );
   }

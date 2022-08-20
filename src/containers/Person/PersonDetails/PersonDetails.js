@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Image, Grid, Card } from "semantic-ui-react";
+import { Container, Image, Grid, Card, Loader } from "semantic-ui-react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import ReadMoreAndLess from "react-read-more-less";
@@ -21,6 +21,7 @@ class PersonDetails extends Component {
     knownCredits: null,
     divided: true,
     redirect: null,
+    loadingState: true,
   };
 
   componentDidMount() {
@@ -79,6 +80,7 @@ class PersonDetails extends Component {
               ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${actorImage.file_path}`
               : NoImage,
           })),
+          loadingState: false,
         });
       });
   }
@@ -98,6 +100,7 @@ class PersonDetails extends Component {
       deathDay,
       divided,
       redirect,
+      loadingState,
     } = this.state;
     if (redirect) {
       return <Redirect to={redirect} />;
@@ -110,115 +113,124 @@ class PersonDetails extends Component {
     }
     return (
       <Container className="PersonDetailsContainer">
-        <Grid>
-          <Grid.Row divided={divided}>
-            <Grid.Column
-              mobile={16}
-              tablet={16}
-              computer={4}
-              className="PersonDetailsLeftCol"
-              key={1}
-            >
-              <h1 className="PersonDetailsName">
-                <strong>{name}</strong>
-              </h1>
-              <Image
-                className="PersonDetailsProfileImage"
-                src={profilePicture}
-                alt="Person Main Image"
-              />
-              <div className="PersonDetailsInfoDiv">
-                <h2 className="PersonDetailsPersonalInfoHeader">
-                  Personal Info
-                </h2>
-                <p className="PersonDetailsInfoP">
-                  <strong className="PersonDetailsInfoStrong">Known for</strong>
-                  {knownForDepartment}
-                </p>
-                <p className="PersonDetailsInfoP">
-                  <strong className="PersonDetailsInfoStrong">
-                    Known Credits
-                  </strong>
-                  {knownCredits && knownCredits.length}
-                </p>
-                <p className="PersonDetailsInfoP">
-                  <strong className="PersonDetailsInfoStrong">Gender</strong>
-                  {genderMaleFemale}
-                </p>
-                <p className="PersonDetailsInfoP">
-                  <strong className="PersonDetailsInfoStrong">
-                    Place of Birth
-                  </strong>
-                  {placeOfBirth === null ? "-" : placeOfBirth}
-                </p>
-                {deathDay ? (
+        {loadingState ? (
+          <Loader active inline="centered" />
+        ) : (
+          <Grid>
+            <Grid.Row divided={divided}>
+              <Grid.Column
+                mobile={16}
+                tablet={16}
+                computer={4}
+                className="PersonDetailsLeftCol"
+                key={1}
+              >
+                <h1 className="PersonDetailsName">
+                  <strong>{name}</strong>
+                </h1>
+                <Image
+                  className="PersonDetailsProfileImage"
+                  src={profilePicture}
+                  alt="Person Main Image"
+                />
+                <div className="PersonDetailsInfoDiv">
+                  <h2 className="PersonDetailsPersonalInfoHeader">
+                    Personal Info
+                  </h2>
                   <p className="PersonDetailsInfoP">
-                    <strong className="PersonDetailsInfoStrong">Died</strong>
-                    {deathDay === null ? "-" : deathDay}
+                    <strong className="PersonDetailsInfoStrong">
+                      Known for
+                    </strong>
+                    {knownForDepartment}
                   </p>
-                ) : null}
-                <p className="PersonDetailsInfoP">
-                  <strong className="PersonDetailsInfoStrong">
-                    Also Known As
-                  </strong>
-                  {alsoKnownAs ? (
-                    alsoKnownAs.map(function (object, i) {
-                      return (
-                        <>
-                          {object.toString().split(",")}
-                          <br />
-                        </>
-                      );
-                    })
+                  <p className="PersonDetailsInfoP">
+                    <strong className="PersonDetailsInfoStrong">
+                      Known Credits
+                    </strong>
+                    {knownCredits && knownCredits.length}
+                  </p>
+                  <p className="PersonDetailsInfoP">
+                    <strong className="PersonDetailsInfoStrong">Gender</strong>
+                    {genderMaleFemale}
+                  </p>
+                  <p className="PersonDetailsInfoP">
+                    <strong className="PersonDetailsInfoStrong">
+                      Place of Birth
+                    </strong>
+                    {placeOfBirth === null ? "-" : placeOfBirth}
+                  </p>
+                  {deathDay ? (
+                    <p className="PersonDetailsInfoP">
+                      <strong className="PersonDetailsInfoStrong">Died</strong>
+                      {deathDay === null ? "-" : deathDay}
+                    </p>
+                  ) : null}
+                  <p className="PersonDetailsInfoP">
+                    <strong className="PersonDetailsInfoStrong">
+                      Also Known As
+                    </strong>
+                    {alsoKnownAs ? (
+                      alsoKnownAs.map(function (object, i) {
+                        return (
+                          <>
+                            {object.toString().split(",")}
+                            <br />
+                          </>
+                        );
+                      })
+                    ) : (
+                      <>-</>
+                    )}
+                  </p>
+                </div>
+              </Grid.Column>
+              <Grid.Column
+                mobile={16}
+                tablet={16}
+                computer={12}
+                className="PersonDetailsRightCol"
+                key={2}
+              >
+                <>
+                  <h3 className="PersonDetailsSubHeader PersonDetailsBiography">
+                    Biography
+                  </h3>
+                  {biography ? (
+                    <ReadMoreAndLess
+                      ref={this.ReadMore}
+                      className="read-more-content"
+                      charLimit={250}
+                      readMoreText="Read more"
+                      readLessText="Read less"
+                    >
+                      {biography}
+                    </ReadMoreAndLess>
                   ) : (
-                    <>-</>
+                    `We don't have a biography for ${name}.`
                   )}
-                </p>
-              </div>
-            </Grid.Column>
-            <Grid.Column
-              mobile={16}
-              tablet={16}
-              computer={12}
-              className="PersonDetailsRightCol"
-              key={2}
-            >
-              <>
-                <h3 className="PersonDetailsSubHeader PersonDetailsBiography">
-                  Biography
-                </h3>
-                {biography ? (
-                  <ReadMoreAndLess
-                    ref={this.ReadMore}
-                    className="read-more-content"
-                    charLimit={250}
-                    readMoreText="Read more"
-                    readLessText="Read less"
-                  >
-                    {biography}
-                  </ReadMoreAndLess>
-                ) : (
-                  `We don't have a biography for ${name}.`
-                )}
-                <h3 className="PersonDetailsSubHeader">Known For</h3>
-                <Slider mainDatas={allCredits} />
-                <h3 className="PersonDetailsSubHeader">Images</h3>
-                <Grid divided="vertically">
-                  <Grid.Row>
-                    {actorImages &&
-                      actorImages.map((actorImage) => (
-                        <Grid.Column key={actorImage.key} width={4}>
-                          <Card>
-                            <Image src={actorImage.image} alt="Person Image" />
-                          </Card>
-                        </Grid.Column>
-                      ))}
-                  </Grid.Row>
-                </Grid>
-              </>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+                  <h3 className="PersonDetailsSubHeader">Known For</h3>
+                  <Slider mainDatas={allCredits} />
+                  <h3 className="PersonDetailsSubHeader">Images</h3>
+                  <Grid divided="vertically">
+                    <Grid.Row>
+                      {actorImages &&
+                        actorImages.map((actorImage) => (
+                          <Grid.Column key={actorImage.key} width={4}>
+                            <Card>
+                              <Image
+                                src={actorImage.image}
+                                alt="Person Image"
+                              />
+                            </Card>
+                          </Grid.Column>
+                        ))}
+                    </Grid.Row>
+                  </Grid>
+                </>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        )}
       </Container>
     );
   }

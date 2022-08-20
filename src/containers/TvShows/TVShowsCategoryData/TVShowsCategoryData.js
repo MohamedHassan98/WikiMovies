@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Pagination } from "semantic-ui-react";
+import { Container, Pagination, Loader } from "semantic-ui-react";
 import axios from "axios";
 import Gridder from "../../../components/Gridder/Gridder";
 import NoImage from "../../../assets/NoImage.png";
@@ -39,6 +39,7 @@ class TVShowsCategoryData extends Component {
     tvshowsData: [],
     totalPages: 1,
     page: 1,
+    loadingState: true,
   };
 
   componentDidMount() {
@@ -52,7 +53,7 @@ class TVShowsCategoryData extends Component {
   }
 
   setPageNum = (_, { activePage }) => {
-    this.setState({ page: activePage }, () =>
+    this.setState({ page: activePage, loadingState: true }, () =>
       axios
         .get(
           `${process.env.REACT_APP_BASE_URL}/tv/${categoryURL}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${activePage}`
@@ -75,22 +76,29 @@ class TVShowsCategoryData extends Component {
           : NoImage,
         tvShowReleaseDate: tvshowData.first_air_date,
       })),
+      loadingState: false,
     });
   };
 
   render() {
-    const { tvshowsData, totalPages } = this.state;
+    const { tvshowsData, totalPages, page, loadingState } = this.state;
     return (
       <Container className="ContainerStyle">
         <h1>{categoryHeader} TV Shows</h1>
-        <Gridder mainDatas={tvshowsData} hrefMainUrl={`/tvshowdetails/`} />
-        <div className="PaginationStyle">
-          <Pagination
-            defaultActivePage={1}
-            totalPages={totalPages}
-            onPageChange={this.setPageNum}
-          />
-        </div>
+        {loadingState ? (
+          <Loader active inline="centered" />
+        ) : (
+          <>
+            <Gridder mainDatas={tvshowsData} hrefMainUrl={`/tvshowdetails/`} />
+            <div className="PaginationStyle">
+              <Pagination
+                activePage={page}
+                totalPages={totalPages}
+                onPageChange={this.setPageNum}
+              />
+            </div>
+          </>
+        )}
       </Container>
     );
   }

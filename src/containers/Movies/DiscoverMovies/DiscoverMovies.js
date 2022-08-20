@@ -6,6 +6,7 @@ import {
   Dropdown,
   Button,
   Pagination,
+  Loader,
 } from "semantic-ui-react";
 import axios from "axios";
 import Gridder from "../../../components/Gridder/Gridder";
@@ -54,6 +55,7 @@ class DiscoverMovies extends Component {
       totalPages: 1,
       page: 1,
       divided: true,
+      loadingState: true,
     };
     this.sortByHandleSubmit = this.sortByHandleSubmit.bind(this);
   }
@@ -78,6 +80,7 @@ class DiscoverMovies extends Component {
               : NoImage,
             movieReleaseDate: discoverMovie.release_date,
           })),
+          loadingState: false,
         });
       });
   }
@@ -88,7 +91,7 @@ class DiscoverMovies extends Component {
 
   setPageNum = (_, { activePage }) => {
     const { sortByValue } = this.state;
-    this.setState({ page: activePage }, () =>
+    this.setState({ page: activePage, loadingState: true }, () =>
       axios
         .get(
           `${process.env.REACT_APP_BASE_URL}/discover/movie?language=en-US&sort_by=${sortByValue}&page=${activePage}&api_key=${process.env.REACT_APP_API_KEY}&include_adult=false`
@@ -103,6 +106,7 @@ class DiscoverMovies extends Component {
                 : NoImage,
               movieReleaseDate: discoverMovie.release_date,
             })),
+            loadingState: false,
           });
         })
     );
@@ -111,29 +115,38 @@ class DiscoverMovies extends Component {
 
   sortByHandleSubmit(event) {
     const { sortByValue } = this.state;
-    axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/discover/movie?language=en-US&sort_by=${sortByValue}&page=1&api_key=${process.env.REACT_APP_API_KEY}&include_adult=false`
-      )
-      .then((response) => {
-        this.setState({
-          page: 1,
-          discoverMovies: response.data.results.map((discoverMovie) => ({
-            key: discoverMovie.id,
-            movieName: discoverMovie.title,
-            movieImage: discoverMovie.poster_path
-              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${discoverMovie.poster_path}`
-              : NoImage,
-            movieReleaseDate: discoverMovie.release_date,
-          })),
-        });
-      });
+    this.setState({ loadingState: true }, () =>
+      axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/discover/movie?language=en-US&sort_by=${sortByValue}&page=1&api_key=${process.env.REACT_APP_API_KEY}&include_adult=false`
+        )
+        .then((response) => {
+          this.setState({
+            page: 1,
+            discoverMovies: response.data.results.map((discoverMovie) => ({
+              key: discoverMovie.id,
+              movieName: discoverMovie.title,
+              movieImage: discoverMovie.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${discoverMovie.poster_path}`
+                : NoImage,
+              movieReleaseDate: discoverMovie.release_date,
+            })),
+            loadingState: false,
+          });
+        })
+    );
     event.preventDefault();
   }
 
   render() {
-    const { sortByValue, discoverMovies, page, totalPages, divided } =
-      this.state;
+    const {
+      sortByValue,
+      discoverMovies,
+      page,
+      totalPages,
+      divided,
+      loadingState,
+    } = this.state;
     return (
       <Container className="ContainerStyle">
         <h1 className="DiscoverMoviesHeader">Discover Movies</h1>
@@ -160,19 +173,23 @@ class DiscoverMovies extends Component {
               </div>
             </div>
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={16} computer={12}>
-            <Gridder
-              mainDatas={discoverMovies}
-              hrefMainUrl={`/moviedetails/`}
-            />
-            <div className="PaginationStyle">
-              <Pagination
-                activePage={page}
-                totalPages={totalPages}
-                onPageChange={this.setPageNum}
+          {loadingState ? (
+            <Loader active inline="centered" />
+          ) : (
+            <Grid.Column mobile={16} tablet={16} computer={12}>
+              <Gridder
+                mainDatas={discoverMovies}
+                hrefMainUrl={`/moviedetails/`}
               />
-            </div>
-          </Grid.Column>
+              <div className="PaginationStyle">
+                <Pagination
+                  activePage={page}
+                  totalPages={totalPages}
+                  onPageChange={this.setPageNum}
+                />
+              </div>
+            </Grid.Column>
+          )}
         </Grid>
       </Container>
     );

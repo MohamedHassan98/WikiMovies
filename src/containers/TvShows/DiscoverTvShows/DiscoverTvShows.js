@@ -6,6 +6,7 @@ import {
   Dropdown,
   Button,
   Pagination,
+  Loader,
 } from "semantic-ui-react";
 import axios from "axios";
 import Gridder from "../../../components/Gridder/Gridder";
@@ -52,6 +53,7 @@ class DiscoverTvShows extends Component {
     totalPages: 1,
     page: 1,
     divided: true,
+    loadingState: true,
   };
   constructor(props) {
     super(props);
@@ -64,7 +66,7 @@ class DiscoverTvShows extends Component {
 
   setPageNum = (_, { activePage }) => {
     const { sortByValue } = this.state;
-    this.setState({ page: activePage }, () =>
+    this.setState({ page: activePage, loadingState: true }, () =>
       axios
         .get(
           `${process.env.REACT_APP_BASE_URL}/discover/tv?language=en-US&page=${activePage}&sort_by=${sortByValue}&api_key=${process.env.REACT_APP_API_KEY}&include_null_first_air_dates=false`
@@ -79,6 +81,7 @@ class DiscoverTvShows extends Component {
                 : NoImage,
               tvShowReleaseDate: discoverTvShow.first_air_date,
             })),
+            loadingState: false,
           });
         })
     );
@@ -104,35 +107,45 @@ class DiscoverTvShows extends Component {
               : NoImage,
             tvShowReleaseDate: discoverTvShow.first_air_date,
           })),
+          loadingState: false,
         });
       });
   }
 
   sortByHandleSubmit(event) {
     const { sortByValue } = this.state;
-    axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/discover/tv?language=en-US&page=1&sort_by=${sortByValue}&api_key=${process.env.REACT_APP_API_KEY}&include_null_first_air_dates=false`
-      )
-      .then((response) => {
-        this.setState({
-          page: 1,
-          discoverTvShows: response.data.results.map((discoverTvShow) => ({
-            key: discoverTvShow.id,
-            tvShowName: discoverTvShow.name,
-            tvShowImage: discoverTvShow.poster_path
-              ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${discoverTvShow.poster_path}`
-              : NoImage,
-            tvShowReleaseDate: discoverTvShow.first_air_date,
-          })),
-        });
-      });
+    this.setState({ loadingState: true }, () =>
+      axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/discover/tv?language=en-US&page=1&sort_by=${sortByValue}&api_key=${process.env.REACT_APP_API_KEY}&include_null_first_air_dates=false`
+        )
+        .then((response) => {
+          this.setState({
+            page: 1,
+            discoverTvShows: response.data.results.map((discoverTvShow) => ({
+              key: discoverTvShow.id,
+              tvShowName: discoverTvShow.name,
+              tvShowImage: discoverTvShow.poster_path
+                ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${discoverTvShow.poster_path}`
+                : NoImage,
+              tvShowReleaseDate: discoverTvShow.first_air_date,
+            })),
+            loadingState: false,
+          });
+        })
+    );
     event.preventDefault();
   }
 
   render() {
-    const { sortByValue, discoverTvShows, page, totalPages, divided } =
-      this.state;
+    const {
+      sortByValue,
+      discoverTvShows,
+      page,
+      totalPages,
+      divided,
+      loadingState,
+    } = this.state;
     return (
       <Container className="ContainerStyle">
         <h1 className="DiscoverTvShowsHeader">Discover Tv Shows</h1>
@@ -159,20 +172,24 @@ class DiscoverTvShows extends Component {
               </div>
             </div>
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={16} computer={12}>
-            <Gridder
-              mainDatas={discoverTvShows}
-              hrefMainUrl={`/tvshowdetails/`}
-            />
-          </Grid.Column>
+          {loadingState ? (
+            <Loader active inline="centered" />
+          ) : (
+            <Grid.Column mobile={16} tablet={16} computer={12}>
+              <Gridder
+                mainDatas={discoverTvShows}
+                hrefMainUrl={`/tvshowdetails/`}
+              />
+              <div className="PaginationStyle">
+                <Pagination
+                  activePage={page}
+                  totalPages={totalPages}
+                  onPageChange={this.setPageNum}
+                />
+              </div>
+            </Grid.Column>
+          )}
         </Grid>
-        <div className="PaginationStyle">
-          <Pagination
-            activePage={page}
-            totalPages={totalPages}
-            onPageChange={this.setPageNum}
-          />
-        </div>
       </Container>
     );
   }

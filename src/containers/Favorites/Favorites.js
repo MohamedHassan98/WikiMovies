@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { Component } from "react";
+import { Loader } from "semantic-ui-react";
 import Gridder from "../../components/Gridder/Gridder";
 import NoImage from "../../assets/NoImage.png";
 import "./Favorites.css";
@@ -8,6 +9,8 @@ class Favorites extends Component {
   state = {
     favoriteMoviesData: [],
     favoriteSeriesData: [],
+    loadingStateMovies: true,
+    loadingStateSeries: true,
   };
 
   componentDidMount() {
@@ -29,7 +32,7 @@ class Favorites extends Component {
         )
       );
     } catch (error) {
-      console.log(error);
+      this.setState({ loadingStateMovies: false });
     }
     try {
       const respSeries = await axios.get(
@@ -45,9 +48,10 @@ class Favorites extends Component {
         )
       );
     } catch (error) {
-      console.log(error);
+      this.setState({ loadingStateSeries: false });
     }
   };
+
   fetchFavoriteMovies = async (movieId, moviesArray) => {
     try {
       await axios
@@ -64,9 +68,12 @@ class Favorites extends Component {
             movieReleaseDate: response.data.release_date,
           })
         );
-      this.setState({ favoriteMoviesData: moviesArray });
+      this.setState({
+        favoriteMoviesData: moviesArray,
+        loadingStateMovies: false,
+      });
     } catch (err) {
-      console.log(err);
+      alert(err);
     }
   };
 
@@ -86,33 +93,54 @@ class Favorites extends Component {
             tvShowReleaseDate: response.data.first_air_date,
           })
         );
-      this.setState({ favoriteSeriesData: seriesArray });
+      this.setState({
+        favoriteSeriesData: seriesArray,
+        loadingStateSeries: false,
+      });
     } catch (err) {
-      console.log(err);
+      alert(err);
     }
   };
 
   render() {
-    const { favoriteMoviesData, favoriteSeriesData } = this.state;
+    const {
+      favoriteMoviesData,
+      favoriteSeriesData,
+      loadingStateMovies,
+      loadingStateSeries,
+    } = this.state;
     return (
       <div style={{ marginTop: "150px" }}>
         <h1 className="FavoriteMovies">Favorite Movies</h1>
-        {favoriteMoviesData.length !== 0 ? (
-          <Gridder
-            mainDatas={favoriteMoviesData}
-            hrefMainUrl={`/moviedetails/`}
-          />
+        {loadingStateMovies ? (
+          <Loader active inline="centered" />
         ) : (
-          <h2 className="FavoriteNotFound">No Favorite Movies Found</h2>
+          <>
+            {favoriteMoviesData.length !== 0 ? (
+              <Gridder
+                mainDatas={favoriteMoviesData}
+                hrefMainUrl={`/moviedetails/`}
+              />
+            ) : (
+              <h2 className="FavoriteNotFound">No Favorite Movies Found</h2>
+            )}
+          </>
         )}
+
         <h1 className="FavoriteSeries">Favorite Series</h1>
-        {favoriteSeriesData.length !== 0 ? (
-          <Gridder
-            mainDatas={favoriteSeriesData}
-            hrefMainUrl={`/tvshowdetails/`}
-          />
+        {loadingStateSeries ? (
+          <Loader active inline="centered" />
         ) : (
-          <h2 className="FavoriteNotFound">No Favorite Series Found</h2>
+          <>
+            {favoriteSeriesData.length !== 0 ? (
+              <Gridder
+                mainDatas={favoriteSeriesData}
+                hrefMainUrl={`/tvshowdetails/`}
+              />
+            ) : (
+              <h2 className="FavoriteNotFound">No Favorite Series Found</h2>
+            )}
+          </>
         )}
       </div>
     );

@@ -21,7 +21,6 @@ import Favorites from "./containers/Favorites/Favorites";
 import "./App.css";
 /*
 
-TASK(Feature) : Add loader in every page
 TASK (Refactor) : Add Hooks as much as possible
 
 */
