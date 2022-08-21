@@ -56,7 +56,7 @@ class SearchResults extends Component {
       )
       .then((response) => {
         if (response.data.total_results === 0) {
-          this.setState({ nothingFound: true });
+          this.setState({ nothingFound: true, loadingState: false });
         } else {
           this.setState({
             totalPages: response.data.total_pages,
@@ -70,10 +70,10 @@ class SearchResults extends Component {
                 ? `${process.env.REACT_APP_BASE_IMAGE_URL}/${searchResult.poster_path}`
                 : NoImage,
             })),
+            loadingState: false,
           });
         }
       });
-    this.setState({ loadingState: false });
   }
 
   componentWillReceiveProps(newProps) {
@@ -84,7 +84,7 @@ class SearchResults extends Component {
       )
       .then((response) => {
         if (response.data.total_results === 0) {
-          this.setState({ nothingFound: true });
+          this.setState({ nothingFound: true, loadingState: false });
         } else {
           this.setState({
             sortByValue: "movie",
