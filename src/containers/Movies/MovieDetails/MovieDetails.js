@@ -12,8 +12,6 @@ import NoImage from "../../../assets/NoImage.png";
 import Slider from "../../../components/Slider/Slider";
 import "./MovieDetails.css";
 
-// TASK: ADD TOASTIFY ON FAVORITES ADD AND REMOVE
-
 class MovieDetails extends Component {
   state = {
     movieDetails: {},

@@ -67,7 +67,7 @@ class Person extends Component {
   };
 
   render() {
-    const { persons, totalPages, loadingState } = this.state;
+    const { persons, totalPages, page, loadingState } = this.state;
     return (
       <Container className="ContainerStyle">
         <h1>Popular People</h1>
@@ -78,7 +78,7 @@ class Person extends Component {
             <Gridder mainDatas={persons} hrefMainUrl={`/person/`} />
             <div className="PaginationStyle">
               <Pagination
-                defaultActivePage={1}
+                activePage={page}
                 totalPages={totalPages}
                 onPageChange={this.setPageNum}
               />
