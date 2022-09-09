@@ -121,6 +121,9 @@ class Navbar extends Component {
     localStorage.removeItem("token");
     localStorage.removeItem("expirationDate");
     localStorage.removeItem("userId");
+    if (this.props.location.pathname === "/favorites") {
+      this.props.history.push("/");
+    }
     window.location.reload();
   };
   clickLogoutHandler = () => {
@@ -131,6 +134,7 @@ class Navbar extends Component {
   };
 
   render() {
+    console.log();
     const { clickLogout, searchClicked, searchName, signedIn } = this.state;
     let logoutModal = null;
     if (clickLogout) {
@@ -257,7 +261,15 @@ class Navbar extends Component {
                         Sign Out
                       </Menu.Item>
                     </>
-                  ) : null}
+                  ) : (
+                    <Menu.Item
+                      className="BurgerMenu"
+                      onClick={() => this.props.history.push("/signin")}
+                    >
+                      <Icon name="sign-out" />
+                      Sign In/Up
+                    </Menu.Item>
+                  )}
                   <Menu.Item className="BurgerMenu">
                     <DarkMode />
                   </Menu.Item>

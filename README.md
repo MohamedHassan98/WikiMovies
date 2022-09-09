@@ -66,6 +66,8 @@
   - a form page to sign in your account.
 - Sign up page
   - a form page to sign up your account.
+- Favorites page
+  - a favorite list page to save the favored movie(s) and tv show(s) your account.
 
 <hr>
 

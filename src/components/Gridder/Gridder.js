@@ -14,6 +14,7 @@ const Gridder = (props) => (
                 aria-label="Card Hyperlink"
               >
                 <Image
+                  style={{ borderRadius: "4px" }}
                   alt="Main Image"
                   src={
                     mainData.movieImage ||
